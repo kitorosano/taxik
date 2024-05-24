@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Contact;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -22,8 +25,16 @@ class ContactController extends Controller
       $contacts = Contact::where('address', 'like', "%$department%")->get();
     }
 
+    $user = Auth::user();
+
+    if ($user->isAdmin) {
+      return Inertia::render('Contacts/Admin', [
+        'contacts' =>  $contacts,
+      ]);
+    }
+
     return Inertia::render('Contacts/Index', [
-      'contacts' =>  $contacts
+      'contacts' =>  $contacts,
     ]);
   }
 
@@ -62,16 +73,30 @@ class ContactController extends Controller
   /**
    * Update the specified resource in storage.
    */
-  public function update(Request $request, Contact $contact)
+  public function update(Request $request, Contact $contact): RedirectResponse
   {
-    //
+    Gate::authorize('update', $contact);
+
+    $validated = $request->validate([
+      'name' => ['required', 'string', 'max:255'],
+      'phone' => ['required', 'string', 'max:255'],
+      'address' => ['required', 'string', 'max:255'],
+    ]);
+
+    $contact->update($validated);
+
+    return redirect(route('contacts.index'));
   }
 
   /**
    * Remove the specified resource from storage.
    */
-  public function destroy(Contact $contact)
+  public function destroy(Contact $contact): RedirectResponse
   {
-    //
+    Gate::authorize('delete', $contact);
+
+    $contact->delete();
+
+    return redirect(route('contacts.index'));
   }
 }

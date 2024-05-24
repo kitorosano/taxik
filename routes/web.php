@@ -30,5 +30,9 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/contacts', [ContactController::class, 'index'])->name('contacts.index');
+Route::resource('contacts', ContactController::class)
+  ->only(['store', 'update', 'destroy'])
+  ->middleware(['auth']);
+
 
 require __DIR__ . '/auth.php';
