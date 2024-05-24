@@ -25,9 +25,7 @@ class ContactController extends Controller
       $contacts = Contact::where('address', 'like', "%$department%")->get();
     }
 
-    $user = Auth::user();
-
-    if ($user->isAdmin) {
+    if (Auth::check() && Auth::user()->isAdmin) {
       return Inertia::render('Contacts/Admin', [
         'contacts' =>  $contacts,
       ]);
