@@ -1,7 +1,9 @@
 import PrimaryButton from "@/Components/PrimaryButton";
+import SecondaryButton from "@/Components/SecondaryButton";
 import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, router, useForm } from "@inertiajs/react";
+import { useState } from "react";
 import ContactsAdminTable from "./Partials/ContactsAdminTable";
 
 const columns = {
@@ -16,6 +18,8 @@ function Admin({ auth, contacts }) {
         department: "",
     });
 
+    const [creatingItem, setCreatingItem] = useState(false);
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -25,6 +29,10 @@ function Admin({ auth, contacts }) {
             d: data.department,
         };
         router.get(route("contacts.index", params));
+    };
+
+    const handleCreate = () => {
+        setCreatingItem((prev) => !prev);
     };
 
     return (
@@ -39,6 +47,9 @@ function Admin({ auth, contacts }) {
                             </h2>
                         </div>
                         <div className="flex justify-between w-full">
+                            <SecondaryButton onClick={handleCreate}>
+                                Crear nuevo
+                            </SecondaryButton>
                             <TextInput
                                 id="location"
                                 className="max-w-96 ml-auto mr-2 text-black"
@@ -64,7 +75,8 @@ function Admin({ auth, contacts }) {
                         <ContactsAdminTable
                             items={contacts}
                             columns={columns}
-                            primary="Identificador"
+                            creatingItem={creatingItem}
+                            setCreatingItem={setCreatingItem}
                         />
                     </div>
                 </div>

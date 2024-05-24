@@ -1,5 +1,4 @@
 import InputError from "@/Components/InputError";
-import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/TextInput";
 import { useForm } from "@inertiajs/react";
 import { useState } from "react";
@@ -48,10 +47,10 @@ function ContactsAdminTableRow({ item, columns }) {
     };
 
     return (
-        <tr key={item.id} className="bg-white border-b">
+        <tr key={item.id} className="bg-white border-b items-center">
             <th
                 scope="row"
-                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap"
             >
                 #{item.id}
             </th>
@@ -59,13 +58,13 @@ function ContactsAdminTableRow({ item, columns }) {
             {editingItem?.id == item.id ? (
                 <>
                     {Object.keys(columns).map((key) => (
-                        <td key={item.id + key}>
+                        <td key={item.id + key} className="px-1 py-3">
                             <TextInput
                                 form="update_contact_form"
                                 name={key}
                                 value={data[key]}
                                 onChange={handleChange}
-                                className="w-fit px-2 py-1 text-gray-900 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
+                                className="w-full px-2 py-1 text-gray-900 text-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
                             ></TextInput>
                             <InputError
                                 message={errors[key]}
@@ -73,17 +72,21 @@ function ContactsAdminTableRow({ item, columns }) {
                             />
                         </td>
                     ))}
-                    <td className="px-1 py-4 flex items-center justify-center gap-4">
+                    <td className="px-1 py-2 text-center">
                         <form onSubmit={handleSave} id="update_contact_form">
-                            <PrimaryButton
+                            <button
                                 form="update_contact_form"
-                                className="font-medium text-gray-700 hover:bg-gray-100 focus:bg-gray-100 transition duration-150 ease-in-out"
+                                onClick={() => setEditingItem(item)}
+                                className="font-medium text-gray-600 hover:text-blue-700"
                             >
                                 Guardar
-                            </PrimaryButton>
+                            </button>
                         </form>
+                    </td>
+                    <td className="px-1 py-2 text-center">
                         <button
-                            className="font-medium text-gray-600 hover:text-yellow-700"
+                            type="button"
+                            className="font-medium text-gray-600 hover:text-red-700"
                             onClick={handleCancel}
                         >
                             Cancelar
@@ -93,17 +96,19 @@ function ContactsAdminTableRow({ item, columns }) {
             ) : (
                 <>
                     {Object.keys(columns).map((key) => (
-                        <td key={item.id + key} className="px-6 py-4">
+                        <td key={item.id + key} className="px-1 py-4 ">
                             {item[key]}
                         </td>
                     ))}
-                    <td className="px-1 py-4 flex items-center justify-center gap-4">
+                    <td className="py-2 text-center">
                         <button
                             className="font-medium text-gray-600 hover:text-yellow-700"
                             onClick={() => setEditingItem(item)}
                         >
                             Modificar
                         </button>
+                    </td>
+                    <td className="py-2 text-center">
                         <form onSubmit={handleDestroy} method="delete">
                             <button className="font-medium text-gray-600 hover:text-red-700">
                                 Eliminar

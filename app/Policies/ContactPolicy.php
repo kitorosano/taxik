@@ -29,7 +29,7 @@ class ContactPolicy
    */
   public function create(User $user): bool
   {
-    return false;
+    return $user->isAdmin;
   }
 
   /**
@@ -45,7 +45,7 @@ class ContactPolicy
    */
   public function delete(User $user, Contact $contact): bool
   {
-    return $this->update($user, $contact);
+    return $user->isAdmin;
   }
 
   /**

@@ -47,9 +47,21 @@ class ContactController extends Controller
   /**
    * Store a newly created resource in storage.
    */
-  public function store(Request $request)
+  public function store(Request $request): RedirectResponse
   {
-    //
+    
+    // validate admin
+    Gate::authorize('create', Contact::class);
+
+    $validated = $request->validate([
+      'name' => ['required', 'string', 'max:255'],
+      'phone' => ['required', 'string', 'max:255'],
+      'address' => ['required', 'string', 'max:255']
+    ]);
+
+    Contact::create($validated);
+
+    return redirect(route('contacts.index'));
   }
 
   /**
