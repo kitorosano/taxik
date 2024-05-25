@@ -97,7 +97,6 @@ export default function Authenticated({ user, header, children }) {
                                             <Dropdown.Link
                                                 href={route("logout")}
                                                 method="post"
-                                                as="button"
                                             >
                                                 Cerrar Sesion
                                             </Dropdown.Link>
@@ -111,8 +110,6 @@ export default function Authenticated({ user, header, children }) {
                                             </Dropdown.Link>
                                             <Dropdown.Link
                                                 href={route("register")}
-                                                method="post"
-                                                as="button"
                                             >
                                                 Registrarme
                                             </Dropdown.Link>
@@ -232,11 +229,7 @@ export default function Authenticated({ user, header, children }) {
                                 <ResponsiveNavLink href={route("login")}>
                                     Entrar
                                 </ResponsiveNavLink>
-                                <ResponsiveNavLink
-                                    method="post"
-                                    href={route("register")}
-                                    as="button"
-                                >
+                                <ResponsiveNavLink href={route("register")}>
                                     Registrarme
                                 </ResponsiveNavLink>
                             </div>

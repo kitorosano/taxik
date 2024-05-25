@@ -8,6 +8,7 @@ function ContactsAdminTableRow({ item, columns }) {
         setData,
         patch,
         delete: destroy,
+        transform,
         clearErrors,
         reset,
         errors,
@@ -28,8 +29,14 @@ function ContactsAdminTableRow({ item, columns }) {
     const handleSave = (e) => {
         e.preventDefault();
 
+        transform((data) => ({
+            ...data,
+            linked_company_id: Number(data.linked_company_id),
+        }));
+
         patch(route("contacts.update", editingItem.id), {
             onSuccess: () => setEditingItem(null),
+            preserveScroll: true
         });
     };
 

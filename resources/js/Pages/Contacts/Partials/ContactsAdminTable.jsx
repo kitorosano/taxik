@@ -4,21 +4,35 @@ import { useForm } from "@inertiajs/react";
 import ContactsAdminTableRow from "./ContactsAdminTableRow";
 
 function ContactsAdminTable({ items, columns, creatingItem, setCreatingItem }) {
-    const { data, setData, post, clearErrors, reset, errors } = useForm({
-        name: "",
-        phone: "",
-        address: "",
-        department: "",
-        linked_company_id: "",
-    });
+    const { data, setData, post, transform, clearErrors, reset, errors } =
+        useForm({
+            name: "",
+            phone: "",
+            address: "",
+            department: "",
+            linked_company_id: "",
+        });
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        if (data.linked_company_id === "")
+            transform((data) => ({
+                name: data.name,
+                phone: data.phone,
+                address: data.address,
+                department: data.department,
+            }));
+        else
+            transform((data) => ({
+                linked_company_id: Number(data.linked_company_id),
+            }));
 
         post(route("contacts.store"), {
             onSuccess: () => {
                 handleCancel();
             },
+            preserveScroll: true,
         });
     };
 
