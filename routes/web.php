@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
@@ -38,6 +39,10 @@ Route::resource('contacts', ContactController::class)
 Route::resource('users', UserController::class)
   ->only(['index', 'update', 'destroy'])
   ->middleware(['auth', 'can:viewAny,App\Models\User']);
+
+Route::get('/companies', [CompanyController::class, 'index'])
+  ->middleware(['auth', 'can:viewAny,App\Models\User'])
+  ->name('companies.index');
 
 
 require __DIR__ . '/auth.php';
