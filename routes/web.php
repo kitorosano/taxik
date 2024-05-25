@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -32,7 +33,11 @@ Route::middleware('auth')->group(function () {
 Route::get('/contacts', [ContactController::class, 'index'])->name('contacts.index');
 Route::resource('contacts', ContactController::class)
   ->only(['store', 'update', 'destroy'])
-  ->middleware(['auth']);
+  ->middleware(['auth', 'can:create,App\Models\Contact']);
+
+Route::resource('users', UserController::class)
+  ->only(['index', 'update', 'destroy'])
+  ->middleware(['auth', 'can:viewAny,App\Models\User']);
 
 
 require __DIR__ . '/auth.php';

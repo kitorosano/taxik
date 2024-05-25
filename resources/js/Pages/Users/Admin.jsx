@@ -1,39 +1,29 @@
 import PrimaryButton from "@/Components/PrimaryButton";
-import SecondaryButton from "@/Components/SecondaryButton";
 import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, router, useForm } from "@inertiajs/react";
-import { useState } from "react";
-import ContactsAdminTable from "./Partials/ContactsAdminTable";
+import ContactsAdminTable from "./Partials/UsersAdminTable";
 
 const columns = {
     name: "nombre",
-    phone: "telefono",
-    address: "dirección",
-    department: "departamento",
-    linked_company_id: "compañia asociada",
+    email: "correo",
+    type: "tipo",
 };
 
-function Admin({ auth, contacts }) {
+function Admin({ auth, users }) {
     const { data, setData, processing } = useForm({
-        department: "",
+        name: "",
     });
-
-    const [creatingItem, setCreatingItem] = useState(false);
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if (data.department === "") return router.get(route("contacts.index"));
+        if (data.name === "") return router.get(route("users.index"));
 
         const params = {
-            d: data.department,
+            d: data.name,
         };
-        router.get(route("contacts.index", params));
-    };
-
-    const handleCreate = () => {
-        setCreatingItem((prev) => !prev);
+        router.get(route("users.index", params));
     };
 
     return (
@@ -44,22 +34,19 @@ function Admin({ auth, contacts }) {
                     <div className="flex justify-between items-center text-gray-900 py-6">
                         <div className="flex justify-between w-full">
                             <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                                Gestiona todos los contactos de taxis
+                                Gestiona todos los usuarios
                             </h2>
                         </div>
                         <div className="flex justify-between w-full">
-                            <SecondaryButton onClick={handleCreate}>
-                                Crear nuevo
-                            </SecondaryButton>
                             <TextInput
-                                id="location"
+                                id="name"
                                 className="max-w-96 ml-auto mr-2 text-black"
-                                value={data.department}
+                                value={data.name}
                                 onChange={(e) =>
-                                    setData("department", e.target.value)
+                                    setData("name", e.target.value)
                                 }
                                 autoFocus
-                                placeholder="Departamento..."
+                                placeholder="Nombre..."
                             />
                             <PrimaryButton disabled={processing}>
                                 Buscar
@@ -73,12 +60,7 @@ function Admin({ auth, contacts }) {
             <div className="py-10">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <ContactsAdminTable
-                            items={contacts}
-                            columns={columns}
-                            creatingItem={creatingItem}
-                            setCreatingItem={setCreatingItem}
-                        />
+                        <ContactsAdminTable items={users} columns={columns} />
                     </div>
                 </div>
             </div>

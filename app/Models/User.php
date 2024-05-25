@@ -38,6 +38,7 @@ class User extends Authenticatable
     'isAdmin',
     'isClient',
     'isCompany',
+    'typeString'
   ];
 
   /**
@@ -66,5 +67,15 @@ class User extends Authenticatable
   protected function getIsCompanyAttribute(): bool
   {
     return $this->type === 2;
+  }
+
+  protected function getTypeStringAttribute(): string
+  {
+    return match ($this->type) {
+      0 => 'Administrador',
+      1 => 'Cliente',
+      2 => 'Compania',
+      default => 'Unknown',
+    };
   }
 }
