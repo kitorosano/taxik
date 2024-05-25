@@ -4,29 +4,26 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class UserController extends Controller
+class CompanyController extends Controller
 {
   /**
    * Display a listing of the resource.
    */
   public function index(Request $request): Response
   {
-
     $name = $request->query('n', '');
 
     if ($name === '') {
-      $users = User::all();
+      $companies = User::where('type', "=", 2)->with('contact')->get();
     } else {
-      $users = User::where('name', 'like', "%$name%")->get();
+      $companies = User::where('type', 2)->where('name', 'like', "%$name%")->with('contact')->get();
     }
 
-    return Inertia::render('Users/Admin', [
-      'users' =>  $users,
+    return Inertia::render('Companies/Index', [
+      'companies' =>  $companies,
     ]);
   }
 
@@ -67,16 +64,7 @@ class UserController extends Controller
    */
   public function update(Request $request, User $user)
   {
-    Gate::authorize('update', $user);
-
-    $validated = $request->validate([
-      'name' => ['required', 'string', 'max:255'],
-      'email' => ['required', 'string', 'max:255'],
-    ]);
-
-    $user->update($validated);
-
-    return redirect(route('users.index'));
+    //
   }
 
   /**
@@ -84,10 +72,6 @@ class UserController extends Controller
    */
   public function destroy(User $user)
   {
-    Gate::authorize('delete', $user);
-
-    $user->delete();
-
-    return redirect(route('users.index'));
+    //
   }
 }

@@ -21,7 +21,7 @@ function Admin({ auth, users }) {
         if (data.name === "") return router.get(route("users.index"));
 
         const params = {
-            d: data.name,
+            n: data.name,
         };
         router.get(route("users.index", params));
     };

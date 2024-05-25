@@ -43,6 +43,21 @@ export default function Authenticated({ user, header, children }) {
                                     </NavLink>
                                 </div>
                             )}
+
+                            {user && !user.isClient ? (
+                                <></>
+                            ) : (
+                                <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                    <NavLink
+                                        href={route("companies.index")}
+                                        active={route().current(
+                                            "companies.index"
+                                        )}
+                                    >
+                                        Reservar Viaje
+                                    </NavLink>
+                                </div>
+                            )}
                         </div>
 
                         <div className="hidden sm:flex sm:items-center sm:ms-6">
@@ -169,9 +184,22 @@ export default function Authenticated({ user, header, children }) {
                         <div className="pt-2 pb-3 space-y-1">
                             <ResponsiveNavLink
                                 href={route("users.index")}
-                                active={route().current("contacts.index")}
+                                active={route().current("users.index")}
                             >
                                 Usuarios
+                            </ResponsiveNavLink>
+                        </div>
+                    )}
+
+                    {user && !user.isClient ? (
+                        <></>
+                    ) : (
+                        <div className="pt-2 pb-3 space-y-1">
+                            <ResponsiveNavLink
+                                href={route("companies.index")}
+                                active={route().current("companies.index")}
+                            >
+                                Reservar Viaje
                             </ResponsiveNavLink>
                         </div>
                     )}
