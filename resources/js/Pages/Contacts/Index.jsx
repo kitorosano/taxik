@@ -68,7 +68,7 @@ function Index({ auth, contacts }) {
                                                 {contact.phone}
                                             </p>
                                             <p className="text-xs">
-                                                {contact.address}
+                                                {contact.address} - {contact.department}
                                             </p>
                                         </div>
                                     </div>

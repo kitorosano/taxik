@@ -14,6 +14,7 @@ class Contact extends Model
     'name',
     'phone',
     'address',
+    'department',
     'linked_company_id',
   ];
 

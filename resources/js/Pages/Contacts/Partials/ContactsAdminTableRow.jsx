@@ -15,6 +15,7 @@ function ContactsAdminTableRow({ item, columns }) {
         name: item.name,
         phone: item.phone,
         address: item.address,
+        department: item.department,
         linked_company_id: item.linked_company_id || "",
     });
 
@@ -83,7 +84,7 @@ function ContactsAdminTableRow({ item, columns }) {
                             </button>
                         </form>
                     </td>
-                    <td className="px-1 py-2 text-center">
+                    <td className="px-1 pr-5 py-2 text-center">
                         <button
                             type="button"
                             className="font-medium text-gray-600 hover:text-red-700"
@@ -96,7 +97,7 @@ function ContactsAdminTableRow({ item, columns }) {
             ) : (
                 <>
                     {Object.keys(columns).map((key) => (
-                        <td key={item.id + key} className="px-1 py-4 ">
+                        <td key={item.id + key} className="px-1 py-4">
                             {item[key]}
                         </td>
                     ))}
@@ -108,7 +109,7 @@ function ContactsAdminTableRow({ item, columns }) {
                             Modificar
                         </button>
                     </td>
-                    <td className="py-2 text-center">
+                    <td className="pr-4 py-2 text-center">
                         <form onSubmit={handleDestroy} method="delete">
                             <button className="font-medium text-gray-600 hover:text-red-700">
                                 Eliminar

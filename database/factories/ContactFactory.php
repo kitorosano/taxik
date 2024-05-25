@@ -45,7 +45,8 @@ class ContactFactory extends Factory
     return [
       'name' => fake()->name(),
       'phone' => fake()->phoneNumber(),
-      'address' => Arr::random($departments),
+      'address' => fake()->streetAddress(),
+      'department' => Arr::random($departments),
       'linked_company_id' => null
     ];
   }

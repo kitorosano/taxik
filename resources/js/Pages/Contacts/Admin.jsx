@@ -10,6 +10,7 @@ const columns = {
     name: "nombre",
     phone: "telefono",
     address: "dirección",
+    department: "departamento",
     linked_company_id: "compañia asociada",
 };
 

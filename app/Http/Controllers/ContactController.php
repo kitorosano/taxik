@@ -22,7 +22,7 @@ class ContactController extends Controller
     if ($department === '') {
       $contacts = Contact::all();
     } else {
-      $contacts = Contact::where('address', 'like', "%$department%")->get();
+      $contacts = Contact::where('department', 'like', "%$department%")->get();
     }
 
     if (Auth::check() && Auth::user()->isAdmin) {
@@ -56,7 +56,8 @@ class ContactController extends Controller
     $validated = $request->validate([
       'name' => ['required', 'string', 'max:255'],
       'phone' => ['required', 'string', 'max:255'],
-      'address' => ['required', 'string', 'max:255']
+      'address' => ['required', 'string', 'max:255'],
+      'department' => ['required', 'string', 'max:255']
     ]);
 
     Contact::create($validated);
@@ -91,6 +92,7 @@ class ContactController extends Controller
       'name' => ['required', 'string', 'max:255'],
       'phone' => ['required', 'string', 'max:255'],
       'address' => ['required', 'string', 'max:255'],
+      'department' => ['required', 'string', 'max:255']
     ]);
 
     $contact->update($validated);

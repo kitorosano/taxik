@@ -8,6 +8,7 @@ function ContactsAdminTable({ items, columns, creatingItem, setCreatingItem }) {
         name: "",
         phone: "",
         address: "",
+        department: "",
         linked_company_id: "",
     });
 
@@ -30,13 +31,13 @@ function ContactsAdminTable({ items, columns, creatingItem, setCreatingItem }) {
     return (
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
             <table className="w-full text-sm text-left rtl:text-right text-gray-500">
-                <thead className="text-xs text-gray-700 uppercase bg-gray-50  ">
+                <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                     <tr>
                         <th scope="col" className="px-6 py-3">
                             Identificador
                         </th>
                         {Object.entries(columns).map(([key, value]) => (
-                            <th key={key} scope="col" className="px-6 py-3">
+                            <th key={key} scope="col" className="px-3 py-3">
                                 {value}
                             </th>
                         ))}
