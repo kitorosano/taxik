@@ -29,7 +29,7 @@ class ContactPolicy
    */
   public function create(User $user): bool
   {
-    return $user->isAdmin;
+    return $user->isAdmin || $user->isCompany;
   }
 
   /**
@@ -37,7 +37,7 @@ class ContactPolicy
    */
   public function update(User $user, Contact $contact): bool
   {
-    return $user->isAdmin;
+    return $user->isAdmin || $user->id === $contact->linked_company_id;
   }
 
   /**

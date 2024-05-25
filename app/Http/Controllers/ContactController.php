@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -49,7 +50,6 @@ class ContactController extends Controller
    */
   public function store(Request $request): RedirectResponse
   {
-    
     // validate admin
     Gate::authorize('create', Contact::class);
 
@@ -57,11 +57,15 @@ class ContactController extends Controller
       'name' => ['required', 'string', 'max:255'],
       'phone' => ['required', 'string', 'max:255'],
       'address' => ['required', 'string', 'max:255'],
-      'department' => ['required', 'string', 'max:255']
+      'department' => ['required', 'string', 'max:255'],
+      'linked_company_id' => ['sometimes', 'int', 'exists:users,id'],
     ]);
 
     Contact::create($validated);
 
+    if ($request->user()->isCompany) {
+      return redirect(route('profile.edit'));
+    }
     return redirect(route('contacts.index'));
   }
 
@@ -92,11 +96,15 @@ class ContactController extends Controller
       'name' => ['required', 'string', 'max:255'],
       'phone' => ['required', 'string', 'max:255'],
       'address' => ['required', 'string', 'max:255'],
-      'department' => ['required', 'string', 'max:255']
+      'department' => ['required', 'required', 'string', 'max:255'],
+      'linked_company_id' => ['sometimes', 'required', 'int', 'exists:users,id'],
     ]);
 
     $contact->update($validated);
 
+    if ($request->user()->isCompany) {
+      return redirect(route('profile.edit'));
+    }
     return redirect(route('contacts.index'));
   }
 
