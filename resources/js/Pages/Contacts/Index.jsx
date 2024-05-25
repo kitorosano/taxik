@@ -24,7 +24,7 @@ function Index({ auth, contacts }) {
             user={auth.user}
             header={
                 <form onSubmit={handleSubmit}>
-                    <div className="flex justify-between items-center text-gray-900 py-6">
+                    <div className="flex justify-between items-center text-gray-900 py-4">
                         <div className="flex justify-between w-full">
                             <h2 className="font-semibold text-xl text-gray-800 leading-tight">
                                 Mostrando taxis de tu departamento
