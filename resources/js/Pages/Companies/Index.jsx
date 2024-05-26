@@ -1,3 +1,4 @@
+import Pagination from "@/Components/Pagination";
 import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
@@ -18,8 +19,6 @@ function Index({ auth, companies }) {
         };
         router.get(route("companies.index", params));
     };
-
-    console.log(companies[0]);
 
     return (
         <AuthenticatedLayout
@@ -57,7 +56,7 @@ function Index({ auth, companies }) {
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900">
                             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                                {companies.map((company) => (
+                                {companies.data.map((company) => (
                                     <div
                                         key={company.id}
                                         className="bg-white overflow-hidden shadow-sm sm:rounded-lg hover:shadow-md"
@@ -86,6 +85,8 @@ function Index({ auth, companies }) {
                             </div>
                         </div>
                     </div>
+
+                    <Pagination meta={companies.meta} links={companies.links} />
                 </div>
             </div>
         </AuthenticatedLayout>

@@ -19,8 +19,17 @@ class Contact extends Model
     'linked_company_id',
   ];
 
+  protected $appends = [
+    'companyName',
+  ];
+
   public function linkedCompany(): BelongsTo
   {
     return $this->belongsTo(User::class, "linked_company_id");
+  }
+
+  public function getCompanyNameAttribute(): string
+  {
+    return $this->linkedCompany->name ?? '';
   }
 }

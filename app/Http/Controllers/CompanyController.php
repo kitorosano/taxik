@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CompaniesResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -17,13 +18,13 @@ class CompanyController extends Controller
     $name = $request->query('n', '');
 
     if ($name === '') {
-      $companies = User::where('type', "=", 2)->with('contact')->get();
+      $companies = User::where('type', "=", 2)->with('contact')->paginate(8);
     } else {
-      $companies = User::where('type', 2)->where('name', 'like', "%$name%")->with('contact')->get();
+      $companies = User::where('type', 2)->where('name', 'like', "%$name%")->with('contact')->paginate(8);
     }
 
     return Inertia::render('Companies/Index', [
-      'companies' =>  $companies,
+      'companies' => CompaniesResource::collection($companies),
     ]);
   }
 

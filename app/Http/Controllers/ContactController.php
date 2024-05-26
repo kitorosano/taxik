@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ContactResource;
 use App\Models\Contact;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -18,22 +19,24 @@ class ContactController extends Controller
    */
   public function index(Request $request): Response
   {
+    $PAGINATION_COUNT = Auth::user()->isAdmin ? 8 : 16;
+
     $department = $request->query('d', '');
 
     if ($department === '') {
-      $contacts = Contact::all();
+      $contacts = Contact::paginate($PAGINATION_COUNT);
     } else {
-      $contacts = Contact::where('department', 'like', "%$department%")->get();
+      $contacts = Contact::where('department', 'like', "%$department%")->paginate($PAGINATION_COUNT);
     }
 
     if (Auth::check() && Auth::user()->isAdmin) {
       return Inertia::render('Contacts/Admin', [
-        'contacts' =>  $contacts,
+        'contacts' => ContactResource::collection($contacts),
       ]);
     }
 
     return Inertia::render('Contacts/Index', [
-      'contacts' =>  $contacts,
+      'contacts' =>  ContactResource::collection($contacts),
     ]);
   }
 
