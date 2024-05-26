@@ -1,3 +1,4 @@
+import Pagination from "@/Components/Pagination";
 import PrimaryButton from "@/Components/PrimaryButton";
 import SecondaryButton from "@/Components/SecondaryButton";
 import TextInput from "@/Components/TextInput";
@@ -11,7 +12,7 @@ const columns = {
     phone: "telefono",
     address: "dirección",
     department: "departamento",
-    linked_company_id: "compañia asociada",
+    companyName: "compañia asociada",
 };
 
 function Admin({ auth, contacts }) {
@@ -74,12 +75,14 @@ function Admin({ auth, contacts }) {
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <ContactsAdminTable
-                            items={contacts}
+                            items={contacts.data}
                             columns={columns}
                             creatingItem={creatingItem}
                             setCreatingItem={setCreatingItem}
                         />
                     </div>
+
+                    <Pagination meta={contacts.meta} links={contacts.links} />
                 </div>
             </div>
         </AuthenticatedLayout>

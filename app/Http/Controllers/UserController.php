@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,13 +21,13 @@ class UserController extends Controller
     $name = $request->query('n', '');
 
     if ($name === '') {
-      $users = User::all();
+      $users = User::paginate(8);
     } else {
-      $users = User::where('name', 'like', "%$name%")->get();
+      $users = User::where('name', 'like', "%$name%")->paginate(8);
     }
 
     return Inertia::render('Users/Admin', [
-      'users' =>  $users,
+      'users' => UserResource::collection($users),
     ]);
   }
 

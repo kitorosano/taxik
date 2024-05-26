@@ -1,3 +1,4 @@
+import Pagination from "@/Components/Pagination";
 import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
@@ -55,7 +56,7 @@ function Index({ auth, contacts }) {
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900">
                             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                                {contacts.map((contact) => (
+                                {contacts.data.map((contact) => (
                                     <div
                                         key={contact.id}
                                         className="bg-white overflow-hidden shadow-sm sm:rounded-lg hover:shadow-md"
@@ -68,7 +69,8 @@ function Index({ auth, contacts }) {
                                                 {contact.phone}
                                             </p>
                                             <p className="text-xs">
-                                                {contact.address} - {contact.department}
+                                                {contact.address} -{" "}
+                                                {contact.department}
                                             </p>
                                         </div>
                                     </div>
@@ -76,6 +78,8 @@ function Index({ auth, contacts }) {
                             </div>
                         </div>
                     </div>
+
+                    <Pagination meta={contacts.meta} links={contacts.links} />
                 </div>
             </div>
         </AuthenticatedLayout>

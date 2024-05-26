@@ -3,6 +3,7 @@ import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, router, useForm } from "@inertiajs/react";
 import ContactsAdminTable from "./Partials/UsersAdminTable";
+import Pagination from "@/Components/Pagination";
 
 const columns = {
     name: "nombre",
@@ -60,8 +61,10 @@ function Admin({ auth, users }) {
             <div className="py-10">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <ContactsAdminTable items={users} columns={columns} />
+                        <ContactsAdminTable items={users.data} columns={columns} />
                     </div>
+
+                    <Pagination meta={users.meta} links={users.links} />
                 </div>
             </div>
         </AuthenticatedLayout>
