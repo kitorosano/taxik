@@ -1,53 +1,63 @@
 import Pagination from "@/Components/Pagination";
-import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import { objectToArray, removeEmptyValues } from "@/Utils/functions";
 import { Head, router, useForm } from "@inertiajs/react";
+import debounce from "just-debounce-it";
+import { useCallback } from "react";
 
-function Index({ auth, companies }) {
-    const { data, setData, processing } = useForm({
-        name: "",
+function Index({ auth, companies, filters }) {
+    const { data, setData } = useForm({
+        name: filters.name || "",
     });
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
-        if (data.name === "") return router.get(route("companies.index"));
-
-        const params = {
-            n: data.name,
-        };
-        router.get(route("companies.index", params));
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setData(name, value);
+        searchWithFilters(name, value);
     };
+
+    const searchWithFilters = useCallback(
+        debounce((name, value) => {
+            const realData = { ...data, [name]: value };
+            const arrayParams = objectToArray(realData);
+
+            if (arrayParams.every((v) => v === "")) {
+                router.get(route("companies.index"));
+                return;
+            }
+
+            const transformedData = removeEmptyValues(realData);
+            router.visit(route("companies.index"), {
+                data: transformedData,
+                preserveState: true,
+                replace: true,
+            });
+        }, 300),
+        [data]
+    );
 
     return (
         <AuthenticatedLayout
             user={auth.user}
             header={
-                <form onSubmit={handleSubmit}>
-                    <div className="flex justify-between items-center text-gray-900 py-4">
-                        <div className="flex justify-between w-full">
-                            <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                                Reserva tu viaje en taxi con estas empresas
-                            </h2>
-                        </div>
-                        <div className="flex justify-between w-full">
-                            <TextInput
-                                id="name"
-                                className="max-w-96 ml-auto mr-2 text-black"
-                                value={data.name}
-                                onChange={(e) =>
-                                    setData("name", e.target.value)
-                                }
-                                autoFocus
-                                placeholder="Buscar por nombre..."
-                            />
-                            <PrimaryButton disabled={processing}>
-                                Buscar
-                            </PrimaryButton>
-                        </div>
+                <div className="flex justify-between items-center text-gray-900 py-4">
+                    <div className="flex justify-between w-full">
+                        <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+                            Reserva tu viaje en taxi con estas empresas
+                        </h2>
                     </div>
-                </form>
+                    <div className="flex justify-end w-full">
+                        <TextInput
+                            name="name"
+                            className="max-w-96 ml-auto mr-2 text-black"
+                            value={data.name}
+                            onChange={handleChange}
+                            autoFocus
+                            placeholder="Nombre..."
+                        />
+                    </div>
+                </div>
             }
         >
             <Head title="Reservar Viaje" />
