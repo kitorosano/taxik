@@ -1,14 +1,13 @@
 import InputError from "@/Components/InputError";
 import TextInput from "@/Components/TextInput";
-import { useForm } from "@inertiajs/react";
+import { removeEmptyValues } from "@/Utils/functions";
+import { router, useForm } from "@inertiajs/react";
 import { useState } from "react";
 function ContactsAdminTableRow({ item, columns }) {
     const {
         data,
         setData,
-        patch,
         delete: destroy,
-        transform,
         clearErrors,
         reset,
         errors,
@@ -29,15 +28,19 @@ function ContactsAdminTableRow({ item, columns }) {
     const handleSave = (e) => {
         e.preventDefault();
 
-        transform((data) => ({
+        const transformedData = removeEmptyValues({
             ...data,
             linked_company_id: Number(data.linked_company_id),
-        }));
-
-        patch(route("contacts.update", editingItem.id), {
-            onSuccess: () => setEditingItem(null),
-            preserveScroll: true
         });
+
+        router.patch(
+            route("contacts.update", editingItem.id),
+            transformedData,
+            {
+                onSuccess: () => setEditingItem(null),
+                preserveScroll: true,
+            }
+        );
     };
 
     const handleCancel = () => {

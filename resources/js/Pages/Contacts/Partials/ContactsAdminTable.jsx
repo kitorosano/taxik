@@ -1,10 +1,11 @@
 import InputError from "@/Components/InputError";
 import TextInput from "@/Components/TextInput";
-import { useForm } from "@inertiajs/react";
+import { removeEmptyValues } from "@/Utils/functions";
+import { router, useForm } from "@inertiajs/react";
 import ContactsAdminTableRow from "./ContactsAdminTableRow";
 
 function ContactsAdminTable({ items, columns, creatingItem, setCreatingItem }) {
-    const { data, setData, post, transform, clearErrors, reset, errors } =
+    const { data, setData, clearErrors, reset, errors } =
         useForm({
             name: "",
             phone: "",
@@ -16,19 +17,12 @@ function ContactsAdminTable({ items, columns, creatingItem, setCreatingItem }) {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if (data.linked_company_id === "")
-            transform((data) => ({
-                name: data.name,
-                phone: data.phone,
-                address: data.address,
-                department: data.department,
-            }));
-        else
-            transform((data) => ({
-                linked_company_id: Number(data.linked_company_id),
-            }));
+        const transformedData = removeEmptyValues({
+            ...data,
+            linked_company_id: Number(data.linked_company_id),
+        });
 
-        post(route("contacts.store"), {
+        router.post(route("contacts.store"), transformedData, {
             onSuccess: () => {
                 handleCancel();
             },

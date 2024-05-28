@@ -19,24 +19,54 @@ class ContactController extends Controller
    */
   public function index(Request $request): Response
   {
-    $PAGINATION_COUNT = Auth::user()->isAdmin ? 8 : 16;
+    $PAGINATION_COUNT = $request->user && $request->user->isAdmin ? 8 : 16;
 
-    $department = $request->query('d', '');
+    $name = $request->query('name', '');
+    $phone = $request->query('phone', '');
+    $address = $request->query('address', '');
+    $department = $request->query('department', '');
+    $companyName = $request->query('companyName', '');
 
-    if ($department === '') {
-      $contacts = Contact::paginate($PAGINATION_COUNT);
-    } else {
-      $contacts = Contact::where('department', 'like', "%$department%")->paginate($PAGINATION_COUNT);
-    }
+    $contacts = Contact::query()
+      ->when($name, function ($query, $name) {
+        return $query->where('name', 'like', "%$name%");
+      })
+      ->when($phone, function ($query, $phone) {
+        return $query->where('phone', 'like', "%$phone%");
+      })
+      ->when($address, function ($query, $address) {
+        return $query->where('address', 'like', "%$address%");
+      })
+      ->when($department, function ($query, $department) {
+        return $query->where('department', 'like', "%$department%");
+      })
+      ->when($companyName, function ($query, $companyName) {
+        return $query->whereHas('linkedCompany', function ($query) use ($companyName) {
+          return $query->where('name', 'like', "%$companyName%");
+        });
+      })
+      ->paginate($PAGINATION_COUNT)
+      ->withQueryString();
+
 
     if (Auth::check() && Auth::user()->isAdmin) {
       return Inertia::render('Contacts/Admin', [
         'contacts' => ContactResource::collection($contacts),
+        'filters' => [
+          'name' => $name,
+          'phone' => $phone,
+          'address' => $address,
+          'department' => $department,
+          'companyName' => $companyName,
+        ],
       ]);
     }
 
     return Inertia::render('Contacts/Index', [
       'contacts' =>  ContactResource::collection($contacts),
+      'filters' => [
+        'department' => $department,
+      ],
     ]);
   }
 
@@ -99,9 +129,10 @@ class ContactController extends Controller
       'name' => ['required', 'string', 'max:255'],
       'phone' => ['required', 'string', 'max:255'],
       'address' => ['required', 'string', 'max:255'],
-      'department' => ['required', 'required', 'string', 'max:255'],
+      'department' => ['required', 'string', 'max:255'],
       'linked_company_id' => ['sometimes', 'required', 'int', 'exists:users,id'],
     ]);
+    // Log::info('ContactController@update', ['validated' => $validated]);
 
     $contact->update($validated);
 
