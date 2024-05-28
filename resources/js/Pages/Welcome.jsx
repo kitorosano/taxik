@@ -24,10 +24,7 @@ export default function Welcome({ auth }) {
 
         if (data.department === "") return router.get(route("contacts.index"));
 
-        const params = {
-            d: data.department,
-        };
-        router.get(route("contacts.index", params));
+        router.get(route("contacts.index", data));
     };
 
     return (

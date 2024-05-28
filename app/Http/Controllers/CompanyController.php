@@ -15,16 +15,22 @@ class CompanyController extends Controller
    */
   public function index(Request $request): Response
   {
-    $name = $request->query('n', '');
+    $name = $request->query('name', '');
 
-    if ($name === '') {
-      $companies = User::where('type', "=", 2)->with('contact')->paginate(8);
-    } else {
-      $companies = User::where('type', 2)->where('name', 'like', "%$name%")->with('contact')->paginate(8);
-    }
+    $companies = User::query()
+      ->where('type', '=', 2)
+      ->when($name, function ($query, $name) {
+        return $query->where('name', 'like', "%$name%");
+      })
+      ->with('contact')
+      ->paginate(8)
+      ->withQueryString();
 
     return Inertia::render('Companies/Index', [
       'companies' => CompaniesResource::collection($companies),
+      'filters' => [
+        'name' => $name,
+      ],
     ]);
   }
 

@@ -1,28 +1,6 @@
-import { useForm } from "@inertiajs/react";
 import UsersAdminTableRow from "./UsersAdminTableRow";
 
 function UsersAdminTable({ items, columns }) {
-    const { data, setData, post, clearErrors, reset, errors } = useForm({
-        name: "",
-        email: "",
-        type: "",
-    });
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
-        post(route("users.store"), {
-            onSuccess: () => {
-                handleCancel();
-            },
-        });
-    };
-
-    const handleCancel = () => {
-        reset();
-        clearErrors();
-    };
-
     return (
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
             <table className="w-full text-sm text-left rtl:text-right text-gray-500">

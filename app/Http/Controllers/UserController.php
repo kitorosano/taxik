@@ -17,17 +17,32 @@ class UserController extends Controller
    */
   public function index(Request $request): Response
   {
+    $PAGINATION_COUNT =  8;
 
-    $name = $request->query('n', '');
+    $name = $request->query('name', '');
+    $email = $request->query('email', '');
+    $type = $request->query('type', '');
 
-    if ($name === '') {
-      $users = User::paginate(8);
-    } else {
-      $users = User::where('name', 'like', "%$name%")->paginate(8);
-    }
+    $users = User::query()
+      ->when($name, function ($query, $name) {
+        return $query->where('name', 'like', "%$name%");
+      })
+      ->when($email, function ($query, $email) {
+        return $query->where('email', 'like', "%$email%");
+      })
+      ->when($type, function ($query, $type) {
+        return $query->where('type', $type);
+      })
+      ->paginate($PAGINATION_COUNT)
+      ->withQueryString();
 
     return Inertia::render('Users/Admin', [
       'users' => UserResource::collection($users),
+      'filters' => [
+        'name' => $name,
+        'email' => $email,
+        'type' => $type,
+      ],
     ]);
   }
 

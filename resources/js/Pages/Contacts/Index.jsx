@@ -1,53 +1,63 @@
 import Pagination from "@/Components/Pagination";
-import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import { objectToArray, removeEmptyValues } from "@/Utils/functions";
 import { Head, router, useForm } from "@inertiajs/react";
+import debounce from "just-debounce-it";
+import { useCallback } from "react";
 
-function Index({ auth, contacts }) {
-    const { data, setData, processing } = useForm({
-        department: "",
+function Index({ auth, contacts, filters }) {
+    const { data, setData } = useForm({
+        department: filters.department || "",
     });
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
-        if (data.department === "") return router.get(route("contacts.index"));
-
-        const params = {
-            d: data.department,
-        };
-        router.get(route("contacts.index", params));
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setData(name, value);
+        searchWithFilters(name, value);
     };
+
+    const searchWithFilters = useCallback(
+        debounce((name, value) => {
+            const realData = { ...data, [name]: value };
+            const arrayParams = objectToArray(realData);
+
+            if (arrayParams.every((v) => v === "")) {
+                router.get(route("contacts.index"));
+                return;
+            }
+
+            const transformedData = removeEmptyValues(realData);
+            router.visit(route("contacts.index"), {
+                data: transformedData,
+                preserveState: true,
+                replace: true,
+            });
+        }, 300),
+        [data]
+    );
 
     return (
         <AuthenticatedLayout
             user={auth.user}
             header={
-                <form onSubmit={handleSubmit}>
-                    <div className="flex justify-between items-center text-gray-900 py-4">
-                        <div className="flex justify-between w-full">
-                            <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                                Mostrando taxis de tu departamento
-                            </h2>
-                        </div>
-                        <div className="flex justify-between w-full">
-                            <TextInput
-                                id="location"
-                                className="max-w-96 ml-auto mr-2 text-black"
-                                value={data.department}
-                                onChange={(e) =>
-                                    setData("department", e.target.value)
-                                }
-                                autoFocus
-                                placeholder="Ingresa tu departamento"
-                            />
-                            <PrimaryButton disabled={processing}>
-                                Buscar Taxis
-                            </PrimaryButton>
-                        </div>
+                <div className="flex justify-between items-center text-gray-900 py-4">
+                    <div className="flex justify-between w-full">
+                        <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+                            Mostrando taxis de tu departamento
+                        </h2>
                     </div>
-                </form>
+                    <div className="flex justify-end w-full">
+                        <TextInput
+                            name="department"
+                            className="max-w-96 ml-auto mr-2 text-black"
+                            value={data.department}
+                            onChange={handleChange}
+                            autoFocus
+                            placeholder="Departamento..."
+                        />
+                    </div>
+                </div>
             }
         >
             <Head title="Contactos" />

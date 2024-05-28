@@ -1,13 +1,12 @@
 import InputError from "@/Components/InputError";
 import TextInput from "@/Components/TextInput";
-import { useForm } from "@inertiajs/react";
+import { router, useForm } from "@inertiajs/react";
 import { useState } from "react";
 
 function UsersAdminTableRow({ item, columns }) {
     const {
         data,
         setData,
-        patch,
         delete: destroy,
         clearErrors,
         reset,
@@ -27,8 +26,9 @@ function UsersAdminTableRow({ item, columns }) {
     const handleSave = (e) => {
         e.preventDefault();
 
-        patch(route("users.update", editingItem.id), {
+        router.patch(route("users.update", editingItem.id), {
             onSuccess: () => setEditingItem(null),
+            preserveScroll: true,
         });
     };
 

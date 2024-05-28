@@ -11,8 +11,6 @@ export default function UpdateContactInformationForm({
 }) {
     const user = usePage().props.auth.user;
 
-    console.log(contact);
-
     const {
         data,
         setData,

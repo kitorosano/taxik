@@ -1,37 +1,20 @@
 import Pagination from "@/Components/Pagination";
-import PrimaryButton from "@/Components/PrimaryButton";
-import SecondaryButton from "@/Components/SecondaryButton";
-import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, router, useForm } from "@inertiajs/react";
+import { Head } from "@inertiajs/react";
 import { useState } from "react";
+import ContactsAdminFilters from "./Partials/ContactsAdminFilters";
 import ContactsAdminTable from "./Partials/ContactsAdminTable";
 
 const columns = {
-    name: "nombre",
-    phone: "telefono",
-    address: "dirección",
-    department: "departamento",
-    companyName: "compañia asociada",
+    name: "Nombre",
+    phone: "Teléfono",
+    address: "Dirección",
+    department: "Departamento",
+    companyName: "Empresa Asociada",
 };
 
-function Admin({ auth, contacts }) {
-    const { data, setData, processing } = useForm({
-        department: "",
-    });
-
+function Admin({ auth, contacts, filters }) {
     const [creatingItem, setCreatingItem] = useState(false);
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
-        if (data.department === "") return router.get(route("contacts.index"));
-
-        const params = {
-            d: data.department,
-        };
-        router.get(route("contacts.index", params));
-    };
 
     const handleCreate = () => {
         setCreatingItem((prev) => !prev);
@@ -41,33 +24,11 @@ function Admin({ auth, contacts }) {
         <AuthenticatedLayout
             user={auth.user}
             header={
-                <form onSubmit={handleSubmit}>
-                    <div className="flex justify-between items-center text-gray-900 py-4">
-                        <div className="flex justify-between w-full">
-                            <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                                Gestiona todos los contactos de taxis
-                            </h2>
-                        </div>
-                        <div className="flex justify-between w-full">
-                            <SecondaryButton onClick={handleCreate}>
-                                Crear nuevo
-                            </SecondaryButton>
-                            <TextInput
-                                id="location"
-                                className="max-w-96 ml-auto mr-2 text-black"
-                                value={data.department}
-                                onChange={(e) =>
-                                    setData("department", e.target.value)
-                                }
-                                autoFocus
-                                placeholder="Departamento..."
-                            />
-                            <PrimaryButton disabled={processing}>
-                                Buscar
-                            </PrimaryButton>
-                        </div>
-                    </div>
-                </form>
+                <ContactsAdminFilters
+                    filters={filters}
+                    columns={columns}
+                    handleCreate={handleCreate}
+                />
             }
         >
             <Head title="Contactos" />
