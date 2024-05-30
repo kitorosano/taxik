@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
   use HasFactory, Notifiable;
 
@@ -38,6 +39,7 @@ class User extends Authenticatable
     'isAdmin',
     'isClient',
     'isCompany',
+    'typeString'
   ];
 
   /**
@@ -53,6 +55,11 @@ class User extends Authenticatable
     ];
   }
 
+  public function contact(): HasOne
+  {
+    return $this->hasOne(Contact::class, 'linked_company_id');
+  }
+
   protected function getIsAdminAttribute(): bool
   {
     return $this->type === 0;
@@ -66,5 +73,15 @@ class User extends Authenticatable
   protected function getIsCompanyAttribute(): bool
   {
     return $this->type === 2;
+  }
+
+  protected function getTypeStringAttribute(): string
+  {
+    return match ($this->type) {
+      0 => 'Administrador',
+      1 => 'Cliente',
+      2 => 'Compania',
+      default => 'Unknown',
+    };
   }
 }

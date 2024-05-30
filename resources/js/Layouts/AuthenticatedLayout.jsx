@@ -9,9 +9,8 @@ export default function Authenticated({ user, header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
 
-    const isLogged = user !== null;
-    const username = isLogged ? user.name : "Invitado";
-    const useremail = isLogged ? user.email : "";
+    const username = user ? user.name : "Invitado";
+    const useremail = user ? user.email : "";
 
     return (
         <div className="min-h-screen bg-gray-100">
@@ -21,7 +20,7 @@ export default function Authenticated({ user, header, children }) {
                         <div className="flex">
                             <div className="shrink-0 flex items-center">
                                 <Link href="/">
-                                    <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800" />
+                                    <ApplicationLogo className="w-[56px] h-[56px]" />
                                 </Link>
                             </div>
 
@@ -33,6 +32,32 @@ export default function Authenticated({ user, header, children }) {
                                     Contactos
                                 </NavLink>
                             </div>
+
+                            {user && user.isAdmin && (
+                                <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                    <NavLink
+                                        href={route("users.index")}
+                                        active={route().current("users.index")}
+                                    >
+                                        Usuarios
+                                    </NavLink>
+                                </div>
+                            )}
+
+                            {user && !user.isClient ? (
+                                <></>
+                            ) : (
+                                <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                    <NavLink
+                                        href={route("companies.index")}
+                                        active={route().current(
+                                            "companies.index"
+                                        )}
+                                    >
+                                        Reservar Viaje
+                                    </NavLink>
+                                </div>
+                            )}
                         </div>
 
                         <div className="hidden sm:flex sm:items-center sm:ms-6">
@@ -62,7 +87,7 @@ export default function Authenticated({ user, header, children }) {
                                         </span>
                                     </Dropdown.Trigger>
 
-                                    {isLogged ? (
+                                    {user ? (
                                         <Dropdown.Content>
                                             <Dropdown.Link
                                                 href={route("profile.edit")}
@@ -72,7 +97,6 @@ export default function Authenticated({ user, header, children }) {
                                             <Dropdown.Link
                                                 href={route("logout")}
                                                 method="post"
-                                                as="button"
                                             >
                                                 Cerrar Sesion
                                             </Dropdown.Link>
@@ -86,8 +110,6 @@ export default function Authenticated({ user, header, children }) {
                                             </Dropdown.Link>
                                             <Dropdown.Link
                                                 href={route("register")}
-                                                method="post"
-                                                as="button"
                                             >
                                                 Registrarme
                                             </Dropdown.Link>
@@ -155,6 +177,30 @@ export default function Authenticated({ user, header, children }) {
                         </ResponsiveNavLink>
                     </div>
 
+                    {user && user.isAdmin && (
+                        <div className="pt-2 pb-3 space-y-1">
+                            <ResponsiveNavLink
+                                href={route("users.index")}
+                                active={route().current("users.index")}
+                            >
+                                Usuarios
+                            </ResponsiveNavLink>
+                        </div>
+                    )}
+
+                    {user && !user.isClient ? (
+                        <></>
+                    ) : (
+                        <div className="pt-2 pb-3 space-y-1">
+                            <ResponsiveNavLink
+                                href={route("companies.index")}
+                                active={route().current("companies.index")}
+                            >
+                                Reservar Viaje
+                            </ResponsiveNavLink>
+                        </div>
+                    )}
+
                     <div className="pt-4 pb-1 border-t border-gray-200">
                         <div className="px-4">
                             <div className="font-medium text-base text-gray-800">
@@ -165,7 +211,7 @@ export default function Authenticated({ user, header, children }) {
                             </div>
                         </div>
 
-                        {isLogged ? (
+                        {user ? (
                             <div className="mt-3 space-y-1">
                                 <ResponsiveNavLink href={route("profile.edit")}>
                                     Perfil
@@ -183,11 +229,7 @@ export default function Authenticated({ user, header, children }) {
                                 <ResponsiveNavLink href={route("login")}>
                                     Entrar
                                 </ResponsiveNavLink>
-                                <ResponsiveNavLink
-                                    method="post"
-                                    href={route("register")}
-                                    as="button"
-                                >
+                                <ResponsiveNavLink href={route("register")}>
                                     Registrarme
                                 </ResponsiveNavLink>
                             </div>

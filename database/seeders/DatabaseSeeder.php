@@ -14,7 +14,7 @@ class DatabaseSeeder extends Seeder
    */
   public function run(): void
   {
-    // $this->userSeeds();
+    $this->userSeeds();
     $this->contactSeeds();
   }
 
@@ -35,17 +35,26 @@ class DatabaseSeeder extends Seeder
       'password' => '12345678',
       'type' => 1
     ]);
-    // Create company user
-    User::factory()->create([
-      'name' => 'Test Company',
-      'email' => 'company@example.com',
-      'password' => '12345678',
-      'type' => 2
-    ]);
   }
 
   protected function contactSeeds(): void
   {
-    Contact::factory(50)->create();
+    // Create company user
+    $company = User::factory()->create([
+      'name' => 'Compania Prueba',
+      'email' => 'company@example.com',
+      'password' => '12345678',
+      'type' => 2
+    ]);
+
+    Contact::factory()->create([
+      'name' => 'Test Company',
+      'phone' => '1234567890',
+      'address' => '123 Main St',
+      'department' => 'Montevideo',
+      'linked_company_id' => $company->id,
+    ]);
+
+    Contact::factory(49)->create();
   }
 }
