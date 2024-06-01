@@ -14,13 +14,14 @@ class DatabaseSeeder extends Seeder
    */
   public function run(): void
   {
-    $this->userSeeds();
-    $this->contactSeeds();
+    $this->adminSeed();
+    $this->clientSeed();
+    $this->companySeed();
+    $this->contactSeed();
   }
 
-  protected function userSeeds(): void
+  protected function adminSeed(): void
   {
-    // User::factory(10)->create();
     // Create admin user
     User::factory()->create([
       'name' => 'Test Admin',
@@ -28,6 +29,11 @@ class DatabaseSeeder extends Seeder
       'password' => '12345678',
       'type' => 0
     ]);
+  }
+
+  protected function clientSeed(): void
+  {
+
     // Create client user
     User::factory()->create([
       'name' => 'Test Client',
@@ -35,9 +41,23 @@ class DatabaseSeeder extends Seeder
       'password' => '12345678',
       'type' => 1
     ]);
+
+    User::factory(4)->create([
+      'password' => '12345678',
+      'type' => 1
+    ]);
   }
 
-  protected function contactSeeds(): void
+  protected function companySeed(): void
+  {
+
+    User::factory(5)->create([
+      'password' => '12345678',
+      'type' => 2
+    ]);
+  }
+
+  protected function contactSeed(): void
   {
     // Create company user
     $company = User::factory()->create([

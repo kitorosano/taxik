@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -12,11 +14,6 @@ class User extends Authenticatable implements MustVerifyEmail
 {
   use HasFactory, Notifiable;
 
-  /**
-   * The attributes that are mass assignable.
-   *
-   * @var array<int, string>
-   */
   protected $fillable = [
     'name',
     'email',
@@ -24,11 +21,6 @@ class User extends Authenticatable implements MustVerifyEmail
     'type',
   ];
 
-  /**
-   * The attributes that should be hidden for serialization.
-   *
-   * @var array<int, string>
-   */
   protected $hidden = [
     'password',
     'remember_token',
@@ -42,11 +34,6 @@ class User extends Authenticatable implements MustVerifyEmail
     'typeString'
   ];
 
-  /**
-   * Get the attributes that should be cast.
-   *
-   * @return array<string, string>
-   */
   protected function casts(): array
   {
     return [
@@ -58,6 +45,13 @@ class User extends Authenticatable implements MustVerifyEmail
   public function contact(): HasOne
   {
     return $this->hasOne(Contact::class, 'linked_company_id');
+  }
+
+  public function favoriteCompanies(): BelongsToMany
+  {
+    return $this->belongsToMany(User::class, 'client_favorite_companies', 'client_id', 'company_id')
+      ->using(ClientFavoriteCompany::class)
+      ->withPivot(['id', 'client_id', 'company_id']);
   }
 
   protected function getIsAdminAttribute(): bool
@@ -80,7 +74,7 @@ class User extends Authenticatable implements MustVerifyEmail
     return match ($this->type) {
       0 => 'Administrador',
       1 => 'Cliente',
-      2 => 'Compania',
+      2 => 'Empresa',
       default => 'Unknown',
     };
   }

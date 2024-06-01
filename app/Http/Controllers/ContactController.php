@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreContactRequest;
 use App\Http\Resources\ContactResource;
 use App\Models\Contact;
 use Illuminate\Http\RedirectResponse;
@@ -81,18 +82,12 @@ class ContactController extends Controller
   /**
    * Store a newly created resource in storage.
    */
-  public function store(Request $request): RedirectResponse
+  public function store(StoreContactRequest $request): RedirectResponse
   {
     // validate admin
     Gate::authorize('create', Contact::class);
 
-    $validated = $request->validate([
-      'name' => ['required', 'string', 'max:255'],
-      'phone' => ['required', 'string', 'max:255'],
-      'address' => ['required', 'string', 'max:255'],
-      'department' => ['required', 'string', 'max:255'],
-      'linked_company_id' => ['sometimes', 'int', 'exists:users,id'],
-    ]);
+    $validated = $request->validated();
 
     Contact::create($validated);
 
@@ -121,18 +116,11 @@ class ContactController extends Controller
   /**
    * Update the specified resource in storage.
    */
-  public function update(Request $request, Contact $contact): RedirectResponse
+  public function update(StoreContactRequest $request, Contact $contact): RedirectResponse
   {
     Gate::authorize('update', $contact);
 
-    $validated = $request->validate([
-      'name' => ['required', 'string', 'max:255'],
-      'phone' => ['required', 'string', 'max:255'],
-      'address' => ['required', 'string', 'max:255'],
-      'department' => ['required', 'string', 'max:255'],
-      'linked_company_id' => ['sometimes', 'required', 'int', 'exists:users,id'],
-    ]);
-    // Log::info('ContactController@update', ['validated' => $validated]);
+    $validated = $request->validated();
 
     $contact->update($validated);
 
