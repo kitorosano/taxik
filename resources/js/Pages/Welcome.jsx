@@ -5,8 +5,6 @@ import { Head, Link, router, useForm } from "@inertiajs/react";
 import TaxikLogo from "/resources/assets/img/taxik-logo-red.png";
 
 export default function Welcome({ auth }) {
-    console.log(TaxikLogo);
-
     const handleImageError = () => {
         document
             .getElementById("screenshot-container")

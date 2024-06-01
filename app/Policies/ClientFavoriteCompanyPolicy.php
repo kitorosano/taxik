@@ -5,14 +5,14 @@ namespace App\Policies;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
 
-class UserPolicy
+class ClientFavoriteCompanyPolicy
 {
   /**
    * Determine whether the user can view any models.
    */
   public function viewAny(User $user): bool
   {
-    return $user->isAdmin || $user->isClient;
+    return false;
   }
 
   /**
@@ -26,10 +26,9 @@ class UserPolicy
   /**
    * Determine whether the user can create models.
    */
-  public function create(User $user): bool
+  public function create(User $user, User $model): bool
   {
-    Log::info('UserPolicy::create');
-    return false;
+    return $user->isClient && $model->isCompany;
   }
 
   /**
@@ -37,7 +36,7 @@ class UserPolicy
    */
   public function update(User $user, User $model): bool
   {
-    return $user->isAdmin;
+    return false;
   }
 
   /**
@@ -45,7 +44,8 @@ class UserPolicy
    */
   public function delete(User $user, User $model): bool
   {
-    return $user->isAdmin;
+    Log::info('ClientFavoriteCompanyPolicy::delete');
+    return $user->isClient && $model->isCompany;
   }
 
   /**

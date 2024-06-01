@@ -4,6 +4,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ClientFavoriteCompanyController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -40,9 +41,15 @@ Route::resource('users', UserController::class)
   ->only(['index', 'update', 'destroy'])
   ->middleware(['auth', 'can:viewAny,App\Models\User']);
 
-Route::get('/companies', [CompanyController::class, 'index'])
-  ->middleware(['auth', 'can:viewAny,App\Models\User'])
-  ->name('companies.index');
+// Route::get('/companies', [CompanyController::class, 'index'])
+//   ->middleware(['auth', 'can:viewAny,App\Models\User'])
+//   ->name('companies.index');
+Route::resource('companies', CompanyController::class)
+  ->only(['index'])
+  ->middleware(['auth', 'can:viewAny,App\Models\User']);
 
+Route::resource('favorite-companies', ClientFavoriteCompanyController::class)
+  ->only(['store', 'destroy'])
+  ->middleware(['auth']);
 
 require __DIR__ . '/auth.php';

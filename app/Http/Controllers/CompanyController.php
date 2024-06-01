@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\CompaniesResource;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -17,17 +18,30 @@ class CompanyController extends Controller
   {
     $name = $request->query('name', '');
 
+    Log::info(auth()->id());
+
+    $favoriteCompanies = request()->user()
+      ->favoriteCompanies()
+      ->with('contact')
+      ->get();
+
+
     $companies = User::query()
       ->where('type', '=', 2)
       ->when($name, function ($query, $name) {
         return $query->where('name', 'like', "%$name%");
       })
+      ->whereNotIn('id', $favoriteCompanies->pluck('id'))
       ->with('contact')
       ->paginate(8)
       ->withQueryString();
 
+
+
+
     return Inertia::render('Companies/Index', [
       'companies' => CompaniesResource::collection($companies),
+      'favoriteCompanies' => CompaniesResource::collection($favoriteCompanies),
       'filters' => [
         'name' => $name,
       ],

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -81,14 +82,11 @@ class UserController extends Controller
   /**
    * Update the specified resource in storage.
    */
-  public function update(Request $request, User $user)
+  public function update(UpdateUserRequest $request, User $user)
   {
     Gate::authorize('update', $user);
 
-    $validated = $request->validate([
-      'name' => ['required', 'string', 'max:255'],
-      'email' => ['required', 'string', 'max:255'],
-    ]);
+    $validated = $request->validated();
 
     $user->update($validated);
 
