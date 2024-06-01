@@ -4,34 +4,28 @@ function FavoriteButton({ onClick, isFavorite = false }) {
             type="submit"
             className={
                 isFavorite
-                    ? "text-red-500 hover:text-gray-500"
-                    : "text-gray-500 hover:text-red-500"
+                    ? "text-yellow-400 hover:text-gray-300"
+                    : "text-gray-500 hover:text-yellow-500"
             }
             onClick={onClick}
         >
-            <svg
-                fill={"currentColor"}
-                height="20px"
-                width="20px"
-                version="1.1"
-                id="Capa_1"
-                xmlns="http://www.w3.org/2000/svg"
-                xmlnsXlink="http://www.w3.org/1999/xlink"
-                viewBox="0 0 471.701 471.701"
-                xmlSpace="preserve"
-            >
-                <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-                <g
-                    id="SVGRepo_tracerCarrier"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                ></g>
-                <g id="SVGRepo_iconCarrier">
-                    <g>
-                        <path d="M433.601,67.001c-24.7-24.7-57.4-38.2-92.3-38.2s-67.7,13.6-92.4,38.3l-12.9,12.9l-13.1-13.1 c-24.7-24.7-57.6-38.4-92.5-38.4c-34.8,0-67.6,13.6-92.2,38.2c-24.7,24.7-38.3,57.5-38.2,92.4c0,34.9,13.7,67.6,38.4,92.3 l187.8,187.8c2.6,2.6,6.1,4,9.5,4c3.4,0,6.9-1.3,9.5-3.9l188.2-187.5c24.7-24.7,38.3-57.5,38.3-92.4 C471.801,124.501,458.301,91.701,433.601,67.001z M414.401,232.701l-178.7,178l-178.3-178.3c-19.6-19.6-30.4-45.6-30.4-73.3 s10.7-53.7,30.3-73.2c19.5-19.5,45.5-30.3,73.1-30.3c27.7,0,53.8,10.8,73.4,30.4l22.6,22.6c5.3,5.3,13.8,5.3,19.1,0l22.4-22.4 c19.6-19.6,45.7-30.4,73.3-30.4c27.6,0,53.6,10.8,73.2,30.3c19.6,19.6,30.3,45.6,30.3,73.3 C444.801,187.101,434.001,213.101,414.401,232.701z"></path>{" "}
-                    </g>
-                </g>
-            </svg>
+            {isFavorite ? (
+                <svg height="20px" viewBox="0 0 24 24">
+                    <path
+                        d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
+                        fill="currentColor"
+                    />
+                    <path d="M0 0h24v24H0z" fill="none" />
+                </svg>
+            ) : (
+                <svg height="20px" viewBox="0 0 24 24">
+                    <path
+                        d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"
+                        fill="currentColor"
+                    />
+                    <path d="M0 0h24v24H0z" fill="none" />
+                </svg>
+            )}
         </button>
     );
 }

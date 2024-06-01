@@ -34,9 +34,6 @@ function CompaniesGridItem({ company }) {
                         <p className="text-xs">{company.contact.department}</p>
                     </>
                 )}
-
-                {/* ratign */}
-                <Rating className="mt-2" value={3} />
             </div>
         </div>
     );
