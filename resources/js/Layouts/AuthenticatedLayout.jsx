@@ -11,6 +11,7 @@ export default function Authenticated({ user, header, children }) {
 
     const username = user ? user.name : "Invitado";
     const useremail = user ? user.email : "";
+    const useravatar = user ? user.avatar : "";
 
     return (
         <div className="min-h-screen bg-gray-100">
@@ -69,6 +70,14 @@ export default function Authenticated({ user, header, children }) {
                                                 type="button"
                                                 className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
                                             >
+                                                {useravatar && (
+                                                    <img
+                                                        src={useravatar}
+                                                        className="w-8 h-8 rounded-full mx-2"
+                                                        alt="Avatar"
+                                                    />
+                                                )}
+
                                                 {username}
 
                                                 <svg
@@ -202,14 +211,34 @@ export default function Authenticated({ user, header, children }) {
                     )}
 
                     <div className="pt-4 pb-1 border-t border-gray-200">
-                        <div className="px-4">
-                            <div className="font-medium text-base text-gray-800">
-                                {username}
+                        {useravatar ? (
+                            <div className="px-4 flex items-center">
+                                <div className="flex-col">
+                                    <img
+                                        src={useravatar}
+                                        className="w-8 h-8 rounded-full mx-2"
+                                        alt="Avatar"
+                                    />
+                                </div>
+                                <div className="flex-col">
+                                    <div className="font-medium text-base text-gray-800">
+                                        {username}
+                                    </div>
+                                    <div className="font-medium text-sm text-gray-500">
+                                        {useremail}
+                                    </div>
+                                </div>
                             </div>
-                            <div className="font-medium text-sm text-gray-500">
-                                {useremail}
+                        ) : (
+                            <div className="px-4">
+                                <div className="font-medium text-base text-gray-800">
+                                    {username}
+                                </div>
+                                <div className="font-medium text-sm text-gray-500">
+                                    {useremail}
+                                </div>
                             </div>
-                        </div>
+                        )}
 
                         {user ? (
                             <div className="mt-3 space-y-1">

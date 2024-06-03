@@ -18,6 +18,7 @@ return new class extends Migration
       $table->timestamp('email_verified_at')->nullable();
       $table->string('password');
       $table->integer('type')->default(1); // 0 - Admin | 1 - Client | 2 - Company
+      $table->mediumText('avatar')->nullable();
       $table->rememberToken();
       $table->timestamps();
     });
