@@ -25,7 +25,6 @@ export default function Edit({ auth, mustVerifyEmail, status, contact }) {
                         <UpdateProfileInformationForm
                             mustVerifyEmail={mustVerifyEmail}
                             status={status}
-                            className="max-w-xl"
                         />
                     </div>
                     {auth.user.isCompany && (
@@ -41,9 +40,11 @@ export default function Edit({ auth, mustVerifyEmail, status, contact }) {
                         <UpdatePasswordForm className="max-w-xl" />
                     </div>
 
-                    <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                        <DeleteUserForm className="max-w-xl" />
-                    </div>
+                    {auth.user.isCompany && (
+                        <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
+                            <DeleteUserForm className="max-w-xl" />
+                        </div>
+                    )}
                 </div>
             </div>
         </AuthenticatedLayout>
