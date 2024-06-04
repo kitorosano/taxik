@@ -1,20 +1,15 @@
 import InputError from "@/Components/InputError";
 import PrimaryButton from "@/Components/PrimaryButton";
-import TextInput from "@/Components/TextInput";
+import TextInputWithOptions from "@/Components/TextInputWithOptions";
+import { departmentList } from "@/Utils/constants";
 import { Head, Link, router, useForm } from "@inertiajs/react";
 import TaxikLogo from "/resources/assets/img/taxik-logo-red.png";
 
 export default function Welcome({ auth }) {
-    const handleImageError = () => {
-        document
-            .getElementById("screenshot-container")
-            ?.classList.add("!hidden");
-        document.getElementById("docs-card")?.classList.add("!row-span-1");
-        document
-            .getElementById("docs-card-content")
-            ?.classList.add("!flex-row");
-        document.getElementById("background")?.classList.add("!hidden");
-    };
+    const selectableDepartments = departmentList.map((department) => ({
+        key: department,
+        value: department,
+    }));
 
     const { data, setData, processing, errors } = useForm({
         department: "",
@@ -42,7 +37,10 @@ export default function Welcome({ auth }) {
                         <header className="grid grid-cols-2 items-center gap-2 py-10 lg:grid-cols-3">
                             <div className="flex lg:justify-center lg:col-start-2">
                                 {/* LOGO TAXIK */}
-                                <img className="absolute w-28 h-28" src={TaxikLogo} />
+                                <img
+                                    className="absolute w-28 h-28"
+                                    src={TaxikLogo}
+                                />
                             </div>
                             <nav className="-mx-3 flex flex-1 justify-end">
                                 {auth.user ? (
@@ -83,16 +81,21 @@ export default function Welcome({ auth }) {
                                 <form onSubmit={handleSubmit}>
                                     <div>
                                         <div className="flex justify-between w-full">
-                                            <TextInput
+                                            <TextInputWithOptions
                                                 id="location"
-                                                className="w-full mr-2 text-black"
-                                                value={data.department}
-                                                onChange={(e) =>
+                                                optionList={
+                                                    selectableDepartments
+                                                }
+                                                inputValue={data.department}
+                                                inputOnChange={(e) =>
                                                     setData(
                                                         "department",
                                                         e.target.value
                                                     )
                                                 }
+                                                wrapperClassName="mr-2"
+                                                inputClassName="w-full h-full text-black"
+                                                optionsClassName="px-2 py-2 text-gray-900 text-sm hover:bg-indigo-100"
                                                 autoFocus
                                                 placeholder="Ingresa tu departamento"
                                             />

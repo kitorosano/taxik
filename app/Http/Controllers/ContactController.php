@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreContactRequest;
+use App\Http\Resources\CompaniesResource;
 use App\Http\Resources\ContactResource;
 use App\Models\Contact;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -49,6 +51,8 @@ class ContactController extends Controller
       ->paginate($PAGINATION_COUNT)
       ->withQueryString();
 
+    $companies = User::query()->where('type', '=', 2)->get();
+
 
     if (Auth::check() && Auth::user()->isAdmin) {
       return Inertia::render('Contacts/Admin', [
@@ -60,6 +64,7 @@ class ContactController extends Controller
           'department' => $department,
           'companyName' => $companyName,
         ],
+        'companies' => CompaniesResource::collection($companies),
       ]);
     }
 
