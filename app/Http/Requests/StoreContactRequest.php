@@ -6,13 +6,6 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreContactRequest extends FormRequest
 {
-  /**
-   * Determine if the user is authorized to make this request.
-   */
-  public function authorize(): bool
-  {
-    return false;
-  }
 
   /**
    * Get the validation rules that apply to the request.
@@ -26,7 +19,7 @@ class StoreContactRequest extends FormRequest
       'phone' => ['required', 'string', 'max:255'],
       'address' => ['required', 'string', 'max:255'],
       'department' => ['required', 'string', 'max:255'],
-      'linked_company_id' => ['sometimes', 'int', 'exists:users,id'],
+      'linked_company_id' => ['sometimes', 'nullable', 'int', 'exists:users,id'],
     ];
   }
 }

@@ -41,7 +41,7 @@ class CompanyController extends Controller
 
     return Inertia::render('Companies/Index', [
       'companies' => CompaniesResource::collection($companies),
-      'favoriteCompanies' => CompaniesResource::collection($favoriteCompanies),
+      'favoriteCompanies' => CompaniesResource::collection($favoriteCompanies), // TOFIX: Have it be a collection of favorite companies
       'filters' => [
         'name' => $name,
       ],

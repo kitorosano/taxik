@@ -20,7 +20,8 @@ class ContactResource extends JsonResource
       'phone' => $this->phone,
       'address' => $this->address,
       'department' => $this->department,
-      'companyName' => $this->companyName
+      'companyName' => $this->companyName,
+      'linked_company_id' => $this->linked_company_id,
     ];
   }
 }
