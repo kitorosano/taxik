@@ -26,6 +26,7 @@ function TextInputWithOptions(
 
     // escribo y cuando selecciono una opcion
     const handleChange = (e) => {
+        setIsListVisible(true);
         setInputValue(e.target.value);
         filterOptions(e.target.value);
         inputOnChange(e);
@@ -58,13 +59,13 @@ function TextInputWithOptions(
     };
 
     return (
-        <div className={"relative " + wrapperClassName}>
+        <div className={"relative w-full " + wrapperClassName}>
             <TextInput
                 ref={ref}
                 className={inputClassName}
                 value={inputValue}
                 onChange={handleChange}
-                onFocus={() => setIsListVisible(true)}
+                // onFocus={() => setIsListVisible(true)}
                 onBlur={handleInputBlur}
                 {...props}
             />
@@ -72,7 +73,7 @@ function TextInputWithOptions(
             {(isListVisible || optionsIsAlwaysVisible) && (
                 <div
                     className={
-                        "absolute flex flex-col bg-white shadow-md rounded-lg mt-2 max-h-40 overflow-y-auto w-full"
+                        "absolute flex flex-col bg-white shadow-md rounded-lg mt-2 max-h-44 overflow-y-auto w-full "
                     }
                 >
                     {optionList.map(({ key, value }) => (
