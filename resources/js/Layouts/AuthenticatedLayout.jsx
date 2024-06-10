@@ -45,19 +45,29 @@ export default function Authenticated({ user, header, children }) {
                                 </div>
                             )}
 
-                            {user && !user.isClient ? (
-                                <></>
-                            ) : (
-                                <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                    <NavLink
-                                        href={route("companies.index")}
-                                        active={route().current(
-                                            "companies.index"
-                                        )}
-                                    >
-                                        Reservar Viaje
-                                    </NavLink>
-                                </div>
+                            {user && user.isClient && (
+                                <>
+                                    <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                        <NavLink
+                                            href={route("companies.index")}
+                                            active={route().current(
+                                                "companies.index"
+                                            )}
+                                        >
+                                            Reservar Viaje
+                                        </NavLink>
+                                    </div>
+                                    <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                        <NavLink
+                                            href={route("travel-order.index")}
+                                            active={route().current(
+                                                "travel-order.index"
+                                            )}
+                                        >
+                                            Historial de Reservas
+                                        </NavLink>
+                                    </div>
+                                </>
                             )}
                         </div>
 
@@ -197,17 +207,25 @@ export default function Authenticated({ user, header, children }) {
                         </div>
                     )}
 
-                    {user && !user.isClient ? (
-                        <></>
-                    ) : (
-                        <div className="pt-2 pb-3 space-y-1">
-                            <ResponsiveNavLink
-                                href={route("companies.index")}
-                                active={route().current("companies.index")}
-                            >
-                                Reservar Viaje
-                            </ResponsiveNavLink>
-                        </div>
+                    {user && user.isClient && (
+                        <>
+                            <div className="pt-2 pb-3 space-y-1">
+                                <ResponsiveNavLink
+                                    href={route("companies.index")}
+                                    active={route().current("companies.index")}
+                                >
+                                    Reservar Viaje
+                                </ResponsiveNavLink>
+                            </div>
+                            <div className="pt-2 pb-3 space-y-1">
+                                <ResponsiveNavLink
+                                    href={route("travel-order.index")}
+                                    active={route().current("travel-order.index")}
+                                >
+                                    Historial de Reservas
+                                </ResponsiveNavLink>
+                            </div>
+                        </>
                     )}
 
                     <div className="pt-4 pb-1 border-t border-gray-200">

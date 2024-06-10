@@ -20,7 +20,7 @@ return new class extends Migration
       $table->string('destination');
       $table->dateTime('departure_date');
       $table->float('price');
-      $table->string('status')->default('pending');
+      $table->integer('status')->default(0); // 1 - Pending | 2 - Approved | 3 - Rejected | 4 - Completed | 5 - Canceled
       $table->dateTime('estimated_arrival_date')->nullable();
       $table->timestamps();
     });
