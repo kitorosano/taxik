@@ -4,7 +4,8 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { objectToArray, removeEmptyValues } from "@/Utils/functions";
 import { Head, router, useForm } from "@inertiajs/react";
 import debounce from "just-debounce-it";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
+import BookTravelModal from "./Partials/BookTravelModal";
 import CompaniesGrid from "./Partials/CompaniesGrid";
 import FavoriteCompaniesList from "./Partials/FavoriteCompaniesList";
 
@@ -13,6 +14,7 @@ function Index({ auth, companies, favoriteCompanies, filters }) {
         name: filters.name || "",
         favorites: filters.favorites || false,
     });
+    const [selectedCompany, setSelectedCompany] = useState(null);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -71,7 +73,10 @@ function Index({ auth, companies, favoriteCompanies, filters }) {
                             <h2 className="font-semibold text-xl text-gray-800 leading-tight p-4 ml-2">
                                 Favoritos
                             </h2>
-                            <FavoriteCompaniesList companies={favoriteCompanies.data} />
+                            <FavoriteCompaniesList
+                                companies={favoriteCompanies.data}
+                                setSelectedCompany={setSelectedCompany}
+                            />
                         </div>
                     </div>
                 )}
@@ -81,11 +86,19 @@ function Index({ auth, companies, favoriteCompanies, filters }) {
                         <h2 className="font-semibold text-xl text-gray-800 leading-tight p-4 ml-2">
                             Empresas
                         </h2>
-                        <CompaniesGrid companies={companies.data} />
+                        <CompaniesGrid
+                            companies={companies.data}
+                            setSelectedCompany={setSelectedCompany}
+                        />
                     </div>
 
                     <Pagination meta={companies.meta} links={companies.links} />
                 </div>
+
+                <BookTravelModal
+                    selectedCompany={selectedCompany}
+                    onClose={() => setSelectedCompany(null)}
+                />
             </div>
         </AuthenticatedLayout>
     );

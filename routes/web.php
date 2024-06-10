@@ -5,6 +5,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ClientFavoriteCompanyController;
+use App\Http\Controllers\TravelOrderController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -50,6 +51,10 @@ Route::resource('companies', CompanyController::class)
 
 Route::resource('favorite-companies', ClientFavoriteCompanyController::class)
   ->only(['store', 'destroy'])
+  ->middleware(['auth']);
+
+Route::resource('travel-order', TravelOrderController::class)
+  ->only(['index', 'store', 'show', 'edit', 'update', 'destroy'])
   ->middleware(['auth']);
 
 require __DIR__ . '/auth.php';

@@ -59,7 +59,8 @@ export default function Register() {
                     </div>
                     <InputError message={errors.type} className="mt-2" />
                 </div>
-                <div>
+
+                <div className="mt-4">
                     <InputLabel htmlFor="name" value="Nombre" />
 
                     <TextInput
