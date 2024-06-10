@@ -3,18 +3,28 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTravelOrderRequest;
+use App\Http\Resources\TravelOrderResource;
 use App\Models\TravelOrder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class TravelOrderController extends Controller
 {
   /**
    * Display a listing of the resource.
    */
-  public function index()
+  public function index(): Response
   {
-    //
+    $orders = TravelOrder::query()
+      ->where('client_id', '=', auth()->user()->id)
+      ->paginate(8)
+      ->withQueryString();
+
+    return Inertia::render('Orders/Index', [
+      'orders' => TravelOrderResource::collection($orders),
+    ]);
   }
 
   /**
@@ -42,7 +52,7 @@ class TravelOrderController extends Controller
       'departure_date' => $validated['departure_date'],
       'price' => $validated['price'],
       'estimated_arrival_date' => $validated['estimated_arrival_date'],
-      'status' => 0,
+      'status' => 1,
     ]);
 
     // TODO: Dispatch an event to notify the company that a new travel order has been created
