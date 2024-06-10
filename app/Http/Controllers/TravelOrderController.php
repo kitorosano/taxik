@@ -30,7 +30,7 @@ class TravelOrderController extends Controller
    */
   public function store(StoreTravelOrderRequest $request)
   {
-    // Gate::authorize('create', TravelOrder::class);
+    // Gate::authorize('create', TravelOrder::class); // TODO: Uncomment this line
 
     $validated = $request->validated();
 
