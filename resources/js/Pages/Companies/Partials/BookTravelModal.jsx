@@ -18,29 +18,25 @@ import { useEffect, useState } from "react";
 function BookTravelModal({ selectedCompany, onClose }) {
     const show = selectedCompany !== null;
 
-    const {
-        data,
-        setData,
-        post,
-        transform,
-        processing,
-        clearErrors,
-        setError,
-        errors,
-        reset,
-    } = useForm({
-        company_id: null,
-        origin: "",
-        destination: "",
-        departure_date: "",
-        price: 0,
-        estimated_arrival_date: "",
-        has_luggage: false,
-    });
+    const { data, setData, processing, clearErrors, setError, errors, reset } =
+        useForm({
+            company_id: null,
+            origin: "",
+            destination: "",
+            departure_date: "",
+            price: 0,
+            estimated_arrival_date: "",
+            has_luggage: false,
+        });
 
     const [isCalculating, setIsCalculating] = useState(null);
     const [totalPrice, setTotalPrice] = useState(0);
     const [estimatedArrivalDate, setEstimatedArrivalDate] = useState("");
+
+    const minimumDepartureDate = new Date().toISOString().slice(0, 16); // current date and time
+    const maximumDepartureDate = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000) // current date and time plus 14 days
+        .toISOString()
+        .slice(0, 16);
 
     useEffect(() => {
         if (selectedCompany) {
@@ -201,6 +197,8 @@ function BookTravelModal({ selectedCompany, onClose }) {
                                     type="datetime-local"
                                     name="departure_date"
                                     value={data.departure_date}
+                                    min={minimumDepartureDate}
+                                    max={maximumDepartureDate}
                                     className="mt-1 block w-full"
                                     autoComplete="departure_date"
                                     onChange={(e) =>
