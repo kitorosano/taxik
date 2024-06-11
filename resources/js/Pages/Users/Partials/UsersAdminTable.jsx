@@ -1,6 +1,10 @@
+import { useState } from "react";
+import UpdateUsersAdminTableRow from "./UpdateUsersAdminTableRow";
 import UsersAdminTableRow from "./UsersAdminTableRow";
 
 function UsersAdminTable({ items, columns }) {
+    const [editingItem, setEditingItem] = useState(null);
+
     if (items.length === 0) {
         return (
             <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -31,13 +35,21 @@ function UsersAdminTable({ items, columns }) {
                     </tr>
                 </thead>
                 <tbody>
-                    {items.map((item) => (
-                        <UsersAdminTableRow
-                            key={item.id}
-                            item={item}
-                            columns={columns}
-                        />
-                    ))}
+                    {items.map((item) =>
+                        editingItem?.id === item.id ? (
+                            <UpdateUsersAdminTableRow
+                                key={item.id}
+                                item={item}
+                                setEditingItem={setEditingItem}
+                            />
+                        ) : (
+                            <UsersAdminTableRow
+                                key={item.id}
+                                item={item}
+                                setEditingItem={setEditingItem}
+                            />
+                        )
+                    )}
                 </tbody>
             </table>
         </div>
