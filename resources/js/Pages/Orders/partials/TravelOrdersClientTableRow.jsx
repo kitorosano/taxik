@@ -13,9 +13,13 @@ function TravelOrdersClientTableRow({ item }) {
                 </span>
             </td>
 
+            <td className="px-1 py-4">{item.company}</td>
+
             <td className="px-1 py-4">{item.origin}</td>
 
             <td className="px-1 py-4">{item.destination}</td>
+
+            <td className="px-1 py-4">${item.price}</td>
 
             <td className="px-1 py-4">{item.departureDate}</td>
 

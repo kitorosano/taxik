@@ -121,7 +121,7 @@ function UpdateContactsAdminTableRow({ item, setEditingItem, companies = [] }) {
                     inputValue={data.department}
                     inputOnChange={(e) => setData("department", e.target.value)}
                     inputClassName="w-full px-2 py-1 text-gray-900 text-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
-                    optionsClassName="px-2 py-1 text-gray-900 text-sm hover:bg-indigo-100"
+                    optionClassName="px-2 py-1 text-gray-900 text-sm hover:bg-indigo-100"
                 />
                 <InputError message={errors.department} className="mt-2" />
             </td>
@@ -133,7 +133,7 @@ function UpdateContactsAdminTableRow({ item, setEditingItem, companies = [] }) {
                     inputValue={data.companyName}
                     inputOnChange={handleChangeLinkedCompany}
                     inputClassName="w-full px-2 py-1 text-gray-900 text-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
-                    optionsClassName="px-2 py-1 text-gray-900 text-sm"
+                    optionClassName="px-2 py-1 text-gray-900 text-sm"
                 />
                 <InputError
                     message={errors.linked_company_id}

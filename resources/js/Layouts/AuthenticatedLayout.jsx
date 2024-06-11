@@ -45,6 +45,19 @@ export default function Authenticated({ user, header, children }) {
                                 </div>
                             )}
 
+                            {user && user.isCompany && (
+                                <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                    <NavLink
+                                        href={route("travel-order.index")}
+                                        active={route().current(
+                                            "travel-order.index"
+                                        )}
+                                    >
+                                        Solicitudes de Reservas
+                                    </NavLink>
+                                </div>
+                            )}
+
                             {user && user.isClient && (
                                 <>
                                     <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
@@ -203,6 +216,17 @@ export default function Authenticated({ user, header, children }) {
                                 active={route().current("users.index")}
                             >
                                 Usuarios
+                            </ResponsiveNavLink>
+                        </div>
+                    )}
+
+                    {user && user.isCompany && (
+                        <div className="pt-2 pb-3 space-y-1">
+                            <ResponsiveNavLink
+                                href={route("travel-order.index")}
+                                active={route().current("travel-order.index")}
+                            >
+                                Solicitud de Reservas
                             </ResponsiveNavLink>
                         </div>
                     )}

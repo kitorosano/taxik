@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTravelOrderRequest;
+use App\Http\Requests\UpdateTravelOrderRequest;
 use App\Http\Resources\TravelOrderResource;
 use App\Models\TravelOrder;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -18,9 +21,21 @@ class TravelOrderController extends Controller
   public function index(): Response
   {
     $orders = TravelOrder::query()
-      ->where('client_id', '=', auth()->user()->id)
+      ->when(auth()->user()->isClient, function ($query) {
+        return $query->where('client_id', '=', auth()->user()->id);
+      })
+      ->when(auth()->user()->isCompany, function ($query) {
+        return $query->where('company_id', '=', auth()->user()->id);
+      })
+      ->orderBy('created_at', 'desc')
       ->paginate(8)
       ->withQueryString();
+
+    if (auth()->check() && auth()->user()->isCompany) {
+      return Inertia::render('Orders/Company', [
+        'orders' => TravelOrderResource::collection($orders),
+      ]);
+    }
 
     return Inertia::render('Orders/Index', [
       'orders' => TravelOrderResource::collection($orders),
@@ -79,9 +94,15 @@ class TravelOrderController extends Controller
   /**
    * Update the specified resource in storage.
    */
-  public function update(Request $request, TravelOrder $travelOrder)
+  public function update(UpdateTravelOrderRequest $request, TravelOrder $travelOrder): RedirectResponse
   {
-    //
+    Gate::authorize('update', $travelOrder);
+
+    $validated = $request->validated();
+
+    $travelOrder->update($validated);
+
+    return redirect(route('travel-order.index'));
   }
 
   /**

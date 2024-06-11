@@ -7,7 +7,7 @@ function TextInputWithOptions(
         wrapperClassName = "",
         inputClassName = "",
         inputValue: _inputValue = "",
-        optionsClassName = "",
+        optionClassName = "",
         inputIsFocused = false,
         inputOnChange = (e) => {},
         optionsOnChange = (e, option) => {},
@@ -73,14 +73,14 @@ function TextInputWithOptions(
             {(isListVisible || optionsIsAlwaysVisible) && (
                 <div
                     className={
-                        "absolute flex flex-col bg-white shadow-md rounded-lg mt-2 max-h-44 overflow-y-auto w-full "
+                        "absolute flex flex-col bg-white shadow-md rounded-lg mt-2 max-h-44 overflow-y-auto w-full z-10 "
                     }
                 >
                     {optionList.map(({ key, value }) => (
                         <div
                             key={key}
                             className={
-                                "relative cursor-pointer " + optionsClassName
+                                "relative cursor-pointer " + optionClassName
                             }
                             onClick={(e) => handleOptionClick({ key, value })}
                         >

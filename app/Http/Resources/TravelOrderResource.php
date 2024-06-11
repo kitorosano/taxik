@@ -14,6 +14,20 @@ class TravelOrderResource extends JsonResource
    */
   public function toArray(Request $request): array
   {
+
+    if ($request->user()->isCompany) {
+      return [
+        'id' => $this->id,
+        'client' => $this->clientName,
+        'price' => $this->price,
+        'status' => $this->statusString,
+        'origin' => $this->origin,
+        'departureDate' => $this->departure_date->format('d/m/Y H:i'),
+        'destination' => $this->destination,
+        'estimatedArrivalDate' => $this->estimated_arrival_date->format('d/m/Y H:i'),
+      ];
+    }
+
     return [
       'id' => $this->id,
       'company' => $this->companyName,
