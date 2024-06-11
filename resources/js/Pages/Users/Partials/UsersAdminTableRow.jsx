@@ -1,6 +1,6 @@
 import InputError from "@/Components/InputError";
 import TextInput from "@/Components/TextInput";
-import { router, useForm } from "@inertiajs/react";
+import { router, useForm } from "@moraki/inertia-react";
 import { useState } from "react";
 
 function UsersAdminTableRow({ item, columns }) {

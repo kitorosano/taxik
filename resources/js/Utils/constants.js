@@ -20,6 +20,14 @@ export const departmentList = [
     "Treinta y Tres",
 ];
 
+export const travelOrderStatusList = [
+    "Pendiente",
+    "Aprobado",
+    "Rechazado",
+    "Completado",
+    "Cancelado",
+];
+
 export const travelOrderStatusSpanClasses = {
     Pendiente: "bg-orange-100 text-orange-800",
     Aprobado: "bg-blue-100 text-blue-800",

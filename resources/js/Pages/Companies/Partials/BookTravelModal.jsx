@@ -12,7 +12,7 @@ import {
     getDistanceInKilometers,
     isDay,
 } from "@/Utils/functions";
-import { router, useForm } from "@inertiajs/react";
+import { router, useForm } from "@moraki/inertia-react";
 import { useEffect, useState } from "react";
 
 function BookTravelModal({ selectedCompany, onClose }) {

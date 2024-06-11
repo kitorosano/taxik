@@ -2,7 +2,7 @@ import InputError from "@/Components/InputError";
 import PrimaryButton from "@/Components/PrimaryButton";
 import TextInputWithOptions from "@/Components/TextInputWithOptions";
 import { departmentList } from "@/Utils/constants";
-import { Head, Link, router, useForm } from "@inertiajs/react";
+import { Head, Link, router, useForm } from "@moraki/inertia-react";
 import TaxikLogo from "/resources/assets/img/taxik-logo-red.png";
 
 export default function Welcome({ auth }) {
@@ -95,7 +95,7 @@ export default function Welcome({ auth }) {
                                                 }
                                                 wrapperClassName="mr-2"
                                                 inputClassName="w-full h-full text-black"
-                                                optionsClassName="px-2 py-2 text-gray-900 text-sm hover:bg-indigo-100"
+                                                optionClassName="px-2 py-2 text-gray-900 text-sm hover:bg-indigo-100"
                                                 autoFocus
                                                 placeholder="Ingresa tu departamento"
                                             />

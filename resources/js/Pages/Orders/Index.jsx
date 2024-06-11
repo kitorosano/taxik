@@ -1,12 +1,17 @@
 import Pagination from "@/Components/Pagination";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head } from "@inertiajs/react";
+import { Head } from "@moraki/inertia-react";
 import TravelOrdersClientTable from "./partials/TravelOrdersClientTable";
 
 const columns = {
-  status: "Estado",
+    status: "Estado",
+<<<<<<< Updated upstream
+=======
+    company: "Empresa",
+>>>>>>> Stashed changes
     origin: "Origen",
     address: "Destino",
+    price: "Precio",
     departureDate: "Salida",
     estimatedArrivalDate: "Llegada Prevista",
 };

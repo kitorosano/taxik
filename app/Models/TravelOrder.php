@@ -22,6 +22,7 @@ class TravelOrder extends Model
   ];
 
   protected $appends = [
+    'clientName',
     'companyName',
     'statusString'
   ];
@@ -47,14 +48,19 @@ class TravelOrder extends Model
   protected function getStatusStringAttribute(): string
   {
     $statuses = [
-      1 => 'Pendiente',
-      2 => 'Aprobado',
-      3 => 'Rechazado',
-      4 => 'Completado',
-      5 => 'Cancelado',
+      0 => 'Pendiente',
+      1 => 'Aprobado',
+      2 => 'Rechazado',
+      3 => 'Completado',
+      4 => 'Cancelado',
     ];
 
     return $statuses[$this->status];
+  }
+
+  protected function getClientNameAttribute(): string
+  {
+    return $this->client->name;
   }
 
   protected function getCompanyNameAttribute(): string

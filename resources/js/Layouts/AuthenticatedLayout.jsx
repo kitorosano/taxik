@@ -2,7 +2,7 @@ import ApplicationLogo from "@/Components/ApplicationLogo";
 import Dropdown from "@/Components/Dropdown";
 import NavLink from "@/Components/NavLink";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
-import { Link } from "@inertiajs/react";
+import { Link } from "@moraki/inertia-react";
 import { useState } from "react";
 
 export default function Authenticated({ user, header, children }) {
@@ -41,6 +41,19 @@ export default function Authenticated({ user, header, children }) {
                                         active={route().current("users.index")}
                                     >
                                         Usuarios
+                                    </NavLink>
+                                </div>
+                            )}
+
+                            {user && user.isCompany && (
+                                <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                    <NavLink
+                                        href={route("travel-order.index")}
+                                        active={route().current(
+                                            "travel-order.index"
+                                        )}
+                                    >
+                                        Solicitudes de Reservas
                                     </NavLink>
                                 </div>
                             )}
@@ -207,6 +220,17 @@ export default function Authenticated({ user, header, children }) {
                         </div>
                     )}
 
+                    {user && user.isCompany && (
+                        <div className="pt-2 pb-3 space-y-1">
+                            <ResponsiveNavLink
+                                href={route("travel-order.index")}
+                                active={route().current("travel-order.index")}
+                            >
+                                Solicitud de Reservas
+                            </ResponsiveNavLink>
+                        </div>
+                    )}
+
                     {user && user.isClient && (
                         <>
                             <div className="pt-2 pb-3 space-y-1">
@@ -220,7 +244,9 @@ export default function Authenticated({ user, header, children }) {
                             <div className="pt-2 pb-3 space-y-1">
                                 <ResponsiveNavLink
                                     href={route("travel-order.index")}
-                                    active={route().current("travel-order.index")}
+                                    active={route().current(
+                                        "travel-order.index"
+                                    )}
                                 >
                                     Historial de Reservas
                                 </ResponsiveNavLink>
