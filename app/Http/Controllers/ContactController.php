@@ -22,7 +22,7 @@ class ContactController extends Controller
    */
   public function index(Request $request): Response
   {
-    $PAGINATION_COUNT = $request->user && $request->user->isAdmin ? 8 : 16;
+    $PAGINATION_COUNT = auth()->check() && auth()->user()->isAdmin ? 8 : 16;
 
     $name = $request->query('name', '');
     $phone = $request->query('phone', '');

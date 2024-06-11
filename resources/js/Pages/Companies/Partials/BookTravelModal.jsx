@@ -12,22 +12,31 @@ import {
     getDistanceInKilometers,
     isDay,
 } from "@/Utils/functions";
-import { router, useForm } from "@moraki/inertia-react";
+import { useForm } from "@moraki/inertia-react";
 import { useEffect, useState } from "react";
 
 function BookTravelModal({ selectedCompany, onClose }) {
     const show = selectedCompany !== null;
 
-    const { data, setData, processing, clearErrors, setError, errors, reset } =
-        useForm({
-            company_id: null,
-            origin: "",
-            destination: "",
-            departure_date: "",
-            price: 0,
-            estimated_arrival_date: "",
-            has_luggage: false,
-        });
+    const {
+        data,
+        setData,
+        post,
+        transform,
+        processing,
+        clearErrors,
+        setError,
+        errors,
+        reset,
+    } = useForm({
+        company_id: null,
+        origin: "",
+        destination: "",
+        departure_date: "",
+        price: 0,
+        estimated_arrival_date: "",
+        has_luggage: false,
+    });
 
     const [isCalculating, setIsCalculating] = useState(null);
     const [totalPrice, setTotalPrice] = useState(0);
@@ -97,13 +106,13 @@ function BookTravelModal({ selectedCompany, onClose }) {
         const { price, estimatedArrivalDate } =
             await calculatePriceAndEstimateArrival(data);
 
-        const transformedData = {
+        transform((data) => ({
             ...data,
             price,
             estimated_arrival_date: estimatedArrivalDate,
-        };
+        }));
 
-        router.post(route("travel-order.store"), transformedData, {
+        post(route("travel-order.store"), {
             preserveState: true,
             onSuccess: () => {
                 handleOnClose();
