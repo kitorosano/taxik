@@ -2,7 +2,7 @@ import Dropdown from "@/Components/Dropdown";
 import SecondaryButton from "@/Components/SecondaryButton";
 import TextInput from "@/Components/TextInput";
 import { objectToArray, removeEmptyValues } from "@/Utils/functions";
-import { router, useForm } from "@inertiajs/react";
+import { router, useForm } from "@moraki/inertia-react";
 import debounce from "just-debounce-it";
 import { useCallback, useState } from "react";
 

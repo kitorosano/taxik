@@ -1,7 +1,7 @@
 import InputError from "@/Components/InputError";
 import TextInput from "@/Components/TextInput";
 import { removeEmptyValues } from "@/Utils/functions";
-import { router, useForm } from "@inertiajs/react";
+import { router, useForm } from "@moraki/inertia-react";
 
 function CreateContactsAdminTableRow({ columns, setCreatingItem }) {
     const { data, setData, clearErrors, reset, errors } = useForm({

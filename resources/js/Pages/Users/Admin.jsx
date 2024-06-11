@@ -1,6 +1,6 @@
 import Pagination from "@/Components/Pagination";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head } from "@inertiajs/react";
+import { Head } from "@moraki/inertia-react";
 import UsersAdminFilters from "./Partials/UsersAdminFilters";
 import ContactsAdminTable from "./Partials/UsersAdminTable";
 

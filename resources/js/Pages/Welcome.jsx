@@ -2,7 +2,7 @@ import InputError from "@/Components/InputError";
 import PrimaryButton from "@/Components/PrimaryButton";
 import TextInputWithOptions from "@/Components/TextInputWithOptions";
 import { departmentList } from "@/Utils/constants";
-import { Head, Link, router, useForm } from "@inertiajs/react";
+import { Head, Link, router, useForm } from "@moraki/inertia-react";
 import TaxikLogo from "/resources/assets/img/taxik-logo-red.png";
 
 export default function Welcome({ auth }) {

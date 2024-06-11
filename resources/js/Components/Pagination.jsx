@@ -1,4 +1,4 @@
-import { Link } from "@inertiajs/react";
+import { Link } from "@moraki/inertia-react";
 
 function Pagination({ meta, links }) {
     const customLinks = meta.links.slice(1, -1);

@@ -1,5 +1,5 @@
 // import FavoriteButton from "@/Components/FavoriteButton";
-import { useForm } from "@inertiajs/react";
+import { useForm } from "@moraki/inertia-react";
 
 function CompaniesGridItem({ company, setSelectedCompany }) {
     const { post } = useForm({

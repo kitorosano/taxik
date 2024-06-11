@@ -2,7 +2,7 @@ import Pagination from "@/Components/Pagination";
 import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { objectToArray, removeEmptyValues } from "@/Utils/functions";
-import { Head, router, useForm } from "@inertiajs/react";
+import { Head, router, useForm } from "@moraki/inertia-react";
 import debounce from "just-debounce-it";
 import { useCallback } from "react";
 

@@ -1,5 +1,5 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head } from "@inertiajs/react";
+import { Head } from "@moraki/inertia-react";
 import DeleteUserForm from "./Partials/DeleteUserForm";
 import UpdateContactInformationForm from "./Partials/UpdateContactInformationForm";
 import UpdatePasswordForm from "./Partials/UpdatePasswordForm";

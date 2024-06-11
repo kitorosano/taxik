@@ -3,7 +3,7 @@ import TextInput from "@/Components/TextInput";
 import TextInputWithOptions from "@/Components/TextInputWithOptions";
 import { departmentList } from "@/Utils/constants";
 import { removeEmptyValues } from "@/Utils/functions";
-import { router, useForm } from "@inertiajs/react";
+import { router, useForm } from "@moraki/inertia-react";
 import debounce from "just-debounce-it";
 import { useCallback } from "react";
 

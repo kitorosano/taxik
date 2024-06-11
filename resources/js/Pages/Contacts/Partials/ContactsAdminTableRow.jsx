@@ -1,4 +1,4 @@
-import { router } from "@inertiajs/react";
+import { router } from "@moraki/inertia-react";
 
 function ContactsAdminTableRow({ item, setEditingItem }) {
     const handleDestroy = (e) => {

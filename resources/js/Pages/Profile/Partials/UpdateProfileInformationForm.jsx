@@ -4,7 +4,7 @@ import PrimaryButton from "@/Components/PrimaryButton";
 import SecondaryButton from "@/Components/SecondaryButton";
 import TextInput from "@/Components/TextInput";
 import { Transition } from "@headlessui/react";
-import { Link, useForm, usePage } from "@inertiajs/react";
+import { Link, useForm, usePage } from "@moraki/inertia-react";
 import { useRef } from "react";
 import DefaultAvatar from "/resources/assets/img/default-avatar.png";
 
@@ -183,7 +183,7 @@ export default function UpdateProfileInformationForm({
                         className="w-56 h-56 rounded-full absolute hover:bg-black/30 hover:opacity-70 cursor-pointer transition-all duration-150"
                     />
                 </div>
-                
+
                 <InputError
                     className="mt-2 text-center"
                     message={errors.avatar}

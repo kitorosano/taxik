@@ -2,7 +2,7 @@ import ApplicationLogo from "@/Components/ApplicationLogo";
 import Dropdown from "@/Components/Dropdown";
 import NavLink from "@/Components/NavLink";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
-import { Link } from "@inertiajs/react";
+import { Link } from "@moraki/inertia-react";
 import { useState } from "react";
 
 export default function Authenticated({ user, header, children }) {
@@ -220,7 +220,9 @@ export default function Authenticated({ user, header, children }) {
                             <div className="pt-2 pb-3 space-y-1">
                                 <ResponsiveNavLink
                                     href={route("travel-order.index")}
-                                    active={route().current("travel-order.index")}
+                                    active={route().current(
+                                        "travel-order.index"
+                                    )}
                                 >
                                     Historial de Reservas
                                 </ResponsiveNavLink>
