@@ -1,22 +1,15 @@
 import InputError from "@/Components/InputError";
 import PrimaryButton from "@/Components/PrimaryButton";
-import TextInput from "@/Components/TextInput";
-import { Head, Link, router, useForm } from "@inertiajs/react";
+import TextInputWithOptions from "@/Components/TextInputWithOptions";
+import { departmentList } from "@/Utils/constants";
+import { Head, Link, router, useForm } from "@moraki/inertia-react";
 import TaxikLogo from "/resources/assets/img/taxik-logo-red.png";
 
 export default function Welcome({ auth }) {
-    console.log(TaxikLogo);
-
-    const handleImageError = () => {
-        document
-            .getElementById("screenshot-container")
-            ?.classList.add("!hidden");
-        document.getElementById("docs-card")?.classList.add("!row-span-1");
-        document
-            .getElementById("docs-card-content")
-            ?.classList.add("!flex-row");
-        document.getElementById("background")?.classList.add("!hidden");
-    };
+    const selectableDepartments = departmentList.map((department) => ({
+        key: department,
+        value: department,
+    }));
 
     const { data, setData, processing, errors } = useForm({
         department: "",
@@ -43,8 +36,10 @@ export default function Welcome({ auth }) {
                     <div className="relative w-full max-w-2xl px-6 lg:max-w-7xl">
                         <header className="grid grid-cols-2 items-center gap-2 py-10 lg:grid-cols-3">
                             <div className="flex lg:justify-center lg:col-start-2">
-                                {/* LOGO TAXIK */}
-                                <img className="absolute w-28 h-28" src={TaxikLogo} />
+                                <img
+                                    className="absolute w-28 h-28"
+                                    src={TaxikLogo}
+                                />
                             </div>
                             <nav className="-mx-3 flex flex-1 justify-end">
                                 {auth.user ? (
@@ -81,36 +76,39 @@ export default function Welcome({ auth }) {
                                 Tu taxi en todas partes
                             </p>
 
-                            <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-                                <form onSubmit={handleSubmit}>
-                                    <div>
-                                        <div className="flex justify-between w-full">
-                                            <TextInput
-                                                id="location"
-                                                className="w-full mr-2 text-black"
-                                                value={data.department}
-                                                onChange={(e) =>
-                                                    setData(
-                                                        "department",
-                                                        e.target.value
-                                                    )
-                                                }
-                                                autoFocus
-                                                placeholder="Ingresa tu departamento"
-                                            />
-                                            <PrimaryButton
-                                                disabled={processing}
-                                            >
-                                                Buscar Taxis
-                                            </PrimaryButton>
-                                        </div>
-                                        <InputError
-                                            message={errors.location}
-                                            className="mt-2"
-                                        />
-                                    </div>
-                                </form>
-                            </div>
+                            <form
+                                onSubmit={handleSubmit}
+                                className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8"
+                            >
+                                <div className="flex justify-between items-center">
+                                    <TextInputWithOptions
+                                        id="location"
+                                        optionList={selectableDepartments}
+                                        inputValue={data.department}
+                                        inputOnChange={(e) =>
+                                            setData(
+                                                "department",
+                                                e.target.value
+                                            )
+                                        }
+                                        wrapperClassName="mr-2"
+                                        inputClassName="w-full text-black"
+                                        optionClassName="px-2 py-2 text-gray-900 text-sm hover:bg-indigo-100"
+                                        autoFocus
+                                        placeholder="Ingresa tu departamento"
+                                    />
+                                    <PrimaryButton
+                                        className="text-nowrap h-11"
+                                        disabled={processing}
+                                    >
+                                        Buscar Taxis
+                                    </PrimaryButton>
+                                </div>
+                                <InputError
+                                    message={errors.location}
+                                    className="mt-2"
+                                />
+                            </form>
                         </main>
 
                         <footer className="py-16 text-center text-sm text-black dark:text-white/70">

@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreContactRequest;
+use App\Http\Resources\CompaniesResource;
 use App\Http\Resources\ContactResource;
 use App\Models\Contact;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,7 +22,7 @@ class ContactController extends Controller
    */
   public function index(Request $request): Response
   {
-    $PAGINATION_COUNT = $request->user && $request->user->isAdmin ? 8 : 16;
+    $PAGINATION_COUNT = auth()->check() && auth()->user()->isAdmin ? 8 : 16;
 
     $name = $request->query('name', '');
     $phone = $request->query('phone', '');
@@ -48,6 +51,8 @@ class ContactController extends Controller
       ->paginate($PAGINATION_COUNT)
       ->withQueryString();
 
+    $companies = User::query()->where('type', '=', 2)->get();
+
 
     if (Auth::check() && Auth::user()->isAdmin) {
       return Inertia::render('Contacts/Admin', [
@@ -59,6 +64,7 @@ class ContactController extends Controller
           'department' => $department,
           'companyName' => $companyName,
         ],
+        'companies' => CompaniesResource::collection($companies),
       ]);
     }
 
@@ -81,18 +87,12 @@ class ContactController extends Controller
   /**
    * Store a newly created resource in storage.
    */
-  public function store(Request $request): RedirectResponse
+  public function store(StoreContactRequest $request): RedirectResponse
   {
     // validate admin
     Gate::authorize('create', Contact::class);
 
-    $validated = $request->validate([
-      'name' => ['required', 'string', 'max:255'],
-      'phone' => ['required', 'string', 'max:255'],
-      'address' => ['required', 'string', 'max:255'],
-      'department' => ['required', 'string', 'max:255'],
-      'linked_company_id' => ['sometimes', 'int', 'exists:users,id'],
-    ]);
+    $validated = $request->validated();
 
     Contact::create($validated);
 
@@ -121,18 +121,11 @@ class ContactController extends Controller
   /**
    * Update the specified resource in storage.
    */
-  public function update(Request $request, Contact $contact): RedirectResponse
+  public function update(StoreContactRequest $request, Contact $contact): RedirectResponse
   {
     Gate::authorize('update', $contact);
 
-    $validated = $request->validate([
-      'name' => ['required', 'string', 'max:255'],
-      'phone' => ['required', 'string', 'max:255'],
-      'address' => ['required', 'string', 'max:255'],
-      'department' => ['required', 'string', 'max:255'],
-      'linked_company_id' => ['sometimes', 'required', 'int', 'exists:users,id'],
-    ]);
-    // Log::info('ContactController@update', ['validated' => $validated]);
+    $validated = $request->validated();
 
     $contact->update($validated);
 

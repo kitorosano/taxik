@@ -3,7 +3,7 @@
 namespace App\Policies;
 
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
+use Illuminate\Support\Facades\Log;
 
 class UserPolicy
 {
@@ -28,6 +28,7 @@ class UserPolicy
    */
   public function create(User $user): bool
   {
+    Log::info('UserPolicy::create');
     return false;
   }
 

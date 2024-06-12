@@ -29,16 +29,16 @@ class ContactFactory extends Factory
       'Rivera',
       'Artigas',
       'Salto',
-      'Paysandu',
+      'Paysandú',
       'Rio Negro',
       'Soriano',
       'Colonia',
-      'San Jose',
+      'San José',
       'Flores',
       'Florida',
       'Lavalleja',
       'Durazno',
-      'Tacuarembo',
+      'Tacuarembó',
       'Montevideo'
     ];
 

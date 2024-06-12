@@ -1,6 +1,6 @@
 import Pagination from "@/Components/Pagination";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head } from "@inertiajs/react";
+import { Head } from "@moraki/inertia-react";
 import { useState } from "react";
 import ContactsAdminFilters from "./Partials/ContactsAdminFilters";
 import ContactsAdminTable from "./Partials/ContactsAdminTable";
@@ -13,7 +13,7 @@ const columns = {
     companyName: "Empresa Asociada",
 };
 
-function Admin({ auth, contacts, filters }) {
+function Admin({ auth, contacts, filters, companies }) {
     const [creatingItem, setCreatingItem] = useState(false);
 
     const handleCreate = () => {
@@ -38,6 +38,7 @@ function Admin({ auth, contacts, filters }) {
                         <ContactsAdminTable
                             items={contacts.data}
                             columns={columns}
+                            companies={companies.data}
                             creatingItem={creatingItem}
                             setCreatingItem={setCreatingItem}
                         />

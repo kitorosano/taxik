@@ -2,7 +2,7 @@ import ApplicationLogo from "@/Components/ApplicationLogo";
 import Dropdown from "@/Components/Dropdown";
 import NavLink from "@/Components/NavLink";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
-import { Link } from "@inertiajs/react";
+import { Link } from "@moraki/inertia-react";
 import { useState } from "react";
 
 export default function Authenticated({ user, header, children }) {
@@ -11,6 +11,11 @@ export default function Authenticated({ user, header, children }) {
 
     const username = user ? user.name : "Invitado";
     const useremail = user ? user.email : "";
+    const useravatar = user ? user.avatar : "";
+
+    const departmentQuery = new URLSearchParams(window.location.search).get(
+        "department"
+    );
 
     return (
         <div className="min-h-screen bg-gray-100">
@@ -44,19 +49,46 @@ export default function Authenticated({ user, header, children }) {
                                 </div>
                             )}
 
-                            {user && !user.isClient ? (
-                                <></>
-                            ) : (
+                            {user && user.isCompany && (
                                 <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                     <NavLink
-                                        href={route("companies.index")}
+                                        href={route("travel-order.index")}
                                         active={route().current(
-                                            "companies.index"
+                                            "travel-order.index"
                                         )}
                                     >
-                                        Reservar Viaje
+                                        Solicitudes de Reservas
                                     </NavLink>
                                 </div>
+                            )}
+
+                            {(!user || user.isClient) && (
+                                <>
+                                    <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                        <NavLink
+                                            href={route("companies.index", {
+                                                _query: {
+                                                    department: departmentQuery,
+                                                },
+                                            })}
+                                            active={route().current(
+                                                "companies.index"
+                                            )}
+                                        >
+                                            Reservar Viaje
+                                        </NavLink>
+                                    </div>
+                                    <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                        <NavLink
+                                            href={route("travel-order.index")}
+                                            active={route().current(
+                                                "travel-order.index"
+                                            )}
+                                        >
+                                            Historial de Reservas
+                                        </NavLink>
+                                    </div>
+                                </>
                             )}
                         </div>
 
@@ -69,6 +101,14 @@ export default function Authenticated({ user, header, children }) {
                                                 type="button"
                                                 className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
                                             >
+                                                {useravatar && (
+                                                    <img
+                                                        src={useravatar}
+                                                        className="w-8 h-8 rounded-full mx-2"
+                                                        alt="Avatar"
+                                                    />
+                                                )}
+
                                                 {username}
 
                                                 <svg
@@ -188,28 +228,69 @@ export default function Authenticated({ user, header, children }) {
                         </div>
                     )}
 
-                    {user && !user.isClient ? (
-                        <></>
-                    ) : (
+                    {user && user.isCompany && (
                         <div className="pt-2 pb-3 space-y-1">
                             <ResponsiveNavLink
-                                href={route("companies.index")}
-                                active={route().current("companies.index")}
+                                href={route("travel-order.index")}
+                                active={route().current("travel-order.index")}
                             >
-                                Reservar Viaje
+                                Solicitud de Reservas
                             </ResponsiveNavLink>
                         </div>
                     )}
 
+                    {(!user || user.isClient) && (
+                        <>
+                            <div className="pt-2 pb-3 space-y-1">
+                                <ResponsiveNavLink
+                                    href={route("companies.index")}
+                                    active={route().current("companies.index")}
+                                >
+                                    Reservar Viaje
+                                </ResponsiveNavLink>
+                            </div>
+                            <div className="pt-2 pb-3 space-y-1">
+                                <ResponsiveNavLink
+                                    href={route("travel-order.index")}
+                                    active={route().current(
+                                        "travel-order.index"
+                                    )}
+                                >
+                                    Historial de Reservas
+                                </ResponsiveNavLink>
+                            </div>
+                        </>
+                    )}
+
                     <div className="pt-4 pb-1 border-t border-gray-200">
-                        <div className="px-4">
-                            <div className="font-medium text-base text-gray-800">
-                                {username}
+                        {useravatar ? (
+                            <div className="px-4 flex items-center">
+                                <div className="flex-col">
+                                    <img
+                                        src={useravatar}
+                                        className="w-8 h-8 rounded-full mx-2"
+                                        alt="Avatar"
+                                    />
+                                </div>
+                                <div className="flex-col">
+                                    <div className="font-medium text-base text-gray-800">
+                                        {username}
+                                    </div>
+                                    <div className="font-medium text-sm text-gray-500">
+                                        {useremail}
+                                    </div>
+                                </div>
                             </div>
-                            <div className="font-medium text-sm text-gray-500">
-                                {useremail}
+                        ) : (
+                            <div className="px-4">
+                                <div className="font-medium text-base text-gray-800">
+                                    {username}
+                                </div>
+                                <div className="font-medium text-sm text-gray-500">
+                                    {useremail}
+                                </div>
                             </div>
-                        </div>
+                        )}
 
                         {user ? (
                             <div className="mt-3 space-y-1">

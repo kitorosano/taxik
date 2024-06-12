@@ -1,11 +1,20 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head } from "@inertiajs/react";
+import { Head } from "@moraki/inertia-react";
+import { useEffect, useRef } from "react";
 import DeleteUserForm from "./Partials/DeleteUserForm";
 import UpdateContactInformationForm from "./Partials/UpdateContactInformationForm";
 import UpdatePasswordForm from "./Partials/UpdatePasswordForm";
 import UpdateProfileInformationForm from "./Partials/UpdateProfileInformationForm";
 
 export default function Edit({ auth, mustVerifyEmail, status, contact }) {
+    const contactSectionRef = useRef(null);
+
+    useEffect(() => {
+        if (auth.user.isCompany && !contact) {
+            contactSectionRef.current.scrollIntoView({ behavior: "smooth" });
+        }
+    });
+
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -25,15 +34,14 @@ export default function Edit({ auth, mustVerifyEmail, status, contact }) {
                         <UpdateProfileInformationForm
                             mustVerifyEmail={mustVerifyEmail}
                             status={status}
-                            className="max-w-xl"
                         />
                     </div>
                     {auth.user.isCompany && (
-                        <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                            <UpdateContactInformationForm
-                                className="max-w-xl"
-                                contact={contact}
-                            />
+                        <div
+                            ref={contactSectionRef}
+                            className="p-4 sm:p-8 bg-white shadow sm:rounded-lg"
+                        >
+                            <UpdateContactInformationForm contact={contact} />
                         </div>
                     )}
 
@@ -41,9 +49,11 @@ export default function Edit({ auth, mustVerifyEmail, status, contact }) {
                         <UpdatePasswordForm className="max-w-xl" />
                     </div>
 
-                    <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                        <DeleteUserForm className="max-w-xl" />
-                    </div>
+                    {auth.user.isCompany && (
+                        <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
+                            <DeleteUserForm className="max-w-xl" />
+                        </div>
+                    )}
                 </div>
             </div>
         </AuthenticatedLayout>

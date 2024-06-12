@@ -14,13 +14,14 @@ class DatabaseSeeder extends Seeder
    */
   public function run(): void
   {
-    $this->userSeeds();
-    $this->contactSeeds();
+    $this->adminSeed();
+    $this->clientSeed();
+    $this->companySeed();
+    $this->contactSeed();
   }
 
-  protected function userSeeds(): void
+  protected function adminSeed(): void
   {
-    // User::factory(10)->create();
     // Create admin user
     User::factory()->create([
       'name' => 'Test Admin',
@@ -28,6 +29,11 @@ class DatabaseSeeder extends Seeder
       'password' => '12345678',
       'type' => 0
     ]);
+  }
+
+  protected function clientSeed(): void
+  {
+
     // Create client user
     User::factory()->create([
       'name' => 'Test Client',
@@ -35,26 +41,36 @@ class DatabaseSeeder extends Seeder
       'password' => '12345678',
       'type' => 1
     ]);
+
+    User::factory(4)->create([
+      'password' => '12345678',
+      'type' => 1
+    ]);
   }
 
-  protected function contactSeeds(): void
+  protected function companySeed(): void
   {
-    // Create company user
-    $company = User::factory()->create([
-      'name' => 'Compania Prueba',
-      'email' => 'company@example.com',
-      'password' => '12345678',
-      'type' => 2
-    ]);
+    foreach (range(1, 5) as $index) {
+      // Create company user
+      $company = User::factory()->create([
+        'name' => 'Test Company ' . $index,
+        'email' => 'company' . $index . '@example.com',
+        'password' => '12345678',
+        'type' => 2
+      ]);
+      // Create contact for company
+      Contact::factory()->create([
+        'name' => 'Test Company Contact ' . $index,
+        'phone' => '1234567890',
+        'address' => '123 Main St',
+        'department' => 'Montevideo',
+        'linked_company_id' => $company->id,
+      ]);
+    }
+  }
 
-    Contact::factory()->create([
-      'name' => 'Test Company',
-      'phone' => '1234567890',
-      'address' => '123 Main St',
-      'department' => 'Montevideo',
-      'linked_company_id' => $company->id,
-    ]);
-
-    Contact::factory(49)->create();
+  protected function contactSeed(): void
+  {
+    Contact::factory(45)->create();
   }
 }
