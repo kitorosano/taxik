@@ -67,7 +67,7 @@ class TravelOrderController extends Controller
       'departure_date' => $validated['departure_date'],
       'price' => $validated['price'],
       'estimated_arrival_date' => $validated['estimated_arrival_date'],
-      'status' => 1,
+      'status' => 0,
     ]);
 
     // TODO: Dispatch an event to notify the company that a new travel order has been created
