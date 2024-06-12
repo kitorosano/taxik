@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\CompaniesResource;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
@@ -28,13 +30,15 @@ class CompanyController extends Controller
 
     $companies = User::query()
       ->where('type', '=', 2)
+      ->whereNotIn('id', $favoriteCompanies->pluck('id'))
       ->when($name, function ($query, $name) {
         return $query->where('name', 'like', "%$name%");
       })
-      ->whereNotIn('id', $favoriteCompanies->pluck('id'))
-      ->with(['contact' => function ($query) use ($department) {
-        return $query->where('department', 'like', "%$department%");
-      }])
+      ->withWhereHas('contact', function ($query) use ($department) {
+        $query->when($department, function ($query, $department) {
+          return $query->where('department', 'like', "%$department%");
+        });
+      })
       ->paginate(8)
       ->withQueryString();
 
