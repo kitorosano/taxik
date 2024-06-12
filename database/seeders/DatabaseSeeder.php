@@ -50,31 +50,27 @@ class DatabaseSeeder extends Seeder
 
   protected function companySeed(): void
   {
-
-    User::factory(5)->create([
-      'password' => '12345678',
-      'type' => 2
-    ]);
+    foreach (range(1, 5) as $index) {
+      // Create company user
+      $company = User::factory()->create([
+        'name' => 'Test Company ' . $index,
+        'email' => 'company' . $index . '@example.com',
+        'password' => '12345678',
+        'type' => 2
+      ]);
+      // Create contact for company
+      Contact::factory()->create([
+        'name' => 'Test Company Contact ' . $index,
+        'phone' => '1234567890',
+        'address' => '123 Main St',
+        'department' => 'Montevideo',
+        'linked_company_id' => $company->id,
+      ]);
+    }
   }
 
   protected function contactSeed(): void
   {
-    // Create company user
-    $company = User::factory()->create([
-      'name' => 'Compania Prueba',
-      'email' => 'company@example.com',
-      'password' => '12345678',
-      'type' => 2
-    ]);
-
-    Contact::factory()->create([
-      'name' => 'Test Company',
-      'phone' => '1234567890',
-      'address' => '123 Main St',
-      'department' => 'Montevideo',
-      'linked_company_id' => $company->id,
-    ]);
-
-    Contact::factory(49)->create();
+    Contact::factory(45)->create();
   }
 }

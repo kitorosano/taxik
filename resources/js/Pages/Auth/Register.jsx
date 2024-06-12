@@ -7,13 +7,14 @@ import { Head, Link, useForm } from "@moraki/inertia-react";
 import { useEffect } from "react";
 
 export default function Register() {
-    const { data, setData, post, processing, errors, reset } = useForm({
-        name: "",
-        email: "",
-        password: "",
-        password_confirmation: "",
-        type: 1,
-    });
+    const { data, setData, post, transform, processing, errors, reset } =
+        useForm({
+            name: "",
+            email: "",
+            password: "",
+            password_confirmation: "",
+            type: "1",
+        });
 
     useEffect(() => {
         return () => {
@@ -23,6 +24,11 @@ export default function Register() {
 
     const submit = (e) => {
         e.preventDefault();
+
+        transform((data) => ({
+            ...data,
+            type: Number(data.type),
+        }));
 
         post(route("register"));
     };
