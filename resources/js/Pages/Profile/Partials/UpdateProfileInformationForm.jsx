@@ -76,10 +76,10 @@ export default function UpdateProfileInformationForm({
                     className="mt-6 space-y-6"
                 >
                     <div>
-                        <InputLabel htmlFor="name" value="Nombre" />
+                        <InputLabel htmlFor="username" value="Nombre" />
 
                         <TextInput
-                            id="name"
+                            id="username"
                             className="mt-1 block w-full"
                             value={data.name}
                             onChange={(e) => setData("name", e.target.value)}
@@ -91,10 +91,10 @@ export default function UpdateProfileInformationForm({
                     </div>
 
                     <div>
-                        <InputLabel htmlFor="email" value="Correo" />
+                        <InputLabel htmlFor="useremail" value="Correo" />
 
                         <TextInput
-                            id="email"
+                            id="useremail"
                             type="email"
                             className="mt-1 block w-full"
                             value={data.email}

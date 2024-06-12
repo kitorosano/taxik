@@ -5,10 +5,7 @@ import TextInput from "@/Components/TextInput";
 import { Transition } from "@headlessui/react";
 import { useForm, usePage } from "@moraki/inertia-react";
 
-export default function UpdateContactInformationForm({
-    className = "",
-    contact,
-}) {
+export default function UpdateContactInformationForm({ contact }) {
     const user = usePage().props.auth.user;
 
     const {
@@ -55,129 +52,162 @@ export default function UpdateContactInformationForm({
     };
 
     return (
-        <section className={className}>
-            <header>
-                <h2 className="text-lg font-medium text-gray-900">
-                    Información de Contacto
-                </h2>
+        <div className="flex justify-between">
+            <section className="max-w-xl w-full">
+                <header>
+                    <h2 className="text-lg font-medium text-gray-900">
+                        Información de Contacto
+                    </h2>
 
-                <p className="mt-1 text-sm text-gray-600">
-                    Actualiza tus datos de contacto para los clientes
-                </p>
-            </header>
+                    <p className="mt-1 text-sm text-gray-600">
+                        Actualiza tus datos de contacto para los clientes
+                    </p>
+                </header>
 
-            <form
-                onSubmit={contact ? handleUpdate : handleSave}
-                id="contact_form"
-                className="mt-6 space-y-6"
-            ></form>
+                <form
+                    onSubmit={contact ? handleUpdate : handleSave}
+                    id="contact_form"
+                    className="mt-6 space-y-6"
+                ></form>
 
-            <section onSubmit={handleUpdate} className="mt-6 space-y-6">
-                <div>
-                    <InputLabel htmlFor="name" value="Nombre" />
-
-                    <TextInput
-                        form="contact_form"
-                        id="name"
-                        className="mt-1 block w-full"
-                        value={data.name}
-                        onChange={(e) => setData("name", e.target.value)}
-                        required
-                        autoComplete="name"
-                    />
-
-                    <InputError className="mt-2" message={errors.name} />
-                </div>
-
-                <div>
-                    <InputLabel htmlFor="phone" value="Teléfono" />
-
-                    <TextInput
-                        form="contact_form"
-                        id="phone"
-                        className="mt-1 block w-full"
-                        value={data.phone}
-                        onChange={(e) => setData("phone", e.target.value)}
-                        required
-                        autoComplete="phone"
-                    />
-
-                    <InputError className="mt-2" message={errors.phone} />
-                </div>
-
-                <div>
-                    <InputLabel htmlFor="address" value="Dirección" />
-
-                    <TextInput
-                        form="contact_form"
-                        id="address"
-                        className="mt-1 block w-full"
-                        value={data.address}
-                        onChange={(e) => setData("address", e.target.value)}
-                        required
-                        autoComplete="address"
-                    />
-
-                    <InputError className="mt-2" message={errors.address} />
-                </div>
-
-                {contact ? (
+                <section onSubmit={handleUpdate} className="mt-6 space-y-6">
                     <div>
-                        <InputLabel htmlFor="department" value="Departamento" />
-
-                        <TextInput
-                            id="department"
-                            className="mt-1 block w-full bg-gray-100 cursor-default text-gray-500"
-                            value={data.department}
-                            required
-                            autoComplete="department"
-                            readOnly
-                        />
-
-                        <InputError
-                            className="mt-2"
-                            message={errors.department}
-                        />
-                    </div>
-                ) : (
-                    <div>
-                        <InputLabel htmlFor="department" value="Departamento" />
+                        <InputLabel htmlFor="name" value="Nombre" />
 
                         <TextInput
                             form="contact_form"
-                            id="department"
+                            id="name"
                             className="mt-1 block w-full"
-                            value={data.department}
-                            onChange={(e) =>
-                                setData("department", e.target.value)
-                            }
+                            value={data.name}
+                            onChange={(e) => setData("name", e.target.value)}
                             required
-                            autoComplete="department"
+                            autoComplete="name"
                         />
 
-                        <InputError
-                            className="mt-2"
-                            message={errors.department}
-                        />
+                        <InputError className="mt-2" message={errors.name} />
                     </div>
-                )}
 
-                <div className="flex items-center gap-4">
-                    <PrimaryButton form="contact_form" disabled={processing}>
-                        Guardar
-                    </PrimaryButton>
+                    <div>
+                        <InputLabel htmlFor="phone" value="Teléfono" />
 
-                    <Transition
-                        show={recentlySuccessful}
-                        enter="transition ease-in-out"
-                        enterFrom="opacity-0"
-                        leave="transition ease-in-out"
-                        leaveTo="opacity-0"
-                    >
-                        <p className="text-sm text-gray-600">Guardado!</p>
-                    </Transition>
-                </div>
+                        <TextInput
+                            form="contact_form"
+                            id="phone"
+                            className="mt-1 block w-full"
+                            value={data.phone}
+                            onChange={(e) => setData("phone", e.target.value)}
+                            required
+                            autoComplete="phone"
+                        />
+
+                        <InputError className="mt-2" message={errors.phone} />
+                    </div>
+
+                    <div>
+                        <InputLabel htmlFor="address" value="Dirección" />
+
+                        <TextInput
+                            form="contact_form"
+                            id="address"
+                            className="mt-1 block w-full"
+                            value={data.address}
+                            onChange={(e) => setData("address", e.target.value)}
+                            required
+                            autoComplete="address"
+                        />
+
+                        <InputError className="mt-2" message={errors.address} />
+                    </div>
+
+                    {contact ? (
+                        <div>
+                            <InputLabel
+                                htmlFor="department"
+                                value="Departamento"
+                            />
+
+                            <TextInput
+                                id="department"
+                                className="mt-1 block w-full bg-gray-100 cursor-default text-gray-500"
+                                value={data.department}
+                                required
+                                autoComplete="department"
+                                readOnly
+                            />
+
+                            <InputError
+                                className="mt-2"
+                                message={errors.department}
+                            />
+                        </div>
+                    ) : (
+                        <div>
+                            <InputLabel
+                                htmlFor="department"
+                                value="Departamento"
+                            />
+
+                            <TextInput
+                                form="contact_form"
+                                id="department"
+                                className="mt-1 block w-full"
+                                value={data.department}
+                                onChange={(e) =>
+                                    setData("department", e.target.value)
+                                }
+                                required
+                                autoComplete="department"
+                            />
+
+                            <InputError
+                                className="mt-2"
+                                message={errors.department}
+                            />
+                        </div>
+                    )}
+
+                    <div className="flex items-center gap-4">
+                        <PrimaryButton
+                            form="contact_form"
+                            disabled={processing}
+                        >
+                            Guardar
+                        </PrimaryButton>
+
+                        <Transition
+                            show={recentlySuccessful}
+                            enter="transition ease-in-out"
+                            enterFrom="opacity-0"
+                            leave="transition ease-in-out"
+                            leaveTo="opacity-0"
+                        >
+                            <p className="text-sm text-gray-600">Guardado!</p>
+                        </Transition>
+                    </div>
+                </section>
             </section>
-        </section>
+
+            {!contact && (
+                <section className="max-w-xl w-full ml-5">
+                    <header>
+                        <h2 className="text-lg font-medium text-gray-900">
+                            ¡Aviso Importante!
+                        </h2>
+
+                        <p className="mt-1 text-sm text-gray-600">
+                            Tu información de contacto no ha sido verificada
+                        </p>
+                    </header>
+
+                    <div className="mt-6 space-y-6">
+                        <p className="mt-2 font-medium text-sm text-red-600">
+                            Es importante que la verifiques para que los
+                            clientes puedan contactarte, de lo contrario tu
+                            información no será visible.
+                        </p>
+                    </div>
+                </section>
+            )}
+        </div>
     );
 }

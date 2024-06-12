@@ -48,9 +48,9 @@ class RegisteredUserController extends Controller
 
     Auth::login($user);
 
-    // if($user->isCompany){
-    //   return redirect(route('companies.index', absolute: false));
-    // }
+    if ($user->isCompany) {
+      return redirect(route('profile.edit', absolute: false));
+    }
     return redirect(route('dashboard', absolute: false));
   }
 }
