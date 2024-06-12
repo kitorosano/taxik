@@ -1,7 +1,11 @@
-import { travelOrderStatusSpanClasses } from "@/Utils/constants";
-
 function TravelOrdersClientTableRow({ item }) {
-    const statusColors = travelOrderStatusSpanClasses[item.status];
+    const statusColors = {
+        Pendiente: "bg-orange-100 text-orange-800",
+        Aprobado: "bg-blue-100 text-blue-800",
+        Rechazado: "bg-red-100 text-red-800",
+        Completado: "bg-green-100 text-green-800",
+        Cancelado: "bg-red-100 text-red-800",
+    }[item.status];
 
     return (
         <tr className="bg-white border-b items-center">

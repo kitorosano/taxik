@@ -1,26 +1,6 @@
 import { forwardRef, useRef, useState } from "react";
+import { CaretIcon } from "./Icons";
 import TextInput from "./TextInput";
-
-const Icon = ({ isOpen, ...props }) => {
-    return (
-        <svg
-            viewBox="0 0 24 24"
-            width="18"
-            height="18"
-            stroke="#444"
-            strokeWidth="1.5"
-            fill="none"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className={
-                "transition-all delay-200 ease-in-out " + isOpen && "rotate-180"
-            }
-            {...props}
-        >
-            <polyline points="6 9 12 15 18 9"></polyline>
-        </svg>
-    );
-};
 
 function SelectInput(
     {
@@ -72,7 +52,7 @@ function SelectInput(
                 onFocus={handleInputFocus}
                 onBlur={handleInputBlur}
                 icon={
-                    <Icon
+                    <CaretIcon
                         isOpen={isListVisible}
                         onClick={() => setIsListVisible((prev) => !prev)}
                     />

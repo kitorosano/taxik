@@ -5,10 +5,7 @@ import TravelOrdersClientTable from "./partials/TravelOrdersClientTable";
 
 const columns = {
     status: "Estado",
-<<<<<<< Updated upstream
-=======
     company: "Empresa",
->>>>>>> Stashed changes
     origin: "Origen",
     address: "Destino",
     price: "Precio",
