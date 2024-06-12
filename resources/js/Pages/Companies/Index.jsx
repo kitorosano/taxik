@@ -12,6 +12,7 @@ import FavoriteCompaniesList from "./Partials/FavoriteCompaniesList";
 function Index({ auth, companies, favoriteCompanies, filters }) {
     const { data, setData } = useForm({
         name: filters.name || "",
+        department: filters.department || "",
         favorites: filters.favorites || false,
     });
     const [selectedCompany, setSelectedCompany] = useState(null);
@@ -53,6 +54,14 @@ function Index({ auth, companies, favoriteCompanies, filters }) {
                         </h2>
                     </div>
                     <div className="flex justify-end w-full">
+                        <TextInput
+                            name="department"
+                            className="max-w-96 ml-auto mr-2 text-black"
+                            value={data.department}
+                            onChange={handleChange}
+                            autoFocus
+                            placeholder="Departamento..."
+                        />
                         <TextInput
                             name="name"
                             className="max-w-96 ml-auto mr-2 text-black"

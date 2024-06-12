@@ -13,6 +13,10 @@ export default function Authenticated({ user, header, children }) {
     const useremail = user ? user.email : "";
     const useravatar = user ? user.avatar : "";
 
+    const departmentQuery = new URLSearchParams(window.location.search).get(
+        "department"
+    );
+
     return (
         <div className="min-h-screen bg-gray-100">
             <nav className="bg-white border-b border-gray-100">
@@ -58,11 +62,15 @@ export default function Authenticated({ user, header, children }) {
                                 </div>
                             )}
 
-                            {user && user.isClient && (
+                            {(!user || user.isClient) && (
                                 <>
                                     <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                         <NavLink
-                                            href={route("companies.index")}
+                                            href={route("companies.index", {
+                                                _query: {
+                                                    department: departmentQuery,
+                                                },
+                                            })}
                                             active={route().current(
                                                 "companies.index"
                                             )}
@@ -231,7 +239,7 @@ export default function Authenticated({ user, header, children }) {
                         </div>
                     )}
 
-                    {user && user.isClient && (
+                    {(!user || user.isClient) && (
                         <>
                             <div className="pt-2 pb-3 space-y-1">
                                 <ResponsiveNavLink

@@ -17,6 +17,7 @@ class CompanyController extends Controller
   public function index(Request $request): Response
   {
     $name = $request->query('name', '');
+    $department = $request->query('department', '');
 
     Log::info(auth()->id());
 
@@ -25,14 +26,15 @@ class CompanyController extends Controller
       ->with('contact')
       ->get();
 
-
     $companies = User::query()
       ->where('type', '=', 2)
       ->when($name, function ($query, $name) {
         return $query->where('name', 'like', "%$name%");
       })
       ->whereNotIn('id', $favoriteCompanies->pluck('id'))
-      ->with('contact')
+      ->with(['contact' => function ($query) use ($department) {
+        return $query->where('department', 'like', "%$department%");
+      }])
       ->paginate(8)
       ->withQueryString();
 
@@ -44,6 +46,7 @@ class CompanyController extends Controller
       'favoriteCompanies' => CompaniesResource::collection($favoriteCompanies), // TOFIX: Have it be a collection of favorite companies
       'filters' => [
         'name' => $name,
+        'department' => $department,
       ],
     ]);
   }
