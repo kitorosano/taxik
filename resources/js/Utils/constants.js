@@ -9,14 +9,14 @@ export const departmentList = [
     "Lavalleja",
     "Maldonado",
     "Montevideo",
-    "Paysandu",
+    "Paysandú",
     "Rio Negro",
     "Rivera",
     "Rocha",
     "Salto",
-    "San Jose",
+    "San José",
     "Soriano",
-    "Tacuarembo",
+    "Tacuarembó",
     "Treinta y Tres",
 ];
 
