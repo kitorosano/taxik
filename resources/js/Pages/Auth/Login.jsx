@@ -1,11 +1,12 @@
 import Checkbox from "@/Components/Checkbox";
+import { CloseEyeIcon, OpenEyeIcon } from "@/Components/Icons";
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
 import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/TextInput";
 import GuestLayout from "@/Layouts/GuestLayout";
 import { Head, Link, useForm } from "@moraki/inertia-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function Login({ status, canResetPassword }) {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -13,6 +14,7 @@ export default function Login({ status, canResetPassword }) {
         password: "",
         remember: false,
     });
+    const [showPassword, setShowPassword] = useState(false);
 
     useEffect(() => {
         return () => {
@@ -49,6 +51,7 @@ export default function Login({ status, canResetPassword }) {
                         autoComplete="username"
                         isFocused={true}
                         onChange={(e) => setData("email", e.target.value)}
+                        required
                     />
 
                     <InputError message={errors.email} className="mt-2" />
@@ -59,18 +62,34 @@ export default function Login({ status, canResetPassword }) {
 
                     <TextInput
                         id="password"
-                        type="password"
+                        type={showPassword ? "text" : "password"}
                         name="password"
                         value={data.password}
                         className="mt-1 block w-full"
                         autoComplete="current-password"
                         onChange={(e) => setData("password", e.target.value)}
+                        required
+                        icon={
+                            showPassword ? (
+                                <OpenEyeIcon
+                                    size={25}
+                                    className="text-gray-600 hover:text-gray-700 cursor-pointer"
+                                    onClick={() => setShowPassword(false)}
+                                />
+                            ) : (
+                                <CloseEyeIcon
+                                    size={25}
+                                    className="text-gray-600 hover:text-gray-700 cursor-pointer"
+                                    onClick={() => setShowPassword(true)}
+                                />
+                            )
+                        }
                     />
 
                     <InputError message={errors.password} className="mt-2" />
                 </div>
 
-                <div className="block mt-4">
+                <div className="flex items-center justify-between mt-4">
                     <label className="flex items-center">
                         <Checkbox
                             name="remember"
@@ -83,9 +102,7 @@ export default function Login({ status, canResetPassword }) {
                             Recordarme
                         </span>
                     </label>
-                </div>
 
-                <div className="flex items-center justify-end mt-4">
                     {canResetPassword && (
                         <Link
                             href={route("password.request")}
@@ -94,10 +111,24 @@ export default function Login({ status, canResetPassword }) {
                             ¿Olvidaste tu contraseña?
                         </Link>
                     )}
+                </div>
 
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Entrar
+                <div className="mt-4">
+                    <PrimaryButton className="w-full" disabled={processing}>
+                        <span className="block w-full text-center">Entrar</span>
                     </PrimaryButton>
+                </div>
+
+                <div className="flex items-center justify-center mt-4">
+                    <span className="text-sm text-gray-600 mr-1">
+                        ¿No tienes una cuenta?
+                    </span>
+                    <Link
+                        href={route("register")}
+                        className="text-sm text-blue-600 hover:text-blue-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    >
+                        Registrate
+                    </Link>
                 </div>
             </form>
         </GuestLayout>

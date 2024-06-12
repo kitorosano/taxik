@@ -1,10 +1,11 @@
+import { CloseEyeIcon, OpenEyeIcon } from "@/Components/Icons";
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
 import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/TextInput";
 import GuestLayout from "@/Layouts/GuestLayout";
 import { Head, Link, useForm } from "@moraki/inertia-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function Register() {
     const { data, setData, post, transform, processing, errors, reset } =
@@ -15,6 +16,7 @@ export default function Register() {
             password_confirmation: "",
             type: "1",
         });
+    const [showPassword, setShowPassword] = useState(false);
 
     useEffect(() => {
         return () => {
@@ -105,13 +107,27 @@ export default function Register() {
 
                     <TextInput
                         id="password"
-                        type="password"
                         name="password"
                         value={data.password}
                         className="mt-1 block w-full"
                         autoComplete="new-password"
                         onChange={(e) => setData("password", e.target.value)}
                         required
+                        icon={
+                            showPassword ? (
+                                <OpenEyeIcon
+                                    size={25}
+                                    className="text-gray-600 hover:text-gray-700 cursor-pointer"
+                                    onClick={() => setShowPassword(false)}
+                                />
+                            ) : (
+                                <CloseEyeIcon
+                                    size={25}
+                                    className="text-gray-600 hover:text-gray-700 cursor-pointer"
+                                    onClick={() => setShowPassword(true)}
+                                />
+                            )
+                        }
                     />
 
                     <InputError message={errors.password} className="mt-2" />
@@ -125,7 +141,7 @@ export default function Register() {
 
                     <TextInput
                         id="password_confirmation"
-                        type="password"
+                        type={showPassword ? "text" : "password"}
                         name="password_confirmation"
                         value={data.password_confirmation}
                         className="mt-1 block w-full"
@@ -134,6 +150,21 @@ export default function Register() {
                             setData("password_confirmation", e.target.value)
                         }
                         required
+                        icon={
+                            showPassword ? (
+                                <OpenEyeIcon
+                                    size={25}
+                                    className="text-gray-600 hover:text-gray-700 cursor-pointer"
+                                    onClick={() => setShowPassword(false)}
+                                />
+                            ) : (
+                                <CloseEyeIcon
+                                    size={25}
+                                    className="text-gray-600 hover:text-gray-700 cursor-pointer"
+                                    onClick={() => setShowPassword(true)}
+                                />
+                            )
+                        }
                     />
 
                     <InputError

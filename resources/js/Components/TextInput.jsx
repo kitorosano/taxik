@@ -20,7 +20,7 @@ export default forwardRef(function TextInput(
     }, []);
 
     return (
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center items-center relative">
             <input
                 {...props}
                 type={type}
@@ -30,7 +30,11 @@ export default forwardRef(function TextInput(
                 }
                 ref={inputRef}
             />
-            {icon && <span className="-ml-6">{icon}</span>}
+            {icon && (
+                <span className="absolute right-2 flex">
+                    {icon}
+                </span>
+            )}
         </div>
     );
 });
