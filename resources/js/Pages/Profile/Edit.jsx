@@ -10,7 +10,7 @@ export default function Edit({ auth, mustVerifyEmail, status, contact }) {
     const contactSectionRef = useRef(null);
 
     useEffect(() => {
-        if (!contact) {
+        if (auth.user.isCompany && !contact) {
             contactSectionRef.current.scrollIntoView({ behavior: "smooth" });
         }
     });
