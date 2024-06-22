@@ -13,10 +13,12 @@ class TravelOrder extends Model
   protected $fillable = [
     'client_id',
     'company_id',
+    'assigned_taxi_id',
     'origin',
     'destination',
     'departure_date',
     'price',
+    'payment_method',
     'status',
     'estimated_arrival_date',
   ];
@@ -24,7 +26,8 @@ class TravelOrder extends Model
   protected $appends = [
     'clientName',
     'companyName',
-    'statusString'
+    'statusString',
+    'paymentMethodString',
   ];
 
   protected function casts(): array
@@ -45,6 +48,21 @@ class TravelOrder extends Model
     return $this->belongsTo(User::class, 'company_id');
   }
 
+  public function assignedTaxi(): BelongsTo
+  {
+    return $this->belongsTo(Taxi::class, 'assigned_taxi_id');
+  }
+
+  protected function getClientNameAttribute(): string
+  {
+    return $this->client->name;
+  }
+
+  protected function getCompanyNameAttribute(): string
+  {
+    return $this->company->name;
+  }
+
   protected function getStatusStringAttribute(): string
   {
     $statuses = [
@@ -58,13 +76,14 @@ class TravelOrder extends Model
     return $statuses[$this->status];
   }
 
-  protected function getClientNameAttribute(): string
+  protected function getPaymentMethodStringAttribute(): string
   {
-    return $this->client->name;
-  }
+    $paymentMethods = [
+      0 => 'Efectivo',
+      1 => 'Tarjeta',
+      2 => 'Mercado Pago',
+    ];
 
-  protected function getCompanyNameAttribute(): string
-  {
-    return $this->company->name;
+    return $paymentMethods[$this->payment_method];
   }
 }

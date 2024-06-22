@@ -16,6 +16,7 @@ class Contact extends Model
     'phone',
     'address',
     'department',
+    'is_validated',
     'linked_company_id',
   ];
 

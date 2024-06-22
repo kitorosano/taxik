@@ -47,6 +47,7 @@ class ContactFactory extends Factory
       'phone' => fake()->phoneNumber(),
       'address' => fake()->streetAddress(),
       'department' => Arr::random($departments),
+      'is_validated' => true,
       'linked_company_id' => null
     ];
   }
