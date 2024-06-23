@@ -1,5 +1,6 @@
 import CloseButton from "@/Components/CloseButton";
 import DangerButton from "@/Components/DangerButton";
+import FavoriteButton from "@/Components/FavoriteButton";
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
 import Modal from "@/Components/Modal";
@@ -15,7 +16,7 @@ import {
 import { useForm } from "@moraki/inertia-react";
 import { useEffect, useState } from "react";
 
-function BookTravelModal({ selectedCompany, onClose }) {
+function BookTravelModal({ selectedCompany, handleFavorite, onClose }) {
     const show = selectedCompany !== null;
 
     const {
@@ -140,17 +141,50 @@ function BookTravelModal({ selectedCompany, onClose }) {
             background="bg-gray-300/75"
         >
             <div className="p-6">
-                {/* TODO: COMPANY INFO */}
+                <header className="flex justify-end">
+                    <CloseButton onClick={onClose} />
+                </header>
 
-                {/* RESERVA VIAJE */}
+                <div className="flex justify-between">
+                    <img
+                        src={selectedCompany?.avatar}
+                        alt="Company avatar"
+                        className="w-24 h-24 rounded-lg"
+                        width={24}
+                    />
+                    <div className="flex-1 ml-4">
+                        <div className="flex gap-4 items-center">
+                            <h2 className="text-lg font-medium text-gray-900">
+                                {selectedCompany?.name}
+                            </h2>
+                            {selectedCompany?.favoriteId ? (
+                                <FavoriteButton
+                                    isFavorite
+                                    onClick={handleFavorite}
+                                />
+                            ) : (
+                                <FavoriteButton onClick={handleFavorite} />
+                            )}
+                        </div>
+                        <p className="text-sm text-gray-600 mb-1">
+                            {selectedCompany?.contact.name}
+                        </p>
+                        <p className="text-sm ">
+                            (+598) {selectedCompany?.contact.phone}
+                        </p>
+                        <p className="text-sm ">
+                            {selectedCompany?.contact.address} -{" "}
+                            {selectedCompany?.contact.department}
+                        </p>
+                    </div>
+                </div>
+
+                <hr className="my-4" />
+
                 <form onSubmit={handleBookTravel}>
-                    <header className="flex justify-between items-center">
-                        <h2 className="text-lg font-medium text-gray-900">
-                            Reservar Viaje
-                        </h2>
-                        <CloseButton onClick={onClose} />
-                    </header>
-
+                    <h2 className="text-lg font-medium text-gray-900">
+                        Reservar Viaje
+                    </h2>
                     <main>
                         <div className="mt-4">
                             <InputLabel htmlFor="origin" value="Origen" />
