@@ -18,9 +18,8 @@ class CompaniesResource extends JsonResource
       'id' => $this->id,
       'name' => $this->name,
       'contact' => $this->contact,
-      'favorite_id' => $this->whenPivotLoaded('client_favorite_companies', function () {
-        return $this->pivot->id;
-      }),
+      'avatar' => $this->avatar,
+      'favoriteId' => $this->favorite_id
     ];
   }
 }
