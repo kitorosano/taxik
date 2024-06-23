@@ -31,7 +31,8 @@ class User extends Authenticatable implements MustVerifyEmail
     'isAdmin',
     'isClient',
     'isCompany',
-    'typeString'
+    'typeString',
+    'favoriteId'
   ];
 
   protected function casts(): array
@@ -47,12 +48,20 @@ class User extends Authenticatable implements MustVerifyEmail
     return $this->hasOne(Contact::class, 'linked_company_id');
   }
 
+  public function favoriteClients(): BelongsToMany
+  {
+    return $this->belongsToMany(User::class, 'client_favorite_companies', 'company_id', 'client_id')
+      ->using(ClientFavoriteCompany::class)
+      ->withPivot(['id', 'client_id', 'company_id']);
+  }
+
   public function favoriteCompanies(): BelongsToMany
   {
     return $this->belongsToMany(User::class, 'client_favorite_companies', 'client_id', 'company_id')
       ->using(ClientFavoriteCompany::class)
       ->withPivot(['id', 'client_id', 'company_id']);
   }
+
 
   protected function getIsAdminAttribute(): bool
   {
@@ -77,5 +86,9 @@ class User extends Authenticatable implements MustVerifyEmail
       2 => 'Empresa',
       default => 'Unknown',
     };
+  }
+  protected function getFavoriteIdAttribute()
+  {
+    return $this->favoriteClients()->where('client_id', auth()->id())->first()?->pivot->id ?? null;
   }
 }

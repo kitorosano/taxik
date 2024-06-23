@@ -44,7 +44,6 @@ class ClientFavoriteCompanyPolicy
    */
   public function delete(User $user, User $model): bool
   {
-    Log::info('ClientFavoriteCompanyPolicy::delete');
     return $user->isClient && $model->isCompany;
   }
 
