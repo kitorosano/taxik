@@ -16,7 +16,7 @@ return new class extends Migration
       $table->id();
       $table->foreignIdFor(User::class, 'company_id')->constrained('users', 'id');
       $table->string('driver_name');
-      $table->string('driver_picture');
+      $table->longText('driver_picture');
       $table->string('car_registration'); //matricula
       $table->string('car_model');
       $table->timestamps();

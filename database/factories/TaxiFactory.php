@@ -119,7 +119,7 @@ class TaxiFactory extends Factory
     return [
       'company_id' => null,
       'driver_name' => fake()->name(),
-      'driver_picture' => fake()->imageUrl(),
+      'driver_picture' => 'https://randomuser.me/api/portraits/men/' . random_int(1, 99) . '.jpg',
       'car_registration' => fake()->regexify('[A-Z]{3}[0-9]{4}'),
       'car_model' => Arr::random($models),
     ];
