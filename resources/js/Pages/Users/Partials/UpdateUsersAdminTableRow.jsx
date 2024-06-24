@@ -16,7 +16,7 @@ function UpdateUsersAdminTableRow({ item, setEditingItem }) {
     const handleSave = (e) => {
         e.preventDefault();
 
-        patch(route("users.update", editingItem.id), {
+        patch(route("users.update", item.id), {
             onSuccess: () => handleCancel(),
             preserveScroll: true,
         });
@@ -65,7 +65,6 @@ function UpdateUsersAdminTableRow({ item, setEditingItem }) {
                 <form onSubmit={handleSave} id="update_user_form">
                     <button
                         form="update_user_form"
-                        onClick={() => setEditingItem(item)}
                         className="font-medium text-gray-600 hover:text-blue-700"
                     >
                         Guardar

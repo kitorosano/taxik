@@ -1,11 +1,13 @@
-import { router } from "@moraki/inertia-react";
+import { useForm } from "@moraki/inertia-react";
 
 function UsersAdminTableRow({ item, setEditingItem }) {
-    const handleDestroy = (e) => {
+    const { delete: destroy } = useForm(item);
+
+    const handleDeleteSubmit = (e) => {
         e.preventDefault();
 
         if (confirm("¿Estás seguro de eliminar este usuario?")) {
-            router.destroy(route("users.destroy", item.id));
+            destroy(route("users.destroy", item.id));
         }
     };
 
@@ -33,7 +35,7 @@ function UsersAdminTableRow({ item, setEditingItem }) {
             </td>
 
             <td className="pr-4 py-2 text-center">
-                <form onSubmit={handleDestroy} method="delete">
+                <form onSubmit={handleDeleteSubmit}>
                     <button className="font-medium text-gray-600 hover:text-red-700">
                         Eliminar
                     </button>
