@@ -20,6 +20,7 @@ class UserController extends Controller
   {
     $PAGINATION_COUNT =  8;
 
+    // filters
     $name = $request->query('name', '');
     $email = $request->query('email', '');
     $type = $request->query('type', '');

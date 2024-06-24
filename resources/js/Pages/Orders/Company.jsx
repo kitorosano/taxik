@@ -1,7 +1,7 @@
 import Pagination from "@/Components/Pagination";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@moraki/inertia-react";
-import TravelOrdersCompanyTable from "./partials/TravelOrdersCompanyTable";
+import TravelOrdersCompanyTable from "./Partials/TravelOrdersCompanyTable";
 
 const columns = {
     client: "Cliente",
@@ -26,7 +26,7 @@ function Company({ auth, orders }) {
             }
         >
             <Head title="Solicitudes de viajes" />
-            <div className="py-10">
+            <div className="py-10 pb-0">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <TravelOrdersCompanyTable

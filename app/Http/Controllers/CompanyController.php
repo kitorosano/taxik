@@ -19,6 +19,7 @@ class CompanyController extends Controller
    */
   public function index(Request $request): Response
   {
+    // filters
     $name = $request->query('name', '');
     $department = $request->query('department', '');
 

@@ -4,6 +4,7 @@ import NavLink from "@/Components/NavLink";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
 import { Link } from "@moraki/inertia-react";
 import { useState } from "react";
+import DefaultAvatar from "/resources/assets/img/default-avatar.png";
 
 export default function Authenticated({ user, header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
@@ -11,7 +12,7 @@ export default function Authenticated({ user, header, children }) {
 
     const username = user ? user.name : "Invitado";
     const useremail = user ? user.email : "";
-    const useravatar = user ? user.avatar : "";
+    const useravatar = user ? user.avatar : DefaultAvatar;
 
     const departmentQuery = new URLSearchParams(window.location.search).get(
         "department"
@@ -25,7 +26,7 @@ export default function Authenticated({ user, header, children }) {
                         <div className="flex">
                             <div className="shrink-0 flex items-center">
                                 <Link href="/">
-                                    <ApplicationLogo className="w-[56px] h-[56px]" />
+                                    <ApplicationLogo className="w-[56px] h-[56px] hover:opacity-75 hover:cursor-pointer" />
                                 </Link>
                             </div>
 
@@ -50,16 +51,28 @@ export default function Authenticated({ user, header, children }) {
                             )}
 
                             {user && user.isCompany && (
-                                <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                    <NavLink
-                                        href={route("travel-order.index")}
-                                        active={route().current(
-                                            "travel-order.index"
-                                        )}
-                                    >
-                                        Solicitudes de Reservas
-                                    </NavLink>
-                                </div>
+                                <>
+                                    <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                        <NavLink
+                                            href={route("taxis.index")}
+                                            active={route().current(
+                                                "taxis.index"
+                                            )}
+                                        >
+                                            Mis taxis
+                                        </NavLink>
+                                    </div>
+                                    <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                        <NavLink
+                                            href={route("travel-order.index")}
+                                            active={route().current(
+                                                "travel-order.index"
+                                            )}
+                                        >
+                                            Solicitudes de Reservas
+                                        </NavLink>
+                                    </div>
+                                </>
                             )}
 
                             {(!user || user.isClient) && (
@@ -229,14 +242,26 @@ export default function Authenticated({ user, header, children }) {
                     )}
 
                     {user && user.isCompany && (
-                        <div className="pt-2 pb-3 space-y-1">
-                            <ResponsiveNavLink
-                                href={route("travel-order.index")}
-                                active={route().current("travel-order.index")}
-                            >
-                                Solicitud de Reservas
-                            </ResponsiveNavLink>
-                        </div>
+                        <>
+                            <div className="pt-2 pb-3 space-y-1">
+                                <ResponsiveNavLink
+                                    href={route("taxis.index")}
+                                    active={route().current("taxis.index")}
+                                >
+                                    Mis Taxis
+                                </ResponsiveNavLink>
+                            </div>
+                            <div className="pt-2 pb-3 space-y-1">
+                                <ResponsiveNavLink
+                                    href={route("travel-order.index")}
+                                    active={route().current(
+                                        "travel-order.index"
+                                    )}
+                                >
+                                    Solicitud de Reservas
+                                </ResponsiveNavLink>
+                            </div>
+                        </>
                     )}
 
                     {(!user || user.isClient) && (

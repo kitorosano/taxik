@@ -32,7 +32,7 @@ function Admin({ auth, contacts, filters, companies }) {
             }
         >
             <Head title="Contactos" />
-            <div className="py-10">
+            <div className="py-10 pb-0">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <ContactsAdminTable

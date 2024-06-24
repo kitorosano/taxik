@@ -5,6 +5,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ClientFavoriteCompanyController;
+use App\Http\Controllers\TaxiController;
 use App\Http\Controllers\TravelOrderController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -56,5 +57,9 @@ Route::resource('favorite-companies', ClientFavoriteCompanyController::class)
 Route::resource('travel-order', TravelOrderController::class)
   ->only(['index', 'store', 'show', 'edit', 'update', 'destroy'])
   ->middleware(['auth']);
+
+Route::resource('taxis', TaxiController::class)
+  ->only(['index', 'store', 'update', 'destroy'])
+  ->middleware(['auth', 'can:viewAny,App\Models\Taxi']);
 
 require __DIR__ . '/auth.php';
