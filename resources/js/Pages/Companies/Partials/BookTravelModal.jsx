@@ -14,7 +14,11 @@ import {
     isDay,
 } from "@/Utils/functions";
 import { useForm } from "@moraki/inertia-react";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
 import { useEffect, useState } from "react";
+
+dayjs.extend(utc);
 
 function BookTravelModal({ selectedCompany, handleFavorite, onClose }) {
     const show = selectedCompany !== null;
@@ -43,9 +47,11 @@ function BookTravelModal({ selectedCompany, handleFavorite, onClose }) {
     const [totalPrice, setTotalPrice] = useState(0);
     const [estimatedArrivalDate, setEstimatedArrivalDate] = useState("");
 
-    const minimumDepartureDate = new Date().toISOString().slice(0, 16); // current date and time
-    const maximumDepartureDate = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000) // current date and time plus 14 days
-        .toISOString()
+    const minimumDepartureDate = dayjs().utc(true).format().slice(0, 16);
+    const maximumDepartureDate = dayjs()
+        .add(14, "day")
+        .utc(true)
+        .format()
         .slice(0, 16);
 
     useEffect(() => {

@@ -6,6 +6,7 @@ use App\Http\Requests\StoreTravelOrderRequest;
 use App\Http\Requests\UpdateTravelOrderRequest;
 use App\Http\Resources\TravelOrderResource;
 use App\Models\TravelOrder;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -18,22 +19,56 @@ class TravelOrderController extends Controller
   /**
    * Display a listing of the resource.
    */
-  public function index(): Response
+  public function index(Request $request): Response
   {
+
+    // filters
+    $id = $request->query('id', '');
+    $departure_date_from = $request->query('departureDateFrom', '');
+    $departure_date_to = $request->query('departureDateTo', '');
+    $arrival_date_from = $request->query('arrivalDateFrom', '');
+    $arrival_date_to = $request->query('arrivalDateTo', '');
+
+    $user = auth()->user();
+
+
     $orders = TravelOrder::query()
-      ->when(auth()->user()->isClient, function ($query) {
-        return $query->where('client_id', '=', auth()->user()->id);
+      ->when($user->isClient, function (Builder $query) use ($user) {
+        return $query->where('client_id', '=', $user->id);
       })
-      ->when(auth()->user()->isCompany, function ($query) {
-        return $query->where('company_id', '=', auth()->user()->id);
+      ->when($user->isCompany, function (Builder $query) use ($user, $id, $departure_date_from, $departure_date_to, $arrival_date_from, $arrival_date_to) {
+        return $query->where('company_id', '=', $user->id)
+          ->when($id, function (Builder $query, $id) {
+            return $query->where('id', 'like', "%$id%");
+          })
+          ->when($departure_date_from, function (Builder $query, $departure_date_from) {
+            return $query->where('departure_date', '>=', $departure_date_from);
+          })
+          ->when($departure_date_to, function (Builder $query, $departure_date_to) {
+            return $query->where('departure_date', '<=', $departure_date_to);
+          })
+          ->when($arrival_date_from, function (Builder $query, $arrival_date_from) {
+            return $query->where('estimated_arrival_date', '>=', $arrival_date_from);
+          })
+          ->when($arrival_date_to, function (Builder $query, $arrival_date_to) {
+            return $query->where('estimated_arrival_date', '<=', $arrival_date_to);
+          });
       })
       ->orderBy('created_at', 'desc')
+      ->orderBy('status', 'asc')
       ->paginate(8)
       ->withQueryString();
 
     if (auth()->check() && auth()->user()->isCompany) {
       return Inertia::render('Orders/Company', [
         'orders' => TravelOrderResource::collection($orders),
+        'filters' => [
+          'id' => $id,
+          'departure_date_from' => $departure_date_from,
+          'departure_date_to' => $departure_date_to,
+          'arrival_date_from' => $arrival_date_from,
+          'arrival_date_to' => $arrival_date_to,
+        ],
       ]);
     }
 
