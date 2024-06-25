@@ -27,3 +27,11 @@ export const travelOrderStatusList = [
     "Completado",
     "Cancelado",
 ];
+
+export const travelOrderStatusCode = {
+    Pendiente: 0,
+    Aprobado: 1,
+    Rechazado: 2,
+    Completado: 3,
+    Cancelado: 4,
+};
