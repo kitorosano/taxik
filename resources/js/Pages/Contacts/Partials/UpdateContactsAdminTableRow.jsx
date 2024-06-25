@@ -79,7 +79,7 @@ function UpdateContactsAdminTableRow({ item, setEditingItem, companies = [] }) {
         <tr key={item.id} className="bg-white border-b items-center">
             <th
                 scope="row"
-                className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap"
+                className="pl-6 py-2 font-medium text-gray-900 whitespace-nowrap"
             >
                 #{item.id}
             </th>

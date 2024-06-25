@@ -98,7 +98,7 @@ function ContactsAdminFilters({ filters, columns, handleCreate }) {
                 </div>
             </div>
             {activeFilters.length > 0 && (
-                <div className="flex items-center text-gray-900 pt-2 pb-4">
+                <div className="flex items-center text-gray-900 pb-2">
                     {activeFilters.map(({ key, value }) => (
                         <div
                             key={`filter-${key}`}
@@ -123,7 +123,7 @@ function ContactsAdminFilters({ filters, columns, handleCreate }) {
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
-                                    className="h-6 w-6 text-gray-400"
+                                    className="h-5 w-5 text-gray-400"
                                     fill="none"
                                     viewBox="0 0 24 24"
                                     stroke="currentColor"
