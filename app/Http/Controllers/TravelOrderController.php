@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTravelOrderRequest;
 use App\Http\Requests\UpdateTravelOrderRequest;
+use App\Http\Resources\TaxiResource;
 use App\Http\Resources\TravelOrderResource;
+use App\Models\Taxi;
 use App\Models\TravelOrder;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
@@ -31,6 +34,7 @@ class TravelOrderController extends Controller
 
     $user = auth()->user();
 
+    $this->finishOrders();
 
     $orders = TravelOrder::query()
       ->when($user->isClient, function (Builder $query) use ($user) {
@@ -52,16 +56,23 @@ class TravelOrderController extends Controller
           })
           ->when($arrival_date_to, function (Builder $query, $arrival_date_to) {
             return $query->where('estimated_arrival_date', '<=', $arrival_date_to);
-          });
+          })
+          ->with('assignedTaxi');
       })
       ->orderBy('created_at', 'desc')
       ->orderBy('status', 'asc')
       ->paginate(8)
       ->withQueryString();
 
-    if (auth()->check() && auth()->user()->isCompany) {
+    $taxis = Taxi::query()
+      ->where('company_id', '=', $user->id)
+      ->paginate(4)
+      ->withQueryString();
+
+    if (auth()->check() && $user->isCompany) {
       return Inertia::render('Orders/Company', [
         'orders' => TravelOrderResource::collection($orders),
+        'taxis' => TaxiResource::collection($taxis),
         'filters' => [
           'id' => $id,
           'departure_date_from' => $departure_date_from,
@@ -75,6 +86,27 @@ class TravelOrderController extends Controller
     return Inertia::render('Orders/Index', [
       'orders' => TravelOrderResource::collection($orders),
     ]);
+  }
+
+  private function finishOrders(): void
+  {
+    $pendingOrders = TravelOrder::query()
+      ->where('status', '=', TravelOrder::$STATUS_CODES['Pendiente'])
+      ->where('estimated_arrival_date', '<=', now())
+      ->get();
+
+    foreach ($pendingOrders as $order) {
+      $order->update(['status' => TravelOrder::$STATUS_CODES['Cancelado']]);
+    }
+
+    $approvedOrders = TravelOrder::query()
+      ->where('status', '=', TravelOrder::$STATUS_CODES['Aprobado'])
+      ->where('departure_date', '<=', now())
+      ->get();
+
+    foreach ($approvedOrders as $order) {
+      $order->update(['status' => TravelOrder::$STATUS_CODES['Completado']]);
+    }
   }
 
   /**
