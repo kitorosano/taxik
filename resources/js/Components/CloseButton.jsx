@@ -1,14 +1,24 @@
-function CloseButton({ className = "", disabled, ...props }) {
+function CloseButton({
+    size = 6,
+    className = "",
+    disabled,
+    onClick,
+    ...props
+}) {
     return (
         <button
             type="button"
-            className={"text-gray-900 " + className}
+            className={
+                "text-gray-500 hover:text-gray-600 hover:bg-gray-100 p-1 rounded-full " +
+                className
+            }
             {...props}
+            onClick={onClick}
             disabled={disabled}
         >
             <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
+                className={`h-${size} w-${size}`}
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
