@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Contact;
+use App\Models\Taxi;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -16,7 +17,7 @@ class DatabaseSeeder extends Seeder
   {
     $this->adminSeed();
     $this->clientSeed();
-    $this->companySeed();
+    $this->companyContactTaxiSeed();
     $this->contactSeed();
   }
 
@@ -48,7 +49,7 @@ class DatabaseSeeder extends Seeder
     ]);
   }
 
-  protected function companySeed(): void
+  protected function companyContactTaxiSeed(): void
   {
     foreach (range(1, 5) as $index) {
       // Create company user
@@ -66,6 +67,13 @@ class DatabaseSeeder extends Seeder
         'department' => 'Montevideo',
         'linked_company_id' => $company->id,
       ]);
+
+      foreach (range(1, 5) as $taxiIndex) {
+        // Create taxi for company
+        Taxi::factory()->create([
+          'company_id' => $company->id,
+        ]);
+      }
     }
   }
 

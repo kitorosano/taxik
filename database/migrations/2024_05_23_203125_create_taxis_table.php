@@ -15,8 +15,10 @@ return new class extends Migration
     Schema::create('taxis', function (Blueprint $table) {
       $table->id();
       $table->foreignIdFor(User::class, 'company_id')->constrained('users', 'id');
-      $table->string('code');
-      $table->boolean('is_available')->default(true);
+      $table->string('driver_name');
+      $table->longText('driver_picture');
+      $table->string('car_registration'); //matricula
+      $table->string('car_model');
       $table->timestamps();
     });
   }

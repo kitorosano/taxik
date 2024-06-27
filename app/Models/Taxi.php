@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Taxi extends Model
 {
@@ -12,12 +13,24 @@ class Taxi extends Model
 
   protected $fillable = [
     'company_id',
-    'code',
-    'is_available',
+    'driver_name',
+    'driver_picture',
+    'car_registration',
+    'car_model',
   ];
 
-  public function company()
+  protected $appends = [
+    'companyName',
+  ];
+
+
+  public function company(): BelongsTo
   {
     return $this->belongsTo(User::class, 'company_id');
+  }
+
+  public function getCompanyNameAttribute(): string
+  {
+    return $this->linkedCompany->name ?? '';
   }
 }

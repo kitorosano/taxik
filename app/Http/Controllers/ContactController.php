@@ -24,6 +24,7 @@ class ContactController extends Controller
   {
     $PAGINATION_COUNT = auth()->check() && auth()->user()->isAdmin ? 8 : 16;
 
+    // filters
     $name = $request->query('name', '');
     $phone = $request->query('phone', '');
     $address = $request->query('address', '');

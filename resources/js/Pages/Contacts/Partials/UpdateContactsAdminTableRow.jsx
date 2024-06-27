@@ -32,7 +32,7 @@ function UpdateContactsAdminTableRow({ item, setEditingItem, companies = [] }) {
 
         if (data.linked_company_id === null) {
             return router.patch(route("contacts.update", item.id), data, {
-                onSuccess: () => setEditingItem(null),
+                onSuccess: () => handleCancel(),
                 preserveScroll: true,
             });
         }
@@ -43,7 +43,7 @@ function UpdateContactsAdminTableRow({ item, setEditingItem, companies = [] }) {
         });
 
         router.patch(route("contacts.update", item.id), transformedData, {
-            onSuccess: () => setEditingItem(null),
+            onSuccess: () => handleCancel(),
             preserveScroll: true,
         });
     };
@@ -79,7 +79,7 @@ function UpdateContactsAdminTableRow({ item, setEditingItem, companies = [] }) {
         <tr key={item.id} className="bg-white border-b items-center">
             <th
                 scope="row"
-                className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap"
+                className="pl-6 py-2 font-medium text-gray-900 whitespace-nowrap"
             >
                 #{item.id}
             </th>
@@ -145,7 +145,6 @@ function UpdateContactsAdminTableRow({ item, setEditingItem, companies = [] }) {
                 <form onSubmit={handleSave} id="update_contact_form">
                     <button
                         form="update_contact_form"
-                        onClick={() => setEditingItem(item)}
                         className="font-medium text-gray-600 hover:text-blue-700"
                     >
                         Guardar

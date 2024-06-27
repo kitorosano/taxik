@@ -4,18 +4,29 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { objectToArray, removeEmptyValues } from "@/Utils/functions";
 import { Head, router, useForm } from "@moraki/inertia-react";
 import debounce from "just-debounce-it";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import BookTravelModal from "./Partials/BookTravelModal";
 import CompaniesGrid from "./Partials/CompaniesGrid";
-import FavoriteCompaniesList from "./Partials/FavoriteCompaniesList";
 
-function Index({ auth, companies, favoriteCompanies, filters }) {
+function Index({ auth, companies, filters }) {
+    const favoriteCompanies = companies.data.filter((c) => c.favoriteId);
+    const notFavoriteCompanies = companies.data.filter((c) => !c.favoriteId);
+
     const { data, setData } = useForm({
         name: filters.name || "",
         department: filters.department || "",
-        favorites: filters.favorites || false,
     });
+
     const [selectedCompany, setSelectedCompany] = useState(null);
+
+    useEffect(() => {
+        if (selectedCompany) {
+            const updatedSelectedCompany = companies.data.find(
+                (c) => c.id === selectedCompany.id
+            );
+            setSelectedCompany(updatedSelectedCompany);
+        }
+    }, [companies]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -42,6 +53,29 @@ function Index({ auth, companies, favoriteCompanies, filters }) {
         }, 300),
         [data]
     );
+
+    const addFavorite = (companyId) => {
+        const data = {
+            company_id: companyId,
+        };
+        router.post(route("favorite-companies.store"), data, {
+            only: ["companies"],
+        });
+    };
+
+    const removeFavorite = (companyId) => {
+        router.delete(route("favorite-companies.destroy", companyId), {
+            only: ["companies"],
+        });
+    };
+
+    const handleFavorite = () => {
+        if (selectedCompany.favoriteId) {
+            removeFavorite(selectedCompany.id);
+        } else {
+            addFavorite(selectedCompany.id);
+        }
+    };
 
     return (
         <AuthenticatedLayout
@@ -75,15 +109,15 @@ function Index({ auth, companies, favoriteCompanies, filters }) {
             }
         >
             <Head title="Reservar Viaje" />
-            <div className="py-10">
-                {favoriteCompanies.data.length > 0 && (
+            <div className="py-10 pb-0">
+                {favoriteCompanies.length > 0 && (
                     <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                         <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                             <h2 className="font-semibold text-xl text-gray-800 leading-tight p-4 ml-2">
                                 Favoritos
                             </h2>
-                            <FavoriteCompaniesList
-                                companies={favoriteCompanies.data}
+                            <CompaniesGrid
+                                companies={favoriteCompanies}
                                 setSelectedCompany={setSelectedCompany}
                             />
                         </div>
@@ -96,7 +130,7 @@ function Index({ auth, companies, favoriteCompanies, filters }) {
                             Empresas
                         </h2>
                         <CompaniesGrid
-                            companies={companies.data}
+                            companies={notFavoriteCompanies}
                             setSelectedCompany={setSelectedCompany}
                         />
                     </div>
@@ -106,6 +140,7 @@ function Index({ auth, companies, favoriteCompanies, filters }) {
 
                 <BookTravelModal
                     selectedCompany={selectedCompany}
+                    handleFavorite={handleFavorite}
                     onClose={() => setSelectedCompany(null)}
                 />
             </div>

@@ -1,11 +1,13 @@
-import { router } from "@moraki/inertia-react";
+import { useForm } from "@moraki/inertia-react";
 
 function ContactsAdminTableRow({ item, setEditingItem }) {
-    const handleDestroy = (e) => {
+    const { delete: destroy } = useForm(item);
+
+    const handleDeleteSubmit = (e) => {
         e.preventDefault();
 
         if (confirm("¿Estás seguro de eliminar este contacto?")) {
-            router.delete(route("contacts.destroy", item.id));
+            destroy(route("contacts.destroy", item.id));
         }
     };
 
@@ -13,7 +15,7 @@ function ContactsAdminTableRow({ item, setEditingItem }) {
         <tr className="bg-white border-b items-center">
             <th
                 scope="row"
-                className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap"
+                className="pl-6 py-2 font-medium text-gray-900 whitespace-nowrap"
             >
                 #{item.id}
             </th>
@@ -38,7 +40,7 @@ function ContactsAdminTableRow({ item, setEditingItem }) {
             </td>
 
             <td className="pr-4 py-2 text-center">
-                <form onSubmit={handleDestroy} method="delete">
+                <form onSubmit={handleDeleteSubmit}>
                     <button className="font-medium text-gray-600 hover:text-red-700">
                         Eliminar
                     </button>

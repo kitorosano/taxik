@@ -6,14 +6,16 @@ import { router, useForm } from "@moraki/inertia-react";
 import debounce from "just-debounce-it";
 import { useCallback, useState } from "react";
 
-function UsersAdminFilters({ filters, columns }) {
+function TaxisCompanyFilters({ filters, columns, handleCreate }) {
     const { data, setData } = useForm({
-        name: filters.name || "",
-        email: filters.email || "",
-        type: filters.type || "",
+        driver_name: filters.driver_name || "",
+        car_registration: filters.car_registration || "",
+        car_model: filters.car_model || "",
     });
 
-    const availableFilters = Object.entries(columns);
+    const availableFilters = Object.entries(columns).filter(
+        ([key]) => key !== "driver_picture"
+    );
     const [activeFilters, setActiveFilters] = useState([]);
 
     const handleAddFilter = ([key, value]) => {
@@ -23,7 +25,7 @@ function UsersAdminFilters({ filters, columns }) {
 
     const handleRemoveFilters = () => {
         setActiveFilters([]);
-        router.get(route("users.index"));
+        router.get(route("taxis.index"));
     };
 
     const handleChange = (e) => {
@@ -38,12 +40,12 @@ function UsersAdminFilters({ filters, columns }) {
             const arrayParams = objectToArray(realData);
 
             if (arrayParams.every((v) => v === "")) {
-                router.get(route("users.index"));
+                router.get(route("taxis.index"));
                 return;
             }
 
             const transformedData = removeEmptyValues(realData);
-            router.visit(route("users.index"), {
+            router.visit(route("taxis.index"), {
                 data: transformedData,
                 preserveState: true,
                 replace: true,
@@ -56,11 +58,14 @@ function UsersAdminFilters({ filters, columns }) {
             <div className="flex justify-between items-center text-gray-900 py-4">
                 <div className="flex w-full">
                     <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                        Gestiona todos los usuarios
+                        Gestiona todos los taxis de tu empresa
                     </h2>
                 </div>
 
                 <div className="flex items-center justify-end w-full gap-4">
+                    <SecondaryButton onClick={handleCreate}>
+                        Asociar nuevo taxi 
+                    </SecondaryButton>
                     <Dropdown>
                         <Dropdown.Trigger>
                             <SecondaryButton className="h-full">
@@ -138,4 +143,4 @@ function UsersAdminFilters({ filters, columns }) {
     );
 }
 
-export default UsersAdminFilters;
+export default TaxisCompanyFilters;

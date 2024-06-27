@@ -34,6 +34,12 @@ function ContactsAdminFilters({ filters, columns, handleCreate }) {
         searchWithFilters(name, value);
     };
 
+    const handleClose = (key) => {
+        setActiveFilters((prev) => prev.filter((f) => f.key !== key));
+        setData(key, "");
+        searchWithFilters(key, "");
+    };
+
     const searchWithFilters = useCallback(
         debounce((name, value) => {
             const realData = { ...data, [name]: value };
@@ -98,7 +104,7 @@ function ContactsAdminFilters({ filters, columns, handleCreate }) {
                 </div>
             </div>
             {activeFilters.length > 0 && (
-                <div className="flex items-center text-gray-900 pt-2 pb-4">
+                <div className="flex items-center text-gray-900 pb-2">
                     {activeFilters.map(({ key, value }) => (
                         <div
                             key={`filter-${key}`}
@@ -111,31 +117,11 @@ function ContactsAdminFilters({ filters, columns, handleCreate }) {
                                 value={data[key]}
                                 onChange={handleChange}
                             />
-                            <button
-                                className="text-gray-400 hover:text-gray-600 hover:bg-gray-100 ml-1 p-1 rounded-full"
-                                onClick={() => {
-                                    setActiveFilters((prev) =>
-                                        prev.filter((f) => f.key !== key)
-                                    );
-                                    setData(key, "");
-                                    searchWithFilters(key, "");
-                                }}
-                            >
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className="h-6 w-6 text-gray-400"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M6 18L18 6M6 6l12 12"
-                                    />
-                                </svg>
-                            </button>
+                            <CloseButton
+                                size={5}
+                                className="ml-1"
+                                onClick={() => handleClose(key)}
+                            />
                         </div>
                     ))}
                 </div>

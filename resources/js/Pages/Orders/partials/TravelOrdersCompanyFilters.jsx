@@ -1,19 +1,28 @@
 import Dropdown from "@/Components/Dropdown";
 import SecondaryButton from "@/Components/SecondaryButton";
-import TextInput from "@/Components/TextInput";
 import { objectToArray, removeEmptyValues } from "@/Utils/functions";
 import { router, useForm } from "@moraki/inertia-react";
 import debounce from "just-debounce-it";
 import { useCallback, useState } from "react";
+import TravelOrdersCompanyFilterItem from "./TravelOrdersCompanyFilterItem";
 
-function UsersAdminFilters({ filters, columns }) {
-    const { data, setData } = useForm({
-        name: filters.name || "",
-        email: filters.email || "",
-        type: filters.type || "",
+const availableFilters = Object.entries({
+    id: "ID",
+    departureDateFrom: "Fecha de Salida Desde",
+    departureDateTo: "Fecha de Salida Hasta",
+    arrivalDateFrom: "Fecha de Llegada Desde",
+    arrivalDateTo: "Fecha de Llegada Hasta",
+});
+
+function TravelOrdersCompanyFilters({ filters }) {
+    const { data, setData, get, errors } = useForm({
+        id: filters.id || "",
+        departureDateFrom: filters.departure_date_from || "",
+        departureDateTo: filters.departure_date_to || "",
+        arrivalDateFrom: filters.arrival_date_from || "",
+        arrivalDateTo: filters.arrival_date_to || "",
     });
 
-    const availableFilters = Object.entries(columns);
     const [activeFilters, setActiveFilters] = useState([]);
 
     const handleAddFilter = ([key, value]) => {
@@ -23,7 +32,7 @@ function UsersAdminFilters({ filters, columns }) {
 
     const handleRemoveFilters = () => {
         setActiveFilters([]);
-        router.get(route("users.index"));
+        get(route("travel-order.index"));
     };
 
     const handleChange = (e) => {
@@ -38,12 +47,12 @@ function UsersAdminFilters({ filters, columns }) {
             const arrayParams = objectToArray(realData);
 
             if (arrayParams.every((v) => v === "")) {
-                router.get(route("users.index"));
+                router.get(route("travel-order.index"));
                 return;
             }
 
             const transformedData = removeEmptyValues(realData);
-            router.visit(route("users.index"), {
+            router.visit(route("travel-order.index"), {
                 data: transformedData,
                 preserveState: true,
                 replace: true,
@@ -56,7 +65,7 @@ function UsersAdminFilters({ filters, columns }) {
             <div className="flex justify-between items-center text-gray-900 py-4">
                 <div className="flex w-full">
                     <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                        Gestiona todos los usuarios
+                        Mostrando tus solicitudes de reservas de viajes
                     </h2>
                 </div>
 
@@ -94,43 +103,26 @@ function UsersAdminFilters({ filters, columns }) {
             {activeFilters.length > 0 && (
                 <div className="flex items-center text-gray-900 pb-2">
                     {activeFilters.map(({ key, value }) => (
-                        <div
+                        <TravelOrdersCompanyFilterItem
                             key={`filter-${key}`}
-                            className="flex items-center mx-2 "
-                        >
-                            <TextInput
-                                name={key}
-                                className="max-w-96 text-black"
-                                placeholder={value + "..."}
-                                value={data[key]}
-                                onChange={handleChange}
-                            />
-                            <button
-                                className="text-gray-400 hover:text-gray-600 hover:bg-gray-100 ml-1 p-1 rounded-full"
-                                onClick={() => {
-                                    setActiveFilters((prev) =>
-                                        prev.filter((f) => f.key !== key)
-                                    );
-                                    setData(key, "");
-                                    searchWithFilters(key, "");
-                                }}
-                            >
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className="h-5 w-5 text-gray-400"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M6 18L18 6M6 6l12 12"
-                                    />
-                                </svg>
-                            </button>
-                        </div>
+                            filterKey={key}
+                            filterValue={data[key]}
+                            filterName={value}
+                            type={
+                                key.toLowerCase().includes("date")
+                                    ? "date"
+                                    : "text"
+                            }
+                            onButtonClick={() => {
+                                setActiveFilters((prev) =>
+                                    prev.filter((f) => f.key !== key)
+                                );
+                                setData(key, "");
+                                searchWithFilters(key, "");
+                            }}
+                            inputHandleChange={handleChange}
+                            errorMessage={errors[key]}
+                        />
                     ))}
                 </div>
             )}
@@ -138,4 +130,4 @@ function UsersAdminFilters({ filters, columns }) {
     );
 }
 
-export default UsersAdminFilters;
+export default TravelOrdersCompanyFilters;
