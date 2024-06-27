@@ -15,6 +15,7 @@ class UpdateTravelOrderRequest extends FormRequest
   public function rules(): array
   {
     return [
+      'assigned_taxi_id' => ['nullable', 'integer', 'exists:taxis,id'],
       'status' => ['required', 'integer', 'between:0,4'],
     ];
   }

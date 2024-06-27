@@ -8,9 +8,10 @@ function TextInputWithOptions(
         inputClassName = "",
         inputValue: _inputValue = "",
         optionClassName = "",
+        optionsWrapperClassName = "",
         inputIsFocused = false,
         inputOnChange = (e) => {},
-        optionsOnChange = (e, option) => {},
+        optionsOnChange = (e) => {},
         optionsIsAlwaysVisible = false,
         ...props
     },
@@ -73,7 +74,8 @@ function TextInputWithOptions(
             {(isListVisible || optionsIsAlwaysVisible) && (
                 <div
                     className={
-                        "absolute flex flex-col bg-white shadow-md rounded-lg mt-2 max-h-44 overflow-y-auto w-full z-10 "
+                        "absolute flex flex-col bg-white shadow-md rounded-lg mt-2 max-h-44 overflow-y-auto w-full z-10 " +
+                        optionsWrapperClassName
                     }
                 >
                     {optionList.map(({ key, value }) => (

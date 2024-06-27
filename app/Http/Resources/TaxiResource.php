@@ -21,6 +21,8 @@ class TaxiResource extends JsonResource
       'driver_picture' => $this->driver_picture,
       'car_registration' => $this->car_registration,
       'car_model' => $this->car_model,
+      'car_information' => $this->car_model . ' - ' . $this->car_registration,
+      'is_available' => true,
     ];
   }
 }

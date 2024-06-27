@@ -19,12 +19,13 @@ class TravelOrderResource extends JsonResource
       return [
         'id' => $this->id,
         'client' => $this->clientName,
+        'taxi' => $this->assignedTaxi,
         'price' => $this->price,
         'status' => $this->statusString,
         'origin' => $this->origin,
-        'departureDate' => $this->departure_date->format('d/m/Y H:i'),
+        'departureDate' => $this->departure_date,
         'destination' => $this->destination,
-        'estimatedArrivalDate' => $this->estimated_arrival_date->format('d/m/Y H:i'),
+        'estimatedArrivalDate' => $this->estimated_arrival_date,
       ];
     }
 

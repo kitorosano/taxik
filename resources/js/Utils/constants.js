@@ -35,3 +35,5 @@ export const travelOrderStatusCode = {
     Completado: 3,
     Cancelado: 4,
 };
+
+export const tzUruguay = 'America/Montevideo'

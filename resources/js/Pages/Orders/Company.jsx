@@ -1,8 +1,8 @@
-import Modal from "@/Components/Modal";
 import Pagination from "@/Components/Pagination";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@moraki/inertia-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import TravelOrderCompanyModal from "./Partials/TravelOrderCompanyModal";
 import TravelOrdersCompanyFilters from "./Partials/TravelOrdersCompanyFilters";
 import TravelOrdersCompanyTable from "./Partials/TravelOrdersCompanyTable";
 
@@ -14,8 +14,17 @@ const columns = {
     status: "Estado",
 };
 
-function Company({ auth, orders, filters }) {
+function Company({ auth, orders, taxis, filters }) {
     const [selectedOrder, setSelectedOrder] = useState(null);
+
+    useEffect(() => {
+        if (selectedOrder) {
+            const updatedSelectedOrder = orders.data.find(
+                (o) => o.id === selectedOrder.id
+            );
+            setSelectedOrder(updatedSelectedOrder);
+        }
+    }, [orders]);
 
     return (
         <AuthenticatedLayout
@@ -37,12 +46,11 @@ function Company({ auth, orders, filters }) {
                 </div>
             </div>
 
-            <Modal
-                show={!!selectedOrder}
+            <TravelOrderCompanyModal
+                selectedOrder={selectedOrder}
                 onClose={() => setSelectedOrder(null)}
-            >
-                <div className="p-4"></div>
-            </Modal>
+                taxis={taxis}
+            />
         </AuthenticatedLayout>
     );
 }
