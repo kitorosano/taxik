@@ -25,16 +25,7 @@ const selectTaxiColumns = {
 };
 
 function TravelOrderCompanyModal({ selectedOrder, onClose, taxis }) {
-    const {
-        data,
-        setData,
-        patch,
-        transform,
-        processing,
-        clearErrors,
-        errors,
-        reset,
-    } = useForm({
+    const { data, setData, patch, transform, clearErrors, reset } = useForm({
         assigned_taxi_id: selectedOrder?.taxi?.id,
         status: selectedOrder?.status,
         reason: "",
@@ -47,10 +38,9 @@ function TravelOrderCompanyModal({ selectedOrder, onClose, taxis }) {
     useEffect(() => {
         if (selectedOrder) {
             setData("assigned_taxi_id", selectedOrder.taxi?.id);
+            setReassigningTaxi(!selectedOrder.taxi?.id);
         }
     }, [selectedOrder]);
-
-    const [isDenying, setIsDenying] = useState(false);
 
     const handleSelectTaxi = (taxi) => {
         transform((data) => ({
@@ -75,44 +65,22 @@ function TravelOrderCompanyModal({ selectedOrder, onClose, taxis }) {
     };
 
     const handleDeny = () => {
-        if (isDenying) {
-            const statusIsPending =
-                selectedOrder?.status === travelOrderStatusList[0];
+        const statusIsPending =
+            selectedOrder?.status === travelOrderStatusList[0];
 
-            if (statusIsPending) {
-                declineOrder();
-            } else {
-                cancelOrder();
-            }
-        } else {
-            setIsDenying(true);
-        }
-    };
-
-    const declineOrder = () => {
         transform((data) => ({
             ...data,
-            status: travelOrderStatusCode.Rechazado,
+            status: statusIsPending
+                ? travelOrderStatusCode["En Viaje"]
+                : travelOrderStatusCode.Cancelado,
         }));
 
-        if (confirm("¿Estás seguro de deseas rechazar esta reserva?")) {
+        const alertText = statusIsPending ? "rechazar" : "cancelar";
+
+        if (confirm(`¿Estás seguro de deseas ${alertText} esta reserva?`)) {
             patch(route("travel-order.update", selectedOrder.id), {
                 preserveScroll: true,
-                only: ["selectedOrder"],
-            });
-        }
-    };
-
-    const cancelOrder = () => {
-        transform((data) => ({
-            ...data,
-            status: travelOrderStatusCode.Cancelado,
-        }));
-
-        if (confirm("¿Estás seguro de deseas cancelar esta reserva?")) {
-            patch(route("travel-order.update", selectedOrder.id), {
-                preserveScroll: true,
-                only: ["selectedOrder"],
+                only: ["orders"],
             });
         }
     };
@@ -124,7 +92,7 @@ function TravelOrderCompanyModal({ selectedOrder, onClose, taxis }) {
     const statusColors = {
         Pendiente: "bg-orange-100 text-orange-800",
         Aprobado: "bg-blue-100 text-blue-800",
-        Rechazado: "bg-red-100 text-red-800",
+        "En Viaje": "bg-cyan-100 text-cyan-800",
         Completado: "bg-green-100 text-green-800",
         Cancelado: "bg-red-100 text-red-800",
     }[selectedOrder?.status];

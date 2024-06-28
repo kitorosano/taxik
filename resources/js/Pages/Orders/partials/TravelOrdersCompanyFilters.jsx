@@ -1,7 +1,7 @@
 import Dropdown from "@/Components/Dropdown";
 import SecondaryButton from "@/Components/SecondaryButton";
 import { objectToArray, removeEmptyValues } from "@/Utils/functions";
-import { router, useForm } from "@moraki/inertia-react";
+import { router } from "@moraki/inertia-react";
 import debounce from "just-debounce-it";
 import { useCallback, useState } from "react";
 import TravelOrdersCompanyFilterItem from "./TravelOrdersCompanyFilterItem";
@@ -12,16 +12,11 @@ const availableFilters = Object.entries({
     departureDateTo: "Fecha de Salida Hasta",
     arrivalDateFrom: "Fecha de Llegada Desde",
     arrivalDateTo: "Fecha de Llegada Hasta",
+    status: "Estado",
 });
 
-function TravelOrdersCompanyFilters({ filters }) {
-    const { data, setData, get, errors } = useForm({
-        id: filters.id || "",
-        departureDateFrom: filters.departure_date_from || "",
-        departureDateTo: filters.departure_date_to || "",
-        arrivalDateFrom: filters.arrival_date_from || "",
-        arrivalDateTo: filters.arrival_date_to || "",
-    });
+function TravelOrdersCompanyFilters({ useForm }) {
+    const { data, setData, get, errors } = useForm;
 
     const [activeFilters, setActiveFilters] = useState([]);
 

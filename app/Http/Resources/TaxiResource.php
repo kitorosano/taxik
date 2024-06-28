@@ -22,7 +22,7 @@ class TaxiResource extends JsonResource
       'car_registration' => $this->car_registration,
       'car_model' => $this->car_model,
       'car_information' => $this->car_model . ' - ' . $this->car_registration,
-      'is_available' => true,
+      'is_available' => $this->isAvailableNow
     ];
   }
 }

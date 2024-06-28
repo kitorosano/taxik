@@ -3,6 +3,13 @@ import { useForm } from "@moraki/inertia-react";
 function TaxisCompanyTableRow({ item, setEditingItem, setViewingPicture }) {
     const { delete: destroy } = useForm(item);
 
+    const isAvailable = item.is_available ? "Disponible" : "Ocupado";
+
+    const statusColors = {
+        Disponible: "bg-green-100 text-green-800",
+        Ocupado: "bg-red-100 text-red-800",
+    }[isAvailable];
+
     const handleDeleteSubmit = (e) => {
         e.preventDefault();
 
@@ -28,6 +35,14 @@ function TaxisCompanyTableRow({ item, setEditingItem, setViewingPicture }) {
             <td className="px-2 py-4">{item.car_model}</td>
 
             <td className="px-2 py-4">{item.car_registration}</td>
+
+            <td className="px-1 py-4">
+                <span
+                    className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusColors}`}
+                >
+                    {isAvailable}
+                </span>
+            </td>
 
             <td className="py-2 text-center">
                 <button

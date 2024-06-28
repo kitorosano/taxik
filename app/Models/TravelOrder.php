@@ -33,7 +33,7 @@ class TravelOrder extends Model
   public static $STATUS_CODES = [
     'Pendiente' => 0,
     'Aprobado' => 1,
-    'Rechazado' => 2,
+    'En Viaje' => 2,
     'Completado' => 3,
     'Cancelado' => 4,
   ];
@@ -41,7 +41,7 @@ class TravelOrder extends Model
   public static $STATUS_STRINGS = [
     0 => 'Pendiente',
     1 => 'Aprobado',
-    2 => 'Rechazado',
+    2 => 'En Viaje',
     3 => 'Completado',
     4 => 'Cancelado',
   ];

@@ -8,6 +8,7 @@ use App\Http\Resources\TaxiResource;
 use App\Http\Resources\TravelOrderResource;
 use App\Models\Taxi;
 use App\Models\TravelOrder;
+use DateTimeZone;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -27,6 +28,7 @@ class TravelOrderController extends Controller
 
     // filters
     $id = $request->query('id', '');
+    $selectedId = $request->query('selectedId', '');
     $departure_date_from = $request->query('departureDateFrom', '');
     $departure_date_to = $request->query('departureDateTo', '');
     $arrival_date_from = $request->query('arrivalDateFrom', '');
@@ -34,7 +36,7 @@ class TravelOrderController extends Controller
 
     $user = auth()->user();
 
-    $this->finishOrders();
+    $this->updateOrdersStatuses();
 
     $orders = TravelOrder::query()
       ->when($user->isClient, function (Builder $query) use ($user) {
@@ -66,8 +68,19 @@ class TravelOrderController extends Controller
 
     $taxis = Taxi::query()
       ->where('company_id', '=', $user->id)
-      ->paginate(4)
-      ->withQueryString();
+      ->when($selectedId, function (Builder $query, $selectedId) {
+        $selectedTravelOrder = TravelOrder::query()->find($selectedId);
+
+        return $query->whereNotIn(
+          'id',
+          TravelOrder::query()
+            ->whereIn('status', [TravelOrder::$STATUS_CODES['Aprobado'],  TravelOrder::$STATUS_CODES['En Viaje']])
+            ->where('departure_date', '<=', $selectedTravelOrder->estimated_arrival_date)
+            ->where('estimated_arrival_date', '>=', $selectedTravelOrder->departure_date)
+            ->pluck('assigned_taxi_id')
+        );
+      })
+      ->get();
 
     if (auth()->check() && $user->isCompany) {
       return Inertia::render('Orders/Company', [
@@ -75,6 +88,7 @@ class TravelOrderController extends Controller
         'taxis' => TaxiResource::collection($taxis),
         'filters' => [
           'id' => $id,
+          'selected_id' => $selectedId,
           'departure_date_from' => $departure_date_from,
           'departure_date_to' => $departure_date_to,
           'arrival_date_from' => $arrival_date_from,
@@ -88,11 +102,11 @@ class TravelOrderController extends Controller
     ]);
   }
 
-  private function finishOrders(): void
+  private function updateOrdersStatuses(): void
   {
     $pendingOrders = TravelOrder::query()
       ->where('status', '=', TravelOrder::$STATUS_CODES['Pendiente'])
-      ->where('estimated_arrival_date', '<=', now())
+      ->where('estimated_arrival_date', '<=', now(new DateTimeZone("America/Montevideo")))
       ->get();
 
     foreach ($pendingOrders as $order) {
@@ -101,10 +115,19 @@ class TravelOrderController extends Controller
 
     $approvedOrders = TravelOrder::query()
       ->where('status', '=', TravelOrder::$STATUS_CODES['Aprobado'])
-      ->where('departure_date', '<=', now())
+      ->where('departure_date', '<=', now(new DateTimeZone("America/Montevideo")))
       ->get();
 
     foreach ($approvedOrders as $order) {
+      $order->update(['status' => TravelOrder::$STATUS_CODES['En Viaje']]);
+    }
+
+    $inProgressOrders = TravelOrder::query()
+      ->where('status', '=', TravelOrder::$STATUS_CODES['En Viaje'])
+      ->where('estimated_arrival_date', '<=', now(new DateTimeZone("America/Montevideo")))
+      ->get();
+
+    foreach ($inProgressOrders as $order) {
       $order->update(['status' => TravelOrder::$STATUS_CODES['Completado']]);
     }
   }
