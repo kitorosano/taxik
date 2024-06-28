@@ -14,7 +14,7 @@ function TaxisCompanyFilters({ filters, columns, handleCreate }) {
     });
 
     const availableFilters = Object.entries(columns).filter(
-        ([key]) => key !== "driver_picture"
+        ([key]) => key !== "driver_picture" && key !== "is_available"
     );
     const [activeFilters, setActiveFilters] = useState([]);
 

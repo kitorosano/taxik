@@ -11,6 +11,7 @@ const columns = {
     driver_name: "Nombre Chofer",
     car_model: "Modelo Coche",
     car_registration: "Matricula Coche",
+    is_available: "Estado",
 };
 
 function Company({ auth, taxis, filters }) {
