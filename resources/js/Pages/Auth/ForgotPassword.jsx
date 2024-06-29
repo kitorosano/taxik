@@ -19,12 +19,14 @@ export default function ForgotPassword({ status }) {
         <GuestLayout>
             <Head title="Forgot Password" />
 
-            <div className="mb-4 text-sm text-gray-600">
-                ¿Olvidaste tu contraseña? No hay problema. Solo dinos tu
-                dirección de correo electrónico y te enviaremos un enlace de
-                restablecimiento de contraseña por correo electrónico que te
-                permitirá elegir uno nuevo.
-            </div>
+            <p className="mb-4 text-sm text-gray-600 w-full">
+                ¿Olvidaste tu contraseña? No hay problema.
+            </p>
+            <p className="mb-4 text-sm text-gray-600 w-full">
+                Solo dinos tu dirección de correo electrónico y te enviaremos un
+                enlace de restablecimiento de contraseña por correo electrónico
+                que te permitirá elegir uno nuevo.
+            </p>
 
             {status && (
                 <div className="mb-4 font-medium text-sm text-green-600">
@@ -38,7 +40,7 @@ export default function ForgotPassword({ status }) {
                     type="email"
                     name="email"
                     value={data.email}
-                    className="mt-1 block w-full"
+                    className={"mt-1 block w-full " + (errors.email && "border-red-500")}
                     isFocused={true}
                     onChange={(e) => setData("email", e.target.value)}
                 />
@@ -47,8 +49,7 @@ export default function ForgotPassword({ status }) {
 
                 <div className="flex items-center justify-end mt-4">
                     <PrimaryButton className="ms-4" disabled={processing}>
-                        Email Password Reset Link Enviar enlace para restablecer
-                        contraseña
+                        Enviar enlace para restablecer contraseña
                     </PrimaryButton>
                 </div>
             </form>

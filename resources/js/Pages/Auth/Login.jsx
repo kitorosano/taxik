@@ -39,6 +39,11 @@ export default function Login({ status, canResetPassword }) {
             )}
 
             <form onSubmit={submit}>
+                <InputError
+                    message={errors.remember}
+                    className="mt-2 mb-4 text-center"
+                />
+
                 <div>
                     <InputLabel htmlFor="email" value="Correo" />
 
@@ -47,11 +52,13 @@ export default function Login({ status, canResetPassword }) {
                         type="email"
                         name="email"
                         value={data.email}
-                        className="mt-1 block w-full"
+                        className={
+                            "mt-1 block w-full " +
+                            (errors.email && "border-red-500")
+                        }
                         autoComplete="username"
                         isFocused={true}
                         onChange={(e) => setData("email", e.target.value)}
-                        required
                     />
 
                     <InputError message={errors.email} className="mt-2" />
@@ -65,10 +72,12 @@ export default function Login({ status, canResetPassword }) {
                         type={showPassword ? "text" : "password"}
                         name="password"
                         value={data.password}
-                        className="mt-1 block w-full"
+                        className={
+                            "mt-1 block w-full " +
+                            (errors.password && "border-red-500")
+                        }
                         autoComplete="current-password"
                         onChange={(e) => setData("password", e.target.value)}
-                        required
                         icon={
                             showPassword ? (
                                 <OpenEyeIcon
