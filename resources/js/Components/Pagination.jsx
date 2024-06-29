@@ -1,25 +1,13 @@
 import { Link } from "@moraki/inertia-react";
 
 function Pagination({ meta, links }) {
-    const customLinks = meta.links.slice(1, -1);
-
     const customPagination = [
         {
             label: "&laquo;",
             url: links.first,
             active: false,
         },
-        {
-            label: "Anterior",
-            url: links.prev,
-            active: false,
-        },
-        ...customLinks,
-        {
-            label: "Siguiente",
-            url: links.next,
-            active: false,
-        },
+        ...meta.links,
         {
             label: "&raquo;",
             url: links.last,
