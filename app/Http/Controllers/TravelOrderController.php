@@ -145,7 +145,7 @@ class TravelOrderController extends Controller
    */
   public function store(StoreTravelOrderRequest $request)
   {
-    // Gate::authorize('create', TravelOrder::class); // TODO: Uncomment this line
+    Gate::authorize('create', TravelOrder::class);
 
     $validated = $request->validated();
 
@@ -162,7 +162,7 @@ class TravelOrderController extends Controller
 
     // TODO: Dispatch an event to notify the company that a new travel order has been created
 
-    return redirect(route('companies.index')); // TODO: Redirect to the travel order index page
+    return redirect(route('travel-order.index'));
   }
 
   /**

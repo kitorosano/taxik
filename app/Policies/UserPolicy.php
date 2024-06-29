@@ -28,7 +28,6 @@ class UserPolicy
    */
   public function create(User $user): bool
   {
-    Log::info('UserPolicy::create');
     return false;
   }
 

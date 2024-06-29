@@ -56,7 +56,7 @@ Route::resource('favorite-companies', ClientFavoriteCompanyController::class)
 
 Route::resource('travel-order', TravelOrderController::class)
   ->only(['index', 'store', 'show', 'edit', 'update', 'destroy'])
-  ->middleware(['auth']);
+  ->middleware(['auth', 'can:viewAny,App\Models\TravelOrder']);
 
 Route::resource('taxis', TaxiController::class)
   ->only(['index', 'store', 'update', 'destroy'])

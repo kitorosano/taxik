@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\TravelOrder;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class TravelOrderPolicy
 {
@@ -13,7 +12,7 @@ class TravelOrderPolicy
    */
   public function viewAny(User $user): bool
   {
-    return false;
+    return !$user->isAdmin;
   }
 
   /**
@@ -29,7 +28,7 @@ class TravelOrderPolicy
    */
   public function create(User $user): bool
   {
-    return false;
+    return $user->isClient;
   }
 
   /**
