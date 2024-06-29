@@ -12,7 +12,7 @@ export default function VerifyEmail({ status }) {
     };
 
     return (
-        <GuestLayout>
+        <GuestLayout title="Verificar Correo">
             <Head title="Verificacion de correo" />
 
             <div className="mb-4 text-sm text-gray-600 w-full">

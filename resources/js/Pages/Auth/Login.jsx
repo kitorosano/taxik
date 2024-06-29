@@ -29,7 +29,7 @@ export default function Login({ status, canResetPassword }) {
     };
 
     return (
-        <GuestLayout>
+        <GuestLayout title="Entrar a Taxik">
             <Head title="Entrar" />
 
             {status && (

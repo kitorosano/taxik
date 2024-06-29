@@ -27,7 +27,7 @@ export default function ResetPassword({ token, email }) {
     };
 
     return (
-        <GuestLayout>
+        <GuestLayout title="Restablecer contraseña">
             <Head title="Restablecer Contraseña" />
 
             <form onSubmit={submit}>

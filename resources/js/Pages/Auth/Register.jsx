@@ -36,7 +36,7 @@ export default function Register() {
     };
 
     return (
-        <GuestLayout>
+        <GuestLayout title="Registrarme en Taxik">
             <Head title="Registrarme" />
 
             <form onSubmit={submit}>

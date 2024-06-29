@@ -16,7 +16,7 @@ export default function ForgotPassword({ status }) {
     };
 
     return (
-        <GuestLayout>
+        <GuestLayout title="Restablecer contraseña">
             <Head title="Forgot Password" />
 
             <p className="mb-4 text-sm text-gray-600 w-full">
