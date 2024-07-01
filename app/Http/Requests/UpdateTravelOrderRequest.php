@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\TaxiAvailable;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateTravelOrderRequest extends FormRequest

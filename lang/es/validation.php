@@ -176,6 +176,9 @@ return [
     'attribute-name' => [
       'rule-name' => 'custom-message',
     ],
+    'assigned_taxi_id' => [
+      'not_available' => 'El taxi seleccionado no está disponible actualmente.',
+    ],
   ],
 
   /*
