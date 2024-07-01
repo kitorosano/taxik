@@ -60,21 +60,61 @@ function CreateTaxisCompanyTableRow({ userId, columns, setCreatingItem }) {
                         width={14}
                     />
                 </label>
-                <InputError message={errors.driver_picture} className="mt-2" />
+                <InputError message={errors.driver_picture} />
             </td>
 
-            {Object.keys(columnsToCreate).map((key) => (
-                <td key={"new" + key} className="px-2 py-4">
-                    <TextInput
-                        form="create_taxi_form"
-                        name={key}
-                        value={data[key]}
-                        onChange={(e) => setData(key, e.target.value)}
-                        className="w-full px-2 py-1 text-gray-900 text-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
-                    />
-                    <InputError message={errors[key]} className="mt-2" />
-                </td>
-            ))}
+            <td className="px-2 py-4">
+                <TextInput
+                    form="create_taxi_form"
+                    name={"driver_name"}
+                    value={data.driver_name}
+                    onChange={(e) => setData("driver_name", e.target.value)}
+                    className={
+                        "w-full px-2 py-1 text-gray-900 text-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm " +
+                        (errors.driver_name && "border-red-500")
+                    }
+                />
+                <InputError message={errors.driver_name} withSpace />
+            </td>
+
+            <td className="px-2 py-4">
+                <TextInput
+                    form="create_taxi_form"
+                    name={"car_model"}
+                    value={data.car_model}
+                    onChange={(e) => setData("car_model", e.target.value)}
+                    className={
+                        "w-full px-2 py-1 text-gray-900 text-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm " +
+                        (errors.car_model && "border-red-500")
+                    }
+                />
+                <InputError message={errors.car_model} withSpace />
+            </td>
+
+            <td className="px-2 py-4">
+                <TextInput
+                    form="create_taxi_form"
+                    name={"car_registration"}
+                    value={data.car_registration}
+                    onChange={(e) =>
+                        setData("car_registration", e.target.value)
+                    }
+                    className={
+                        "w-full px-2 py-1 text-gray-900 text-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm " +
+                        (errors.car_registration && "border-red-500")
+                    }
+                />
+                <InputError message={errors.car_registration} withSpace />
+            </td>
+
+            <td className="px-1 py-4">
+                <span
+                    className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800`}
+                >
+                    Disponible
+                </span>
+                <InputError withSpace />
+            </td>
 
             <td className="py-2 text-center">
                 <form onSubmit={handleSubmit} id="create_taxi_form">
@@ -85,6 +125,7 @@ function CreateTaxisCompanyTableRow({ userId, columns, setCreatingItem }) {
                         Guardar
                     </button>
                 </form>
+                <InputError withSpace />
             </td>
             <td className="py-2 text-center">
                 <button
@@ -94,6 +135,7 @@ function CreateTaxisCompanyTableRow({ userId, columns, setCreatingItem }) {
                 >
                     Cancelar
                 </button>
+                <InputError withSpace />
             </td>
         </tr>
     );

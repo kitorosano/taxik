@@ -18,17 +18,17 @@ function Company({ auth, orders, taxis, filters }) {
     const useFormState = useForm({
         id: filters.id || "",
         selected_id: filters.selected_id || "",
-        departureDateFrom: filters.departure_date_from || "",
-        departureDateTo: filters.departure_date_to || "",
-        arrivalDateFrom: filters.arrival_date_from || "",
-        arrivalDateTo: filters.arrival_date_to || "",
+        departure_date_from: filters.departure_date_from || "",
+        departure_date_to: filters.departure_date_to || "",
+        arrival_date_from: filters.arrival_date_from || "",
+        arrival_date_to: filters.arrival_date_to || "",
     });
     const selectedOrder = orders.data.find(
         (o) => o.id === Number(filters.selected_id)
     );
 
     const handleSelectOrderAndGetAvailableTaxis = (order) => {
-        const filterParams = { ...useFormState.data, selectedId: order.id };
+        const filterParams = { ...useFormState.data, selected_id: order.id };
         const transformedData = removeEmptyValues(filterParams);
         router.visit(route("travel-order.index"), {
             data: transformedData,
