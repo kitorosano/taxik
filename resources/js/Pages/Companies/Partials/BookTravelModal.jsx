@@ -123,11 +123,6 @@ function BookTravelModal({ selectedCompany, handleFavorite, onClose }) {
             preserveState: true,
             onSuccess: () => {
                 handleOnClose();
-                alert("Viaje reservado correctamente");
-            },
-            onError: (errors) => {
-                console.log(errors);
-                alert("Ocurrió un error al reservar el viaje");
             },
         });
     };
@@ -205,7 +200,6 @@ function BookTravelModal({ selectedCompany, handleFavorite, onClose }) {
                                 onChange={(e) =>
                                     setData("origin", e.target.value)
                                 }
-                                required
                             />
 
                             <InputError
@@ -225,7 +219,6 @@ function BookTravelModal({ selectedCompany, handleFavorite, onClose }) {
                                 onChange={(e) =>
                                     setData("destination", e.target.value)
                                 }
-                                required
                             />
 
                             <InputError
@@ -256,7 +249,6 @@ function BookTravelModal({ selectedCompany, handleFavorite, onClose }) {
                                             e.target.value
                                         )
                                     }
-                                    required
                                 />
 
                                 <InputError
@@ -311,7 +303,7 @@ function BookTravelModal({ selectedCompany, handleFavorite, onClose }) {
                         </SecondaryButton>
 
                         <div className="flex justify-end items-center gap-2 ">
-                            <DangerButton type="button" onClick={onClose}>
+                            <DangerButton type="button" onClick={handleOnClose}>
                                 Cancelar
                             </DangerButton>
                             <PrimaryButton disabled={processing}>
