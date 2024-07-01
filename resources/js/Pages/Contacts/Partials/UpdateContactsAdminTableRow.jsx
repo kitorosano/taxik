@@ -3,12 +3,12 @@ import TextInput from "@/Components/TextInput";
 import TextInputWithOptions from "@/Components/TextInputWithOptions";
 import { departmentList } from "@/Utils/constants";
 import { removeEmptyValues } from "@/Utils/functions";
-import { router, useForm } from "@moraki/inertia-react";
+import { useForm } from "@moraki/inertia-react";
 import debounce from "just-debounce-it";
 import { useCallback } from "react";
 
 function UpdateContactsAdminTableRow({ item, setEditingItem, companies = [] }) {
-    const { data, setData, clearErrors, reset, errors } = useForm({
+    const { data, setData, patch, clearErrors, reset, errors } = useForm({
         name: item.name,
         phone: item.phone,
         address: item.address,
@@ -30,19 +30,16 @@ function UpdateContactsAdminTableRow({ item, setEditingItem, companies = [] }) {
     const handleSave = (e) => {
         e.preventDefault();
 
-        if (data.linked_company_id === null) {
-            return router.patch(route("contacts.update", item.id), data, {
-                onSuccess: () => handleCancel(),
-                preserveScroll: true,
+        let transformedData = data;
+
+        if (data.linked_company_id !== null) {
+            transformedData = removeEmptyValues({
+                ...data,
+                linked_company_id: Number(data.linked_company_id),
             });
         }
 
-        const transformedData = removeEmptyValues({
-            ...data,
-            linked_company_id: Number(data.linked_company_id),
-        });
-
-        router.patch(route("contacts.update", item.id), transformedData, {
+        patch(route("contacts.update", item.id), transformedData, {
             onSuccess: () => handleCancel(),
             preserveScroll: true,
         });
@@ -82,6 +79,7 @@ function UpdateContactsAdminTableRow({ item, setEditingItem, companies = [] }) {
                 className="pl-6 py-2 font-medium text-gray-900 whitespace-nowrap"
             >
                 #{item.id}
+                <InputError withSpace />
             </th>
 
             <td className="px-1 py-3">
@@ -89,9 +87,12 @@ function UpdateContactsAdminTableRow({ item, setEditingItem, companies = [] }) {
                     form="update_contact_form"
                     value={data.name}
                     onChange={(e) => setData("name", e.target.value)}
-                    className="w-full px-2 py-1 text-gray-900 text-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
+                    className={
+                        "w-full px-2 py-1 text-gray-900 text-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm " +
+                        (errors.name && "border-red-500")
+                    }
                 />
-                <InputError message={errors.name} className="mt-2" />
+                <InputError withSpace message={errors.name} />
             </td>
 
             <td className="px-1 py-3">
@@ -99,9 +100,12 @@ function UpdateContactsAdminTableRow({ item, setEditingItem, companies = [] }) {
                     form="update_contact_form"
                     value={data.phone}
                     onChange={(e) => setData("phone", e.target.value)}
-                    className="w-full px-2 py-1 text-gray-900 text-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
+                    className={
+                        "w-full px-2 py-1 text-gray-900 text-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm " +
+                        (errors.phone && "border-red-500")
+                    }
                 />
-                <InputError message={errors.phone} className="mt-2" />
+                <InputError withSpace message={errors.phone} />
             </td>
 
             <td className="px-1 py-3">
@@ -109,9 +113,12 @@ function UpdateContactsAdminTableRow({ item, setEditingItem, companies = [] }) {
                     form="update_contact_form"
                     value={data.address}
                     onChange={(e) => setData("address", e.target.value)}
-                    className="w-full px-2 py-1 text-gray-900 text-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
+                    className={
+                        "w-full px-2 py-1 text-gray-900 text-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm " +
+                        (errors.address && "border-red-500")
+                    }
                 />
-                <InputError message={errors.address} className="mt-2" />
+                <InputError withSpace message={errors.address} />
             </td>
 
             <td className="px-1 py-3">
@@ -120,10 +127,13 @@ function UpdateContactsAdminTableRow({ item, setEditingItem, companies = [] }) {
                     optionList={selectableDepartments}
                     inputValue={data.department}
                     inputOnChange={(e) => setData("department", e.target.value)}
-                    inputClassName="w-full px-2 py-1 text-gray-900 text-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
+                    inputClassName={
+                        "w-full px-2 py-1 text-gray-900 text-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm " +
+                        (errors.department && "border-red-500")
+                    }
                     optionClassName="px-2 py-1 text-gray-900 text-sm hover:bg-indigo-100"
                 />
-                <InputError message={errors.department} className="mt-2" />
+                <InputError withSpace message={errors.department} />
             </td>
 
             <td className="px-1 py-3">
@@ -132,13 +142,13 @@ function UpdateContactsAdminTableRow({ item, setEditingItem, companies = [] }) {
                     optionList={selectableCompanies}
                     inputValue={data.companyName}
                     inputOnChange={handleChangeLinkedCompany}
-                    inputClassName="w-full px-2 py-1 text-gray-900 text-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
-                    optionClassName="px-2 py-1 text-gray-900 text-sm"
+                    inputClassName={
+                        "w-full px-2 py-1 text-gray-900 text-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm " +
+                        (errors.linked_company_id && "border-red-500")
+                    }
+                    optionClassName="px-2 py-1 text-gray-900 text-sm hover:bg-indigo-100"
                 />
-                <InputError
-                    message={errors.linked_company_id}
-                    className="mt-2"
-                />
+                <InputError withSpace message={errors.linked_company_id} />
             </td>
 
             <td className="px-1 py-2 text-center">
@@ -150,6 +160,7 @@ function UpdateContactsAdminTableRow({ item, setEditingItem, companies = [] }) {
                         Guardar
                     </button>
                 </form>
+                <InputError withSpace />
             </td>
 
             <td className="px-1 pr-5 py-2 text-center">
@@ -160,6 +171,7 @@ function UpdateContactsAdminTableRow({ item, setEditingItem, companies = [] }) {
                 >
                     Cancelar
                 </button>
+                <InputError withSpace />
             </td>
         </tr>
     );

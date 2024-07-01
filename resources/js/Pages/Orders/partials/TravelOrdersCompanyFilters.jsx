@@ -1,17 +1,17 @@
 import Dropdown from "@/Components/Dropdown";
+import FilterItem from "@/Components/FilterItem";
 import SecondaryButton from "@/Components/SecondaryButton";
 import { objectToArray, removeEmptyValues } from "@/Utils/functions";
 import { router } from "@moraki/inertia-react";
 import debounce from "just-debounce-it";
 import { useCallback, useState } from "react";
-import TravelOrdersCompanyFilterItem from "./TravelOrdersCompanyFilterItem";
 
 const availableFilters = Object.entries({
     id: "ID",
-    departureDateFrom: "Fecha de Salida Desde",
-    departureDateTo: "Fecha de Salida Hasta",
-    arrivalDateFrom: "Fecha de Llegada Desde",
-    arrivalDateTo: "Fecha de Llegada Hasta",
+    departure_date_from: "Fecha de Salida Desde",
+    departure_date_to: "Fecha de Salida Hasta",
+    arrival_date_from: "Fecha de Llegada Desde",
+    arrival_date_to: "Fecha de Llegada Hasta",
     status: "Estado",
 });
 
@@ -34,6 +34,12 @@ function TravelOrdersCompanyFilters({ useForm }) {
         const { name, value } = e.target;
         setData(name, value);
         searchWithFilters(name, value);
+    };
+
+    const handleClose = (key) => {
+        setActiveFilters((prev) => prev.filter((f) => f.key !== key));
+        setData(key, "");
+        searchWithFilters(key, "");
     };
 
     const searchWithFilters = useCallback(
@@ -98,7 +104,7 @@ function TravelOrdersCompanyFilters({ useForm }) {
             {activeFilters.length > 0 && (
                 <div className="flex items-center text-gray-900 pb-2">
                     {activeFilters.map(({ key, value }) => (
-                        <TravelOrdersCompanyFilterItem
+                        <FilterItem
                             key={`filter-${key}`}
                             filterKey={key}
                             filterValue={data[key]}
@@ -108,13 +114,7 @@ function TravelOrdersCompanyFilters({ useForm }) {
                                     ? "date"
                                     : "text"
                             }
-                            onButtonClick={() => {
-                                setActiveFilters((prev) =>
-                                    prev.filter((f) => f.key !== key)
-                                );
-                                setData(key, "");
-                                searchWithFilters(key, "");
-                            }}
+                            onButtonClick={() => handleClose(key)}
                             inputHandleChange={handleChange}
                             errorMessage={errors[key]}
                         />

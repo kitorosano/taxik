@@ -35,6 +35,7 @@ function UpdateUsersAdminTableRow({ item, setEditingItem }) {
                 className="px-4 py-2 font-medium text-gray-900 whitespace-nowrap"
             >
                 #{item.id}
+                <InputError withSpace />
             </th>
 
             <td className="px-1 py-3">
@@ -43,9 +44,12 @@ function UpdateUsersAdminTableRow({ item, setEditingItem }) {
                     name={"name"}
                     value={data.name}
                     onChange={handleChange}
-                    className="w-full px-2 py-1 text-gray-900 text-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
+                    className={
+                        "w-full px-2 py-1 text-gray-900 text-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm " +
+                        (errors.name && "border-red-500")
+                    }
                 ></TextInput>
-                <InputError message={errors.name} className="mt-2" />
+                <InputError message={errors.name} withSpace />
             </td>
 
             <td className="px-1 py-3">
@@ -54,12 +58,18 @@ function UpdateUsersAdminTableRow({ item, setEditingItem }) {
                     name="email"
                     value={data.email}
                     onChange={handleChange}
-                    className="w-full px-2 py-1 text-gray-900 text-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
+                    className={
+                        "w-full px-2 py-1 text-gray-900 text-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm " +
+                        (errors.email && "border-red-500")
+                    }
                 ></TextInput>
-                <InputError message={errors.email} className="mt-2" />
+                <InputError message={errors.email} withSpace />
             </td>
 
-            <td className="px-1 py-4">{item.type}</td>
+            <td className="px-1 py-4">
+                {item.type}
+                <InputError withSpace />
+            </td>
 
             <td className="px-1 py-2 text-center">
                 <form onSubmit={handleSave} id="update_user_form">
@@ -70,6 +80,7 @@ function UpdateUsersAdminTableRow({ item, setEditingItem }) {
                         Guardar
                     </button>
                 </form>
+                <InputError withSpace />
             </td>
             <td className="px-1 pr-5 py-2 text-center">
                 <button
@@ -79,6 +90,7 @@ function UpdateUsersAdminTableRow({ item, setEditingItem }) {
                 >
                     Cancelar
                 </button>
+                <InputError withSpace />
             </td>
         </tr>
     );

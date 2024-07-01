@@ -36,7 +36,7 @@ export default function Register() {
     };
 
     return (
-        <GuestLayout>
+        <GuestLayout title="Registrarme en Taxik">
             <Head title="Registrarme" />
 
             <form onSubmit={submit}>
@@ -49,7 +49,6 @@ export default function Register() {
                             value={"1"}
                             checked={data.type === "1"}
                             onChange={(e) => setData("type", e.target.value)}
-                            required
                         />
                         <InputLabel htmlFor="type_client" value="Cliente" />
                     </div>
@@ -61,7 +60,6 @@ export default function Register() {
                             value={"2"}
                             checked={data.type === "2"}
                             onChange={(e) => setData("type", e.target.value)}
-                            required
                         />
                         <InputLabel htmlFor="type_company" value="Empresa" />
                     </div>
@@ -75,11 +73,13 @@ export default function Register() {
                         id="name"
                         name="name"
                         value={data.name}
-                        className="mt-1 block w-full"
+                        className={
+                            "mt-1 block w-full " +
+                            (errors.name && "border-red-500")
+                        }
                         autoComplete="name"
                         isFocused={true}
                         onChange={(e) => setData("name", e.target.value)}
-                        required
                     />
 
                     <InputError message={errors.name} className="mt-2" />
@@ -93,10 +93,12 @@ export default function Register() {
                         type="email"
                         name="email"
                         value={data.email}
-                        className="mt-1 block w-full"
+                        className={
+                            "mt-1 block w-full " +
+                            (errors.email && "border-red-500")
+                        }
                         autoComplete="username"
                         onChange={(e) => setData("email", e.target.value)}
-                        required
                     />
 
                     <InputError message={errors.email} className="mt-2" />
@@ -109,10 +111,12 @@ export default function Register() {
                         id="password"
                         name="password"
                         value={data.password}
-                        className="mt-1 block w-full"
+                        className={
+                            "mt-1 block w-full " +
+                            (errors.password && "border-red-500")
+                        }
                         autoComplete="new-password"
                         onChange={(e) => setData("password", e.target.value)}
-                        required
                         icon={
                             showPassword ? (
                                 <OpenEyeIcon
@@ -144,12 +148,14 @@ export default function Register() {
                         type={showPassword ? "text" : "password"}
                         name="password_confirmation"
                         value={data.password_confirmation}
-                        className="mt-1 block w-full"
+                        className={
+                            "mt-1 block w-full " +
+                            (errors.password_confirmation && "border-red-500")
+                        }
                         autoComplete="new-password"
                         onChange={(e) =>
                             setData("password_confirmation", e.target.value)
                         }
-                        required
                         icon={
                             showPassword ? (
                                 <OpenEyeIcon

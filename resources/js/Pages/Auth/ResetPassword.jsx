@@ -27,10 +27,15 @@ export default function ResetPassword({ token, email }) {
     };
 
     return (
-        <GuestLayout>
+        <GuestLayout title="Restablecer contraseña">
             <Head title="Restablecer Contraseña" />
 
             <form onSubmit={submit}>
+                <InputError
+                    message={errors.token}
+                    className="mt-2 mb-4 text-center"
+                />
+
                 <div>
                     <InputLabel htmlFor="email" value="Correo" />
 
@@ -39,7 +44,10 @@ export default function ResetPassword({ token, email }) {
                         type="email"
                         name="email"
                         value={data.email}
-                        className="mt-1 block w-full"
+                        className={
+                            "mt-1 block w-full " +
+                            (errors.email && "border-red-500")
+                        }
                         autoComplete="username"
                         onChange={(e) => setData("email", e.target.value)}
                     />
@@ -55,7 +63,10 @@ export default function ResetPassword({ token, email }) {
                         type="password"
                         name="password"
                         value={data.password}
-                        className="mt-1 block w-full"
+                        className={
+                            "mt-1 block w-full " +
+                            (errors.password && "border-red-500")
+                        }
                         autoComplete="new-password"
                         isFocused={true}
                         onChange={(e) => setData("password", e.target.value)}
@@ -75,7 +86,10 @@ export default function ResetPassword({ token, email }) {
                         id="password_confirmation"
                         name="password_confirmation"
                         value={data.password_confirmation}
-                        className="mt-1 block w-full"
+                        className={
+                            "mt-1 block w-full " +
+                            (errors.password_confirmation && "border-red-500")
+                        }
                         autoComplete="new-password"
                         onChange={(e) =>
                             setData("password_confirmation", e.target.value)

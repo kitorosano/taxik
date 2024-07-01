@@ -2,7 +2,7 @@ import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
 import TextInput from "@/Components/TextInput";
 
-const TravelOrdersCompanyFilterItem = ({
+const FilterItem = ({
     filterKey,
     filterValue,
     filterName,
@@ -61,4 +61,4 @@ const TravelOrdersCompanyFilterItem = ({
     );
 };
 
-export default TravelOrdersCompanyFilterItem;
+export default FilterItem;

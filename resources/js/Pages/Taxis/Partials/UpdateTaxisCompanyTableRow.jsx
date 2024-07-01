@@ -10,6 +10,13 @@ function UpdateTaxisCompanyTableRow({ item, setEditingItem }) {
         car_model: item.car_model,
     });
 
+    const isAvailable = item.is_available ? "Disponible" : "Ocupado";
+
+    const statusColors = {
+        Disponible: "bg-green-100 text-green-800",
+        Ocupado: "bg-red-100 text-red-800",
+    }[isAvailable];
+
     const handlePictureChange = (e) => {
         const reader = new FileReader();
 
@@ -58,7 +65,7 @@ function UpdateTaxisCompanyTableRow({ item, setEditingItem }) {
                         width={14}
                     />
                 </label>
-                <InputError message={errors.driver_picture} className="mt-2" />
+                <InputError message={errors.driver_picture} />
             </td>
 
             <td className="px-1 py-3">
@@ -69,7 +76,7 @@ function UpdateTaxisCompanyTableRow({ item, setEditingItem }) {
                     onChange={handleChange}
                     className="w-full px-2 py-1 text-gray-900 text-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
                 ></TextInput>
-                <InputError message={errors.driver_name} className="mt-2" />
+                <InputError message={errors.driver_name} withSpace />
             </td>
 
             <td className="px-1 py-3">
@@ -80,7 +87,7 @@ function UpdateTaxisCompanyTableRow({ item, setEditingItem }) {
                     onChange={handleChange}
                     className="w-full px-2 py-1 text-gray-900 text-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
                 ></TextInput>
-                <InputError message={errors.car_model} className="mt-2" />
+                <InputError message={errors.car_model} withSpace />
             </td>
 
             <td className="px-1 py-3">
@@ -91,10 +98,16 @@ function UpdateTaxisCompanyTableRow({ item, setEditingItem }) {
                     onChange={handleChange}
                     className="w-full px-2 py-1 text-gray-900 text-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
                 ></TextInput>
-                <InputError
-                    message={errors.car_registration}
-                    className="mt-2"
-                />
+                <InputError message={errors.car_registration} withSpace />
+            </td>
+
+            <td className="px-1 py-4">
+                <span
+                    className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusColors}`}
+                >
+                    {isAvailable}
+                </span>
+                <InputError withSpace />
             </td>
 
             <td className="px-1 py-2 text-center">
@@ -106,6 +119,7 @@ function UpdateTaxisCompanyTableRow({ item, setEditingItem }) {
                         Guardar
                     </button>
                 </form>
+                <InputError withSpace />
             </td>
             <td className="px-1 pr-5 py-2 text-center">
                 <button
@@ -115,6 +129,7 @@ function UpdateTaxisCompanyTableRow({ item, setEditingItem }) {
                 >
                     Cancelar
                 </button>
+                <InputError withSpace />
             </td>
         </tr>
     );

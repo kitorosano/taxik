@@ -46,6 +46,7 @@ function ContactsAdminTable({
                         <CreateContactsAdminTableRow
                             columns={columns}
                             setCreatingItem={setCreatingItem}
+                            companies={companies}
                         />
                     )}
                     {items.map((item) =>

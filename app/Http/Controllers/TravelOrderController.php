@@ -28,11 +28,11 @@ class TravelOrderController extends Controller
 
     // filters
     $id = $request->query('id', '');
-    $selectedId = $request->query('selectedId', '');
-    $departure_date_from = $request->query('departureDateFrom', '');
-    $departure_date_to = $request->query('departureDateTo', '');
-    $arrival_date_from = $request->query('arrivalDateFrom', '');
-    $arrival_date_to = $request->query('arrivalDateTo', '');
+    $selected_id = $request->query('selected_id', '');
+    $departure_date_from = $request->query('departure_date_from', '');
+    $departure_date_to = $request->query('departure_date_to', '');
+    $arrival_date_from = $request->query('arrival_date_from', '');
+    $arrival_date_to = $request->query('arrival_date_to', '');
 
     $user = auth()->user();
 
@@ -68,8 +68,8 @@ class TravelOrderController extends Controller
 
     $taxis = Taxi::query()
       ->where('company_id', '=', $user->id)
-      ->when($selectedId, function (Builder $query, $selectedId) {
-        $selectedTravelOrder = TravelOrder::query()->find($selectedId);
+      ->when($selected_id, function (Builder $query, $selected_id) {
+        $selectedTravelOrder = TravelOrder::query()->find($selected_id);
 
         return $query->whereNotIn(
           'id',
@@ -88,7 +88,7 @@ class TravelOrderController extends Controller
         'taxis' => TaxiResource::collection($taxis),
         'filters' => [
           'id' => $id,
-          'selected_id' => $selectedId,
+          'selected_id' => $selected_id,
           'departure_date_from' => $departure_date_from,
           'departure_date_to' => $departure_date_to,
           'arrival_date_from' => $arrival_date_from,
@@ -145,7 +145,7 @@ class TravelOrderController extends Controller
    */
   public function store(StoreTravelOrderRequest $request)
   {
-    // Gate::authorize('create', TravelOrder::class); // TODO: Uncomment this line
+    Gate::authorize('create', TravelOrder::class);
 
     $validated = $request->validated();
 
@@ -162,7 +162,7 @@ class TravelOrderController extends Controller
 
     // TODO: Dispatch an event to notify the company that a new travel order has been created
 
-    return redirect(route('companies.index')); // TODO: Redirect to the travel order index page
+    return redirect(route('travel-order.index'));
   }
 
   /**
