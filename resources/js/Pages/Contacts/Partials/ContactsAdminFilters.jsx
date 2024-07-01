@@ -1,6 +1,6 @@
 import Dropdown from "@/Components/Dropdown";
+import FilterItem from "@/Components/FilterItem";
 import SecondaryButton from "@/Components/SecondaryButton";
-import TextInput from "@/Components/TextInput";
 import { objectToArray, removeEmptyValues } from "@/Utils/functions";
 import { router, useForm } from "@moraki/inertia-react";
 import debounce from "just-debounce-it";
@@ -106,23 +106,20 @@ function ContactsAdminFilters({ filters, columns, handleCreate }) {
             {activeFilters.length > 0 && (
                 <div className="flex items-center text-gray-900 pb-2">
                     {activeFilters.map(({ key, value }) => (
-                        <div
+                        <FilterItem
                             key={`filter-${key}`}
-                            className="flex items-center mx-2 "
-                        >
-                            <TextInput
-                                name={key}
-                                className="max-w-96 text-black"
-                                placeholder={value + "..."}
-                                value={data[key]}
-                                onChange={handleChange}
-                            />
-                            <CloseButton
-                                size={5}
-                                className="ml-1"
-                                onClick={() => handleClose(key)}
-                            />
-                        </div>
+                            filterKey={key}
+                            filterValue={data[key]}
+                            filterName={value}
+                            type={
+                                key.toLowerCase().includes("date")
+                                    ? "date"
+                                    : "text"
+                            }
+                            onButtonClick={() => handleClose(key)}
+                            inputHandleChange={handleChange}
+                            errorMessage={errors[key]}
+                        />
                     ))}
                 </div>
             )}

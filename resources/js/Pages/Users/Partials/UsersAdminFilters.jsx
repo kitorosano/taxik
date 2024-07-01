@@ -1,6 +1,6 @@
 import Dropdown from "@/Components/Dropdown";
+import FilterItem from "@/Components/FilterItem";
 import SecondaryButton from "@/Components/SecondaryButton";
-import TextInput from "@/Components/TextInput";
 import { objectToArray, removeEmptyValues } from "@/Utils/functions";
 import { router, useForm } from "@moraki/inertia-react";
 import debounce from "just-debounce-it";
@@ -30,6 +30,12 @@ function UsersAdminFilters({ filters, columns }) {
         const { name, value } = e.target;
         setData(name, value);
         searchWithFilters(name, value);
+    };
+
+    const handleClose = (key) => {
+        setActiveFilters((prev) => prev.filter((f) => f.key !== key));
+        setData(key, "");
+        searchWithFilters(key, "");
     };
 
     const searchWithFilters = useCallback(
@@ -94,43 +100,20 @@ function UsersAdminFilters({ filters, columns }) {
             {activeFilters.length > 0 && (
                 <div className="flex items-center text-gray-900 pb-2">
                     {activeFilters.map(({ key, value }) => (
-                        <div
+                        <FilterItem
                             key={`filter-${key}`}
-                            className="flex items-center mx-2 "
-                        >
-                            <TextInput
-                                name={key}
-                                className="max-w-96 text-black"
-                                placeholder={value + "..."}
-                                value={data[key]}
-                                onChange={handleChange}
-                            />
-                            <button
-                                className="text-gray-400 hover:text-gray-600 hover:bg-gray-100 ml-1 p-1 rounded-full"
-                                onClick={() => {
-                                    setActiveFilters((prev) =>
-                                        prev.filter((f) => f.key !== key)
-                                    );
-                                    setData(key, "");
-                                    searchWithFilters(key, "");
-                                }}
-                            >
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className="h-5 w-5 text-gray-400"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M6 18L18 6M6 6l12 12"
-                                    />
-                                </svg>
-                            </button>
-                        </div>
+                            filterKey={key}
+                            filterValue={data[key]}
+                            filterName={value}
+                            type={
+                                key.toLowerCase().includes("date")
+                                    ? "date"
+                                    : "text"
+                            }
+                            onButtonClick={() => handleClose(key)}
+                            inputHandleChange={handleChange}
+                            errorMessage={errors[key]}
+                        />
                     ))}
                 </div>
             )}
