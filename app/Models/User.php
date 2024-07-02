@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -62,6 +63,10 @@ class User extends Authenticatable implements MustVerifyEmail
       ->withPivot(['id', 'client_id', 'company_id']);
   }
 
+  public function notifications(): HasMany
+  {
+    return $this->hasMany(Notification::class)->orderBy('created_at', 'desc');
+  }
 
   protected function getIsAdminAttribute(): bool
   {
@@ -81,10 +86,10 @@ class User extends Authenticatable implements MustVerifyEmail
   protected function getTypeStringAttribute(): string
   {
     return match ($this->type) {
-      0 => 'Administrador',
-      1 => 'Cliente',
-      2 => 'Empresa',
-      default => 'Unknown',
+      0 => trans('enums.user.type.admin'),
+      1 => trans('enums.user.type.client'),
+      2 => trans('enums.user.type.company'),
+      default => trans('enums.user.type.unknown'),
     };
   }
   protected function getFavoriteIdAttribute()

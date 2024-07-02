@@ -17,7 +17,7 @@ class UpdateTravelOrderRequest extends FormRequest
   {
     return [
       'assigned_taxi_id' => ['nullable', 'integer', 'exists:taxis,id'],
-      'status' => ['required', 'integer', 'between:0,4'],
+      'status' => ['required', 'integer', 'between:1,4'], // 1 - accepted, 2 - on trip, 3 - completed, 4 - canceled
     ];
   }
 }

@@ -65,19 +65,12 @@ function TravelOrderCompanyModal({ selectedOrder, onClose, taxis }) {
     };
 
     const handleDeny = () => {
-        const statusIsPending =
-            selectedOrder?.status === travelOrderStatusList[0];
-
         transform((data) => ({
             ...data,
-            status: statusIsPending
-                ? travelOrderStatusCode["En Viaje"]
-                : travelOrderStatusCode.Cancelado,
+            status: travelOrderStatusCode.Cancelado,
         }));
 
-        const alertText = statusIsPending ? "rechazar" : "cancelar";
-
-        if (confirm(`¿Estás seguro de deseas ${alertText} esta reserva?`)) {
+        if (confirm(`¿Estás seguro de deseas cancelar esta reserva?`)) {
             patch(route("travel-order.update", selectedOrder.id), {
                 preserveScroll: true,
                 only: ["orders"],
@@ -185,47 +178,47 @@ function TravelOrderCompanyModal({ selectedOrder, onClose, taxis }) {
                     </div>
 
                     <hr className="my-3" />
-                    {selectedOrder?.status !== travelOrderStatusList[2] &&
-                        selectedOrder?.status !== travelOrderStatusList[4] && (
-                            <>
-                                <footer className="flex justify-between items-center">
-                                    <SecondaryButton
+                    {(selectedOrder?.status === travelOrderStatusList[0] ||
+                        selectedOrder?.status === travelOrderStatusList[1]) && (
+                        <>
+                            <footer className="flex justify-between items-center">
+                                <SecondaryButton
+                                    type="button"
+                                    onClick={() =>
+                                        setReassigningTaxi((prev) => !prev)
+                                    }
+                                >
+                                    {reassigningTaxi
+                                        ? "Cerrar tabla"
+                                        : "Reasignar taxi"}
+                                </SecondaryButton>
+
+                                <div className="flex justify-end items-center gap-2 ">
+                                    <DangerButton
                                         type="button"
-                                        onClick={() =>
-                                            setReassigningTaxi((prev) => !prev)
-                                        }
+                                        onClick={handleDeny}
                                     >
-                                        {reassigningTaxi
-                                            ? "Cerrar tabla"
-                                            : "Reasignar taxi"}
-                                    </SecondaryButton>
+                                        {selectedOrder?.status ===
+                                        travelOrderStatusList[0]
+                                            ? "Rechazar"
+                                            : "Cancelar"}
+                                    </DangerButton>
+                                </div>
+                            </footer>
 
-                                    <div className="flex justify-end items-center gap-2 ">
-                                        <DangerButton
-                                            type="button"
-                                            onClick={handleDeny}
-                                        >
-                                            {selectedOrder?.status ===
-                                            travelOrderStatusList[0]
-                                                ? "Rechazar"
-                                                : "Cancelar"}
-                                        </DangerButton>
-                                    </div>
-                                </footer>
+                            <hr className="my-3" />
 
-                                <hr className="my-3" />
-
-                                {reassigningTaxi && (
-                                    <div className="flex justify-center items-center mx-10  ">
-                                        <TravelOrdersCompanyTaxisTable
-                                            items={taxis.data}
-                                            columns={selectTaxiColumns}
-                                            setSelectedItem={handleSelectTaxi}
-                                        />
-                                    </div>
-                                )}
-                            </>
-                        )}
+                            {reassigningTaxi && (
+                                <div className="flex justify-center items-center mx-10  ">
+                                    <TravelOrdersCompanyTaxisTable
+                                        items={taxis.data}
+                                        columns={selectTaxiColumns}
+                                        setSelectedItem={handleSelectTaxi}
+                                    />
+                                </div>
+                            )}
+                        </>
+                    )}
                 </main>
             </div>
         </Modal>

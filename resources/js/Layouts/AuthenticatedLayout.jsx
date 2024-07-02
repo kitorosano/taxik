@@ -1,6 +1,7 @@
 import ApplicationLogo from "@/Components/ApplicationLogo";
 import Dropdown from "@/Components/Dropdown";
 import NavLink from "@/Components/NavLink";
+import Notifications from "@/Components/Notifications";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
 import { Link } from "@moraki/inertia-react";
 import { useState } from "react";
@@ -106,7 +107,10 @@ export default function Authenticated({ user, header, children }) {
                         </div>
 
                         <div className="hidden sm:flex sm:items-center sm:ms-6">
-                            <div className="ms-3 relative">
+                            <div className="p-2">
+                                <Notifications user={user} />
+                            </div>
+                            <div className="relative">
                                 <Dropdown>
                                     <Dropdown.Trigger>
                                         <span className="inline-flex rounded-md">
