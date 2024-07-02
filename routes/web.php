@@ -5,6 +5,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ClientFavoriteCompanyController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\TaxiController;
 use App\Http\Controllers\TravelOrderController;
 use Illuminate\Foundation\Application;
@@ -61,5 +62,8 @@ Route::resource('travel-order', TravelOrderController::class)
 Route::resource('taxis', TaxiController::class)
   ->only(['index', 'store', 'update', 'destroy'])
   ->middleware(['auth', 'can:viewAny,App\Models\Taxi']);
+
+Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+Route::post('/notifications/watch', [NotificationController::class, 'update'])->name('notifications.watch');
 
 require __DIR__ . '/auth.php';
