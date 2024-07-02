@@ -2,6 +2,7 @@ import Pagination from "@/Components/Pagination";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@moraki/inertia-react";
 import TravelOrdersClientTable from "./Partials/TravelOrdersClientTable";
+import { useEffect } from "react";
 
 const columns = {
     status: "Estado",

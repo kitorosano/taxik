@@ -128,9 +128,9 @@ function BookTravelModal({ selectedCompany, handleFavorite, onClose }) {
     };
 
     const handleOnClose = () => {
+        onClose();
         reset();
         clearErrors();
-        onClose();
     };
 
     return (
@@ -143,7 +143,7 @@ function BookTravelModal({ selectedCompany, handleFavorite, onClose }) {
         >
             <div className="p-6">
                 <header className="flex justify-end">
-                    <CloseButton onClick={onClose} />
+                    <CloseButton onClick={handleOnClose} />
                 </header>
 
                 <div className="flex justify-between">
