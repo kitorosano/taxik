@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\TravelOrderStatusUpdated;
 use App\Http\Requests\StoreTravelOrderRequest;
 use App\Http\Requests\UpdateTravelOrderRequest;
 use App\Http\Resources\TaxiResource;
@@ -71,10 +72,14 @@ class TravelOrderController extends Controller
       ->when($selected_id, function (Builder $query, $selected_id) {
         $selectedTravelOrder = TravelOrder::query()->find($selected_id);
 
+        if (!$selectedTravelOrder) {
+          return $query;
+        }
+
         return $query->whereNotIn(
           'id',
           TravelOrder::query()
-            ->whereIn('status', [TravelOrder::$STATUS_CODES['Aprobado'],  TravelOrder::$STATUS_CODES['En Viaje']])
+            ->whereIn('status', [TravelOrder::$STATUS_CODES['approved'],  TravelOrder::$STATUS_CODES['on-trip']])
             ->where('departure_date', '<=', $selectedTravelOrder->estimated_arrival_date)
             ->where('estimated_arrival_date', '>=', $selectedTravelOrder->departure_date)
             ->pluck('assigned_taxi_id')
@@ -105,30 +110,36 @@ class TravelOrderController extends Controller
   private function updateOrdersStatuses(): void
   {
     $pendingOrders = TravelOrder::query()
-      ->where('status', '=', TravelOrder::$STATUS_CODES['Pendiente'])
+      ->where('status', '=', TravelOrder::$STATUS_CODES['pending'])
       ->where('estimated_arrival_date', '<=', now(new DateTimeZone("America/Montevideo")))
       ->get();
 
     foreach ($pendingOrders as $order) {
-      $order->update(['status' => TravelOrder::$STATUS_CODES['Cancelado']]);
+      $order->update(['status' => TravelOrder::$STATUS_CODES['canceled']]);
+
+      TravelOrderStatusUpdated::dispatch($order);
     }
 
     $approvedOrders = TravelOrder::query()
-      ->where('status', '=', TravelOrder::$STATUS_CODES['Aprobado'])
+      ->where('status', '=', TravelOrder::$STATUS_CODES['approved'])
       ->where('departure_date', '<=', now(new DateTimeZone("America/Montevideo")))
       ->get();
 
     foreach ($approvedOrders as $order) {
-      $order->update(['status' => TravelOrder::$STATUS_CODES['En Viaje']]);
+      $order->update(['status' => TravelOrder::$STATUS_CODES['on-trip']]);
+
+      TravelOrderStatusUpdated::dispatch($order);
     }
 
     $inProgressOrders = TravelOrder::query()
-      ->where('status', '=', TravelOrder::$STATUS_CODES['En Viaje'])
+      ->where('status', '=', TravelOrder::$STATUS_CODES['on-trip'])
       ->where('estimated_arrival_date', '<=', now(new DateTimeZone("America/Montevideo")))
       ->get();
 
     foreach ($inProgressOrders as $order) {
-      $order->update(['status' => TravelOrder::$STATUS_CODES['Completado']]);
+      $order->update(['status' => TravelOrder::$STATUS_CODES['completed']]);
+
+      TravelOrderStatusUpdated::dispatch($order);
     }
   }
 
@@ -149,7 +160,7 @@ class TravelOrderController extends Controller
 
     $validated = $request->validated();
 
-    TravelOrder::create([
+    $travelOrder = TravelOrder::create([
       'client_id' => $request->user()->id,
       'company_id' => $validated['company_id'],
       'origin' => $validated['origin'],
@@ -160,7 +171,7 @@ class TravelOrderController extends Controller
       'status' => 0,
     ]);
 
-    // TODO: Dispatch an event to notify the company that a new travel order has been created
+    event(new TravelOrderStatusUpdated($travelOrder));
 
     return redirect(route('travel-order.index'));
   }
@@ -191,6 +202,8 @@ class TravelOrderController extends Controller
     $validated = $request->validated();
 
     $travelOrder->update($validated);
+
+    TravelOrderStatusUpdated::dispatch($travelOrder);
 
     return redirect(route('travel-order.index'));
   }

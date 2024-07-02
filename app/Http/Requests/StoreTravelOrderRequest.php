@@ -18,7 +18,7 @@ class StoreTravelOrderRequest extends FormRequest
       'company_id' => ['required', 'int', 'exists:users,id'],
       'origin' => ['required', 'string', 'max:255'],
       'destination' => ['required', 'string', 'max:255'],
-      'departure_date' => ['required', 'date', 'after:today'],
+      'departure_date' => ['required', 'date'],
       'price' => ['required', 'numeric'],
       'estimated_arrival_date' => ['required', 'date'],
     ];
