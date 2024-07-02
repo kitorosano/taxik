@@ -1,5 +1,6 @@
 //  - This file is used to export all the icons in the project
 
+export { default as BellOutlineIcon } from "./BellOutline";
 export { default as CaretIcon } from "./Caret";
 export { default as CloseEyeIcon } from "./CloseEye";
 export { default as EmptyStarIcon } from "./EmptyStar";
