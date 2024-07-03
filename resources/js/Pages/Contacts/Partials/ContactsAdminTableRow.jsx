@@ -1,16 +1,4 @@
-import { useForm } from "@moraki/inertia-react";
-
-function ContactsAdminTableRow({ item, setEditingItem }) {
-    const { delete: destroy } = useForm(item);
-
-    const handleDeleteSubmit = (e) => {
-        e.preventDefault();
-
-        if (confirm("¿Estás seguro de eliminar este contacto?")) {
-            destroy(route("contacts.destroy", item.id));
-        }
-    };
-
+function ContactsAdminTableRow({ item, setEditingItem, setSelectedContact }) {
     return (
         <tr className="bg-white border-b items-center">
             <th
@@ -40,11 +28,12 @@ function ContactsAdminTableRow({ item, setEditingItem }) {
             </td>
 
             <td className="pr-4 py-2 text-center">
-                <form onSubmit={handleDeleteSubmit}>
-                    <button className="font-medium text-gray-600 hover:text-red-700">
-                        Eliminar
-                    </button>
-                </form>
+                <button
+                    className="font-medium text-gray-600 hover:text-red-700"
+                    onClick={() => setSelectedContact(item)}
+                >
+                    Eliminar
+                </button>
             </td>
         </tr>
     );

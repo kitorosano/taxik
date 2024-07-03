@@ -154,10 +154,17 @@ class ContactController extends Controller
   {
     Gate::authorize('delete', $contact);
 
+    if ($contact->linkedCompany()->exists()) {
+      return redirect(route('contacts.index'))->with([
+        'message' => trans('notifications.contact-delete-error', ['company' => $contact->companyName]),
+        'messageType' => 'error',
+      ]);
+    }
+
     $contact->delete();
 
     return redirect(route('contacts.index'))->with([
-      'message' => trans('notifications.contact-delete.admin', ['contact' => $contact->name]),
+      'message' => trans('notifications.contact-delete', ['contact' => $contact->name]),
       'messageType' => 'success',
     ]);
   }

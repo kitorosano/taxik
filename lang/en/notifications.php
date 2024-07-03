@@ -26,10 +26,8 @@ return [
     'company' => 'You have updated your contact!',
     'admin' => 'You have updated the contact ":contact"'
   ],
-  'contact-delete' => [
-    'company' => 'Your contact has been deleted!',
-    'admin' => 'You have deleted the contact ":contact"'
-  ],
+  'contact-delete' => 'You have deleted the contact ":contact"',
+  'contact-delete-error' => 'You cannot delete this contact because it is linked to the company ":company"',
 
   'language-changed' => 'Language changed to :lang!',
 

@@ -178,7 +178,7 @@ return [
     ],
     'assigned_taxi_id' => [
       'not_available' => 'El taxi seleccionado no está disponible actualmente.',
-    ],
+    ]
   ],
 
   /*

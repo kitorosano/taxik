@@ -26,10 +26,8 @@ return [
     'company' => 'Has actualizado tu contacto!',
     'admin' => 'Has actualizado el contacto ":contact"'
   ],
-  'contact-delete' => [
-    'company' => 'Tu contacto ha sido eliminado!',
-    'admin' => 'Has eliminado el contacto ":contact"'
-  ],
+  'contact-delete' => 'Has eliminado el contacto ":contact"',
+  'contact-delete-error' => 'No puedes eliminar este contacto porque está vinculado a la empresa ":company"',
 
   'language-changed' => 'Idioma cambiado a :lang!',
 
