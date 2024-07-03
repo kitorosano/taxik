@@ -23,6 +23,7 @@
         "vite": "^5.0"
     },
     "dependencies": {
-        "dayjs": "^1.11.11"
+        "dayjs": "^1.11.11",
+        "react-toastify": "^10.0.5"
     }
 }

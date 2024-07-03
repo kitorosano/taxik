@@ -23,8 +23,6 @@ class CompanyController extends Controller
     $name = $request->query('name', '');
     $department = $request->query('department', '');
 
-    Log::info(auth()->id());
-
     $companies = User::query()
       ->where('type', '=', 2)
       ->when($name, function (Builder $query, $name) {

@@ -54,7 +54,6 @@ class ContactController extends Controller
 
     $companies = User::query()->where('type', '=', 2)->get();
 
-
     if (Auth::check() && Auth::user()->isAdmin) {
       return Inertia::render('Contacts/Admin', [
         'contacts' => ContactResource::collection($contacts),
@@ -95,12 +94,18 @@ class ContactController extends Controller
 
     $validated = $request->validated();
 
-    Contact::create($validated);
+    $contact = Contact::create($validated);
 
     if ($request->user()->isCompany) {
-      return redirect(route('profile.edit'));
+      return redirect(route('profile.edit'))->with([
+        'message' => trans('notifications.contact-create.company'),
+        'messageType' => 'success',
+      ]);
     }
-    return redirect(route('contacts.index'));
+    return redirect(route('contacts.index'))->with([
+      'message' => trans('notifications.contact-create.admin', ['contact' => $contact->name]),
+      'messageType' => 'success',
+    ]);
   }
 
   /**
@@ -131,9 +136,15 @@ class ContactController extends Controller
     $contact->update($validated);
 
     if ($request->user()->isCompany) {
-      return redirect(route('profile.edit'));
+      return redirect(route('profile.edit'))->with([
+        'message' => trans('notifications.contact-update.company'),
+        'messageType' => 'success',
+      ]);
     }
-    return redirect(route('contacts.index'));
+    return redirect(route('contacts.index'))->with([
+      'message' => trans('notifications.contact-update.admin', ['contact' => $contact->name]),
+      'messageType' => 'success',
+    ]);
   }
 
   /**
@@ -145,6 +156,9 @@ class ContactController extends Controller
 
     $contact->delete();
 
-    return redirect(route('contacts.index'));
+    return redirect(route('contacts.index'))->with([
+      'message' => trans('notifications.contact-delete.admin', ['contact' => $contact->name]),
+      'messageType' => 'success',
+    ]);
   }
 }

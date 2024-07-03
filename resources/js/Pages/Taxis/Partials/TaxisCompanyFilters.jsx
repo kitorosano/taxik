@@ -7,7 +7,7 @@ import debounce from "just-debounce-it";
 import { useCallback, useState } from "react";
 
 function TaxisCompanyFilters({ filters, columns, handleCreate }) {
-    const { data, setData } = useForm({
+    const { data, setData, errors } = useForm({
         driver_name: filters.driver_name || "",
         car_registration: filters.car_registration || "",
         car_model: filters.car_model || "",
@@ -53,6 +53,7 @@ function TaxisCompanyFilters({ filters, columns, handleCreate }) {
             const transformedData = removeEmptyValues(realData);
             router.visit(route("taxis.index"), {
                 data: transformedData,
+                only: ['taxis'],
                 preserveState: true,
                 replace: true,
             });

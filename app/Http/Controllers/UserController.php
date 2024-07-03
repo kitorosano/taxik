@@ -91,7 +91,10 @@ class UserController extends Controller
 
     $user->update($validated);
 
-    return redirect(route('users.index'));
+    return redirect(route('users.index'))->with([
+      'message' => trans('notifications.user-update', ['user' => $user->name]),
+      'messageType' => 'success'
+    ]);
   }
 
   /**
@@ -103,6 +106,9 @@ class UserController extends Controller
 
     $user->delete();
 
-    return redirect(route('users.index'));
+    return redirect(route('users.index'))->with([
+      'message' => trans('notifications.user-delete', ['user' => $user->name]),
+      'messageType' => 'success'
+    ]);
   }
 }

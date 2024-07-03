@@ -28,8 +28,10 @@ class TravelOrderController extends Controller
   {
 
     // filters
-    $id = $request->query('id', '');
     $selected_id = $request->query('selected_id', '');
+    $id = $request->query('id', '');
+    $origin = $request->query('origin', '');
+    $destination = $request->query('destination', '');
     $departure_date_from = $request->query('departure_date_from', '');
     $departure_date_to = $request->query('departure_date_to', '');
     $arrival_date_from = $request->query('arrival_date_from', '');
@@ -37,16 +39,22 @@ class TravelOrderController extends Controller
 
     $user = auth()->user();
 
-    $this->updateOrdersStatuses();
+    $this->automaticUpdateOrdersStatuses();
 
     $orders = TravelOrder::query()
       ->when($user->isClient, function (Builder $query) use ($user) {
         return $query->where('client_id', '=', $user->id);
       })
-      ->when($user->isCompany, function (Builder $query) use ($user, $id, $departure_date_from, $departure_date_to, $arrival_date_from, $arrival_date_to) {
+      ->when($user->isCompany, function (Builder $query) use ($user, $id, $origin, $destination, $departure_date_from, $departure_date_to, $arrival_date_from, $arrival_date_to) {
         return $query->where('company_id', '=', $user->id)
           ->when($id, function (Builder $query, $id) {
             return $query->where('id', 'like', "%$id%");
+          })
+          ->when($origin, function (Builder $query, $origin) {
+            return $query->where('origin', 'like', "%$origin%");
+          })
+          ->when($destination, function (Builder $query, $destination) {
+            return $query->where('destination', 'like', "%$destination%");
           })
           ->when($departure_date_from, function (Builder $query, $departure_date_from) {
             return $query->where('departure_date', '>=', $departure_date_from);
@@ -92,8 +100,10 @@ class TravelOrderController extends Controller
         'orders' => TravelOrderResource::collection($orders),
         'taxis' => TaxiResource::collection($taxis),
         'filters' => [
-          'id' => $id,
           'selected_id' => $selected_id,
+          'id' => $id,
+          'origin' => $origin,
+          'destination' => $destination,
           'departure_date_from' => $departure_date_from,
           'departure_date_to' => $departure_date_to,
           'arrival_date_from' => $arrival_date_from,
@@ -107,7 +117,7 @@ class TravelOrderController extends Controller
     ]);
   }
 
-  private function updateOrdersStatuses(): void
+  private function automaticUpdateOrdersStatuses(): void
   {
     $pendingOrders = TravelOrder::query()
       ->where('status', '=', TravelOrder::$STATUS_CODES['pending'])
@@ -173,7 +183,10 @@ class TravelOrderController extends Controller
 
     event(new TravelOrderStatusUpdated($travelOrder));
 
-    return redirect(route('travel-order.index'));
+    return redirect(route('travel-order.index'))->with([
+      'message' => trans('notifications.travel-order-client-create'),
+      'messageType' => 'success',
+    ]);
   }
 
   /**
@@ -205,7 +218,10 @@ class TravelOrderController extends Controller
 
     TravelOrderStatusUpdated::dispatch($travelOrder);
 
-    return redirect(route('travel-order.index'));
+    return redirect(route('travel-order.index'))->with([
+      'message' => trans('notifications.travel-order-company-update', ['id' => $travelOrder->id, 'client' => $travelOrder->client->name]),
+      'messageType' => 'success',
+    ]);
   }
 
   /**

@@ -1,5 +1,6 @@
 import "../css/app.css";
 import "./bootstrap";
+import 'react-toastify/dist/ReactToastify.css';
 
 import { createInertiaApp } from "@moraki/inertia-react";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";

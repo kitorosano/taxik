@@ -7,7 +7,7 @@ import debounce from "just-debounce-it";
 import { useCallback, useState } from "react";
 
 function UsersAdminFilters({ filters, columns }) {
-    const { data, setData } = useForm({
+    const { data, setData, errors } = useForm({
         name: filters.name || "",
         email: filters.email || "",
         type: filters.type || "",
@@ -51,6 +51,7 @@ function UsersAdminFilters({ filters, columns }) {
             const transformedData = removeEmptyValues(realData);
             router.visit(route("users.index"), {
                 data: transformedData,
+                only: ['users'],
                 preserveState: true,
                 replace: true,
             });

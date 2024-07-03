@@ -7,17 +7,16 @@ import debounce from "just-debounce-it";
 import { useCallback, useState } from "react";
 
 const availableFilters = Object.entries({
-    id: "ID",
+    id: "Identificador",
+    origin: "Origen",
+    destination: "Destino",
     departure_date_from: "Fecha de Salida Desde",
     departure_date_to: "Fecha de Salida Hasta",
     arrival_date_from: "Fecha de Llegada Desde",
     arrival_date_to: "Fecha de Llegada Hasta",
-    status: "Estado",
 });
 
-function TravelOrdersCompanyFilters({ useForm }) {
-    const { data, setData, get, errors } = useForm;
-
+function TravelOrdersCompanyFilters({ data, setData, get, errors }) {
     const [activeFilters, setActiveFilters] = useState([]);
 
     const handleAddFilter = ([key, value]) => {
@@ -55,6 +54,7 @@ function TravelOrdersCompanyFilters({ useForm }) {
             const transformedData = removeEmptyValues(realData);
             router.visit(route("travel-order.index"), {
                 data: transformedData,
+                only: ["orders"],
                 preserveState: true,
                 replace: true,
             });

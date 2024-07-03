@@ -39,7 +39,8 @@ function UpdateContactsAdminTableRow({ item, setEditingItem, companies = [] }) {
             });
         }
 
-        patch(route("contacts.update", item.id), transformedData, {
+        patch(route("contacts.update", item.id), {
+            data: transformedData,
             onSuccess: () => handleCancel(),
             preserveScroll: true,
         });

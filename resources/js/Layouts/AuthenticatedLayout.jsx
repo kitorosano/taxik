@@ -3,7 +3,8 @@ import Dropdown from "@/Components/Dropdown";
 import NavLink from "@/Components/NavLink";
 import Notifications from "@/Components/Notifications";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
-import { Link } from "@moraki/inertia-react";
+import ToastMessage from "@/Components/ToastMessage";
+import { Link, usePage } from "@moraki/inertia-react";
 import { useState } from "react";
 import DefaultAvatar from "/resources/assets/img/default-avatar.png";
 
@@ -19,8 +20,16 @@ export default function Authenticated({ user, header, children }) {
         "department"
     );
 
+    const { flash } = usePage().props;
+    const flashToastMessage = {
+        content: flash?.message || "",
+        type: flash?.messageType || "default",
+    };
+
     return (
-        <div className="min-h-screen bg-gray-100">
+        <div className="relative min-h-screen bg-gray-100">
+            <ToastMessage newMessage={flashToastMessage} />
+
             <nav className="bg-white border-b border-gray-100">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between h-16">
@@ -148,12 +157,14 @@ export default function Authenticated({ user, header, children }) {
                                         <Dropdown.Content>
                                             <Dropdown.Link
                                                 href={route("profile.edit")}
+                                                as="button"
                                             >
                                                 Perfil
                                             </Dropdown.Link>
                                             <Dropdown.Link
                                                 href={route("logout")}
                                                 method="post"
+                                                as="button"
                                             >
                                                 Cerrar Sesion
                                             </Dropdown.Link>
@@ -162,11 +173,13 @@ export default function Authenticated({ user, header, children }) {
                                         <Dropdown.Content>
                                             <Dropdown.Link
                                                 href={route("login")}
+                                                as="button"
                                             >
                                                 Entrar
                                             </Dropdown.Link>
                                             <Dropdown.Link
                                                 href={route("register")}
+                                                as="button"
                                             >
                                                 Registrarme
                                             </Dropdown.Link>
