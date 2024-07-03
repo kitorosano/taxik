@@ -55,7 +55,11 @@ const Content = ({
 
     let widthClasses = "";
 
-    if (width === "48") {
+    if (width === "auto") {
+        widthClasses = "w-auto";
+    } else if (width === "32") {
+        widthClasses = "w-32";
+    } else if (width === "48") {
         widthClasses = "w-48";
     } else if (width === "64") {
         widthClasses = "w-64";
