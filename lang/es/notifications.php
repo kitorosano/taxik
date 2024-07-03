@@ -13,6 +13,8 @@ return [
     |
     */
 
+  'travel-order-create' => 'Tu pedido de viaje ha sido creado exitosamente!',
+
   'travel-order-update' => [
     'client' => [
       'title' => 'Reserva de viaje actualizada',

@@ -13,6 +13,8 @@ return [
     |
     */
 
+  'travel-order-create' => 'Your travel order has been created successfully!',
+
   'travel-order-update' => [
     'client' => [
       'title' => 'Update on your travel order',

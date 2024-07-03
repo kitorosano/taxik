@@ -173,7 +173,10 @@ class TravelOrderController extends Controller
 
     event(new TravelOrderStatusUpdated($travelOrder));
 
-    return redirect(route('travel-order.index'));
+    return redirect(route('travel-order.index'))->with([
+      'message' => trans('notifications.travel-order-create'),
+      'messageType' => 'success',
+    ]);
   }
 
   /**
