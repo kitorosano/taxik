@@ -1,3 +1,5 @@
+import CloseButton from "@/Components/CloseButton";
+import Modal from "@/Components/Modal";
 import Pagination from "@/Components/Pagination";
 import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
@@ -5,11 +7,12 @@ import { objectToArray, removeEmptyValues } from "@/Utils/functions";
 import { Head, router, useForm } from "@moraki/inertia-react";
 import debounce from "just-debounce-it";
 import { useLaravelReactI18n } from "laravel-react-i18n";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 
 function Index({ auth, contacts, filters }) {
     const { t } = useLaravelReactI18n();
 
+    const [selectedContact, setSelectedContact] = useState(null);
     const { data, setData } = useForm({
         department: filters.department || "",
     });
@@ -57,7 +60,9 @@ function Index({ auth, contacts, filters }) {
                             value={data.department}
                             onChange={handleChange}
                             autoFocus
-                            placeholder={t("pages.contacts.department-placeholder")}
+                            placeholder={t(
+                                "pages.contacts.department-placeholder"
+                            )}
                         />
                     </div>
                 </div>
@@ -72,7 +77,10 @@ function Index({ auth, contacts, filters }) {
                                 {contacts.data.map((contact) => (
                                     <div
                                         key={contact.id}
-                                        className="bg-white overflow-hidden shadow-sm sm:rounded-lg hover:shadow-md"
+                                        className="bg-white overflow-hidden shadow-sm sm:rounded-lg hover:shadow-md cursor-pointer hover:bg-gray-50 transition duration-150 ease-in-out"
+                                        onClick={() =>
+                                            setSelectedContact(contact)
+                                        }
                                     >
                                         <div className="px-4 py-2 flex flex-col items-center text-center">
                                             <p className="font-bold uppercase">
@@ -95,6 +103,36 @@ function Index({ auth, contacts, filters }) {
                     <Pagination meta={contacts.meta} links={contacts.links} />
                 </div>
             </div>
+
+            <Modal
+                show={!!selectedContact}
+                maxWidth="md"
+                onClose={() => setSelectedContact(null)}
+                background="bg-gray-300/75"
+            >
+                <div className="p-6">
+                    <header className="flex justify-end">
+                        <CloseButton onClick={() => setSelectedContact(null)} />
+                    </header>
+                    <main className="flex flex-col gap-2">
+                        <p className="text-2xl text-center text-gray-800">
+                            Ponerse en contacto con
+                        </p>
+                        <p className="text-2xl text-center font-black text-gray-900">
+                            {selectedContact?.name}
+                        </p>
+
+                        <a
+                            type="button"
+                            target="_blank"
+                            href={`whatsapp://send?phone=${selectedContact?.phone}`}
+                            className="bg-green-500 text-white mt-4 p-4 rounded-md text-center font-semibold hover:bg-green-600 transition duration-150 ease-in-out"
+                        >
+                            Enviar mensaje al {selectedContact?.phone}
+                        </a>
+                    </main>
+                </div>
+            </Modal>
         </AuthenticatedLayout>
     );
 }
