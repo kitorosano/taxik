@@ -47,6 +47,6 @@ class RegisteredUserController extends Controller
     if ($user->isCompany) {
       return redirect(route('profile.edit', absolute: false));
     }
-    return redirect(route('dashboard', absolute: false));
+    return redirect(route('contacts.index', absolute: false));
   }
 }

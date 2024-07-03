@@ -14,7 +14,7 @@ use Inertia\Inertia;
 
 Route::get('/', function () {
   if (auth()->check()) {
-    return redirect()->route('dashboard');
+    return redirect()->route('contacts.index');
   } else {
     return Inertia::render('Welcome', [
       'canLogin' => Route::has('login'),
@@ -24,10 +24,6 @@ Route::get('/', function () {
     ]);
   }
 });
-
-Route::get('/dashboard', function () {
-  return redirect()->route('contacts.index');
-})->name('dashboard');
 
 Route::middleware('auth')->group(function () {
   Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
