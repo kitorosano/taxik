@@ -1,66 +1,154 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
-
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+<p style="display: flex; align-items: center; justify-content: center">
+<img src="./resources/assets/img/taxik-logo-brand.png" width="150" alt="Taxik Logo">
 </p>
 
-## About Laravel
+<p style="display: flex; align-items: center; justify-content: center">
+<a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="150" alt="Laravel Logo"></a>
+<a href="https://reactjs.org/" target="_blank"><img src="https://logos-world.net/wp-content/uploads/2023/08/React-Symbol-500x281.png" width="95" alt="React Logo"></a>
+</p>
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+# Introducción
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Taxik es una aplicación web que promete brindar a los residentes de las ciudades de Uruguay una forma rápida y segura de solicitar un taxi. La aplicación permite a los conductores de taxi registrarse y ofrecer sus servicios a los usuarios.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Además, permite a los usuarios solicitar viajes de taxi de forma rápida y segura. La aplicación cuenta con un sistema de notificaciones en tiempo real para mantener a los usuarios informados sobre el estado de sus viajes.
 
-## Learning Laravel
+## Características
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+-   Registro de usuarios y empresas de taxis
+-   Inicio de sesión
+-   Listado de contactos de taxis por departamento
+-   Solicitar reserva de viaje online
+-   Ver historial de viajes
+-   Manejo de perfil de usuario
+-   Gestion de usuarios y empresas de taxis
+-   Gestion de taxis por empresa
+-   Notificaciones en tiempo real
+-   Internacionalización (español e inglés)
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## Capturas de pantalla
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+![Bienvenida](./resources/assets/screenshots/welcome.png)
 
-## Laravel Sponsors
+![Contactos](./resources/assets/screenshots/contacts.png)
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+![Perfil](./resources/assets/screenshots/profile.png)
 
-### Premium Partners
+![Reservar Viaje](./resources/assets/screenshots/book-travel.png)
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+![Solicitud de Reserva](./resources/assets/screenshots/travel-orders.png)
 
-## Contributing
+# Guia de instalación
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Requerimientos
 
-## Code of Conduct
+-   Laravel >= 11
+-   PHP >= 8.2
+-   Composer >= 2.7
+-   NodeJS >= 18.18
+-   NPM >= 9.8
+-   Vite
+-   Base de datos MySQL
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Instalación
 
-## Security Vulnerabilities
+Instalar librerias de laravel con [composer](https://getcomposer.org):
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```sh
+composer install
+```
 
-## License
+Instalar dependencias de node con [npm](https://www.npmjs.com):
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```sh
+npm i
+```
+
+## Configuración
+
+### Variables de entorno
+
+Crear archivo de configuración de laravel en donde se definen las variables de entorno:
+
+```sh
+cp .env.example .env
+```
+
+Generar clave de aplicación:
+
+```sh
+php artisan key:generate
+```
+
+### Migraciones y Seeders de la base de datos
+
+> **Nota:** Es necesario tener una base de datos creada y configurar las credenciales en el archivo `.env`.
+
+Ejecutar migraciones para crear las tablas en la base de datos:
+
+```sh
+php artisan migrate
+```
+
+Ejecutar seeders para poblar las tablas con datos de prueba:
+
+```sh
+php artisan db:seed
+```
+
+### Compilación
+
+Compilar archivos de javascript y css:
+
+```sh
+npm run dev
+```
+
+Esto a su vez generará los archivos de traducción en formato json, para el uso del frontend. Puedes verlos en la carpeta `lang/../php_*.json`.
+
+## Levantar ambiente de desarrollo
+
+> **Nota**: Asegurate de tener tu servicio de base de datos MySQL corriendo.
+
+Se deberan de ejecutar los siguientes comandos para levantar el servidor de desarrollo:
+
+#### Mantener la compilación de archivos de javascript y css en modo de desarrollo:
+
+```sh
+npm run dev
+```
+
+#### Levantar servidor de desarrollo de laravel:
+
+```sh
+php artisan serve
+```
+
+#### Levantar modulo Reverb para la comunicación por socket, para las notificaciones en tiempo real:
+
+```sh
+php artisan reverb:start
+```
+
+#### Escuchar por la cola de trabajos (esto tanto para los sockets como para otros eventos de laravel):
+
+```sh
+php artisan queue:listen
+```
+
+## Tecnologías y dependencias utilizadas
+
+-   [Laravel](https://laravel.com)
+    -   [Inertia.js](https://inertiajs.com)
+    -   [Breeze](https://laravel.com/docs/11.x/starter-kits#laravel-breeze)
+    -   [Reverb](https://reverb.laravel.com/)
+-   [React](https://reactjs.org)
+    -   [Vite](https://vitejs.dev)
+    -   [Tailwind CSS](https://tailwindcss.com)
+    -   [Day.js](https://day.js.org)
+    -   [Laravel React i18n](https://day.js.org/)
+    -   [Toastify](https://fkhadra.github.io/react-toastify/)
+
+## Licencia
+
+Este proyecto fue desarrollado por estudiantes de la Universidad Tecnológica del Uruguay (UTEC) y se encuentra bajo la licencia [MIT](https://opensource.org/licenses/MIT).
