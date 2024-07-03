@@ -54,7 +54,6 @@ class ContactController extends Controller
 
     $companies = User::query()->where('type', '=', 2)->get();
 
-
     if (Auth::check() && Auth::user()->isAdmin) {
       return Inertia::render('Contacts/Admin', [
         'contacts' => ContactResource::collection($contacts),

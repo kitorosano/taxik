@@ -58,15 +58,11 @@ function Index({ auth, companies, filters }) {
         const data = {
             company_id: companyId,
         };
-        router.post(route("favorite-companies.store"), data, {
-            only: ["companies"],
-        });
+        router.post(route("favorite-companies.store"), data);
     };
 
     const removeFavorite = (companyId) => {
-        router.delete(route("favorite-companies.destroy", companyId), {
-            only: ["companies"],
-        });
+        router.delete(route("favorite-companies.destroy", companyId));
     };
 
     const handleFavorite = () => {
