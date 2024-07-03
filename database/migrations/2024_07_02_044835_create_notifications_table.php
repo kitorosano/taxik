@@ -14,7 +14,7 @@ return new class extends Migration
   {
     Schema::create('notifications', function (Blueprint $table) {
       $table->id();
-      $table->foreignIdFor(User::class)->constrained('users', 'id');
+      $table->foreignIdFor(User::class)->constrained('users', 'id')->onDelete('cascade');
       $table->string('title');
       $table->text('description');
       $table->boolean('watched')->default(false);

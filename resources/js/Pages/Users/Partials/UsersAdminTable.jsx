@@ -2,7 +2,7 @@ import { useState } from "react";
 import UpdateUsersAdminTableRow from "./UpdateUsersAdminTableRow";
 import UsersAdminTableRow from "./UsersAdminTableRow";
 
-function UsersAdminTable({ items, columns }) {
+function UsersAdminTable({ items, columns, setSelectedUser }) {
     const [editingItem, setEditingItem] = useState(null);
 
     if (items.length === 0) {
@@ -47,6 +47,7 @@ function UsersAdminTable({ items, columns }) {
                                 key={item.id}
                                 item={item}
                                 setEditingItem={setEditingItem}
+                                setSelectedUser={setSelectedUser}
                             />
                         )
                     )}

@@ -19,7 +19,7 @@ return new class extends Migration
       $table->string('address');
       $table->string('department');
       $table->boolean('is_validated')->default(false);
-      $table->foreignIdFor(User::class, 'linked_company_id')->nullable()->constrained('users', 'id');
+      $table->foreignIdFor(User::class, 'linked_company_id')->nullable()->constrained('users', 'id')->nullOnDelete();
       $table->timestamps();
     });
   }

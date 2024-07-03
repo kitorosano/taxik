@@ -2,18 +2,16 @@ import Dropdown from "@/Components/Dropdown";
 import FilterItem from "@/Components/FilterItem";
 import SecondaryButton from "@/Components/SecondaryButton";
 import { objectToArray, removeEmptyValues } from "@/Utils/functions";
-import { router, useForm } from "@moraki/inertia-react";
+import { router } from "@moraki/inertia-react";
 import debounce from "just-debounce-it";
 import { useCallback, useState } from "react";
 
-function UsersAdminFilters({ filters, columns }) {
-    const { data, setData, errors } = useForm({
-        name: filters.name || "",
-        email: filters.email || "",
-        type: filters.type || "",
-    });
+const availableFilters = Object.entries({
+    name: "Nombre",
+    email: "Correo",
+});
 
-    const availableFilters = Object.entries(columns);
+function UsersAdminFilters({ data, setData, errors }) {
     const [activeFilters, setActiveFilters] = useState([]);
 
     const handleAddFilter = ([key, value]) => {
@@ -51,7 +49,7 @@ function UsersAdminFilters({ filters, columns }) {
             const transformedData = removeEmptyValues(realData);
             router.visit(route("users.index"), {
                 data: transformedData,
-                only: ['users'],
+                only: ["users"],
                 preserveState: true,
                 replace: true,
             });
