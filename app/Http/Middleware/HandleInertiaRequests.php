@@ -3,6 +3,9 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -29,6 +32,7 @@ class HandleInertiaRequests extends Middleware
    */
   public function share(Request $request): array
   {
+    Log::info('HandleInertiaRequests', ['locale' => App::getLocale(), 'session' => Session::get('locale')]);
     return [
       ...parent::share($request),
       'auth' => [
@@ -38,6 +42,7 @@ class HandleInertiaRequests extends Middleware
         'message' => fn () => $request->session()->get('message') ?? "",
         'messageType' => fn () => $request->session()->get('messageType') ?? 'info',
       ],
+      'locale' => Session::get('locale', 'es'),
     ];
   }
 }

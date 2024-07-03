@@ -7,3 +7,4 @@ export { default as EmptyStarIcon } from "./EmptyStar";
 export { default as FullStarIcon } from "./FullStar";
 export { default as HalfStarIcon } from "./HalfStar";
 export { default as OpenEyeIcon } from "./OpenEye";
+export { default as LanguageIcon } from "./Language";

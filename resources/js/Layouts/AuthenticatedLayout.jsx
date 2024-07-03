@@ -1,14 +1,17 @@
 import ApplicationLogo from "@/Components/ApplicationLogo";
 import Dropdown from "@/Components/Dropdown";
+import LanguageSwitcher from "@/Components/LanguageSwitcher";
 import NavLink from "@/Components/NavLink";
 import Notifications from "@/Components/Notifications";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
 import ToastMessage from "@/Components/ToastMessage";
 import { Link, usePage } from "@moraki/inertia-react";
+import { useLaravelReactI18n } from "laravel-react-i18n";
 import { useState } from "react";
 import DefaultAvatar from "/resources/assets/img/default-avatar.png";
 
 export default function Authenticated({ user, header, children }) {
+    const { t } = useLaravelReactI18n();
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
 
@@ -20,7 +23,7 @@ export default function Authenticated({ user, header, children }) {
         "department"
     );
 
-    const { flash } = usePage().props;
+    const { flash, locale } = usePage().props;
     const flashToastMessage = {
         content: flash?.message || "",
         type: flash?.messageType || "default",
@@ -45,7 +48,7 @@ export default function Authenticated({ user, header, children }) {
                                     href={route("contacts.index")}
                                     active={route().current("contacts.index")}
                                 >
-                                    Contactos
+                                    {t("pages.navbar.contacts")}
                                 </NavLink>
                             </div>
 
@@ -55,7 +58,7 @@ export default function Authenticated({ user, header, children }) {
                                         href={route("users.index")}
                                         active={route().current("users.index")}
                                     >
-                                        Usuarios
+                                        {t("pages.navbar.users")}
                                     </NavLink>
                                 </div>
                             )}
@@ -69,7 +72,7 @@ export default function Authenticated({ user, header, children }) {
                                                 "taxis.index"
                                             )}
                                         >
-                                            Mis taxis
+                                            {t("pages.navbar.taxis")}
                                         </NavLink>
                                     </div>
                                     <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
@@ -79,7 +82,9 @@ export default function Authenticated({ user, header, children }) {
                                                 "travel-order.index"
                                             )}
                                         >
-                                            Solicitudes de Reservas
+                                            {t(
+                                                "pages.navbar.travel-order.company"
+                                            )}
                                         </NavLink>
                                     </div>
                                 </>
@@ -98,7 +103,7 @@ export default function Authenticated({ user, header, children }) {
                                                 "companies.index"
                                             )}
                                         >
-                                            Reservar Viaje
+                                            {t("pages.navbar.companies")}
                                         </NavLink>
                                     </div>
                                     <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
@@ -108,7 +113,9 @@ export default function Authenticated({ user, header, children }) {
                                                 "travel-order.index"
                                             )}
                                         >
-                                            Historial de Reservas
+                                            {t(
+                                                "pages.navbar.travel-order.client"
+                                            )}
                                         </NavLink>
                                     </div>
                                 </>
@@ -116,6 +123,9 @@ export default function Authenticated({ user, header, children }) {
                         </div>
 
                         <div className="hidden sm:flex sm:items-center sm:ms-6">
+                            <div className="p-2">
+                                <LanguageSwitcher initialLocale={locale} />
+                            </div>
                             {user && (
                                 <div className="p-2">
                                     <Notifications user={user} />
@@ -161,14 +171,14 @@ export default function Authenticated({ user, header, children }) {
                                                 href={route("profile.edit")}
                                                 as="button"
                                             >
-                                                Perfil
+                                                {t("pages.navbar.profile")}
                                             </Dropdown.Link>
                                             <Dropdown.Link
                                                 href={route("logout")}
                                                 method="post"
                                                 as="button"
                                             >
-                                                Cerrar Sesion
+                                                {t("pages.navbar.logout")}
                                             </Dropdown.Link>
                                         </Dropdown.Content>
                                     ) : (
@@ -177,13 +187,13 @@ export default function Authenticated({ user, header, children }) {
                                                 href={route("login")}
                                                 as="button"
                                             >
-                                                Entrar
+                                                {t("pages.navbar.login")}
                                             </Dropdown.Link>
                                             <Dropdown.Link
                                                 href={route("register")}
                                                 as="button"
                                             >
-                                                Registrarme
+                                                {t("pages.navbar.register")}
                                             </Dropdown.Link>
                                         </Dropdown.Content>
                                     )}
@@ -252,7 +262,7 @@ export default function Authenticated({ user, header, children }) {
                             href={route("contacts.index")}
                             active={route().current("contacts.index")}
                         >
-                            Contactos
+                            {t("pages.navbar.contacts")}
                         </ResponsiveNavLink>
                     </div>
 
@@ -262,7 +272,7 @@ export default function Authenticated({ user, header, children }) {
                                 href={route("users.index")}
                                 active={route().current("users.index")}
                             >
-                                Usuarios
+                                {t("pages.navbar.users")}
                             </ResponsiveNavLink>
                         </div>
                     )}
@@ -274,7 +284,7 @@ export default function Authenticated({ user, header, children }) {
                                     href={route("taxis.index")}
                                     active={route().current("taxis.index")}
                                 >
-                                    Mis Taxis
+                                    {t("pages.navbar.taxis")}
                                 </ResponsiveNavLink>
                             </div>
                             <div className="pt-2 pb-3 space-y-1">
@@ -284,7 +294,7 @@ export default function Authenticated({ user, header, children }) {
                                         "travel-order.index"
                                     )}
                                 >
-                                    Solicitud de Reservas
+                                    {t("pages.navbar.travel-order.company")}
                                 </ResponsiveNavLink>
                             </div>
                         </>
@@ -297,7 +307,7 @@ export default function Authenticated({ user, header, children }) {
                                     href={route("companies.index")}
                                     active={route().current("companies.index")}
                                 >
-                                    Reservar Viaje
+                                    {t("pages.navbar.companies")}
                                 </ResponsiveNavLink>
                             </div>
                             <div className="pt-2 pb-3 space-y-1">
@@ -307,7 +317,7 @@ export default function Authenticated({ user, header, children }) {
                                         "travel-order.index"
                                     )}
                                 >
-                                    Historial de Reservas
+                                    {t("pages.navbar.travel-order.client")}
                                 </ResponsiveNavLink>
                             </div>
                         </>
@@ -346,23 +356,23 @@ export default function Authenticated({ user, header, children }) {
                         {user ? (
                             <div className="mt-3 space-y-1">
                                 <ResponsiveNavLink href={route("profile.edit")}>
-                                    Perfil
+                                    {t("pages.navbar.profile")}
                                 </ResponsiveNavLink>
                                 <ResponsiveNavLink
                                     method="post"
                                     href={route("logout")}
                                     as="button"
                                 >
-                                    Cerrar Sesion
+                                    {t("pages.navbar.logout")}
                                 </ResponsiveNavLink>
                             </div>
                         ) : (
                             <div className="mt-3 space-y-1">
                                 <ResponsiveNavLink href={route("login")}>
-                                    Entrar
+                                    {t("pages.navbar.login")}
                                 </ResponsiveNavLink>
                                 <ResponsiveNavLink href={route("register")}>
-                                    Registrarme
+                                    {t("pages.navbar.register")}
                                 </ResponsiveNavLink>
                             </div>
                         )}

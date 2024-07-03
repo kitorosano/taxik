@@ -31,6 +31,8 @@ return [
     'admin' => 'Has eliminado el contacto ":contact"'
   ],
 
+  'language-changed' => 'Idioma cambiado a :lang!',
+
   'profile-update' => 'Tu perfil ha sido actualizado exitosamente!',
 
   'taxi-create' => 'El taxi de :driver, matricula :registration, ha sido creado exitosamente!',
