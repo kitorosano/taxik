@@ -47,6 +47,7 @@ function Index({ auth, companies, filters }) {
             const transformedData = removeEmptyValues(realData);
             router.visit(route("companies.index"), {
                 data: transformedData,
+                only: ["companies"],
                 preserveState: true,
                 replace: true,
             });
