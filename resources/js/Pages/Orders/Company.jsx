@@ -15,20 +15,22 @@ const columns = {
 };
 
 function Company({ auth, orders, taxis, filters }) {
-    const useFormState = useForm({
-        id: filters.id || "",
-        selected_id: filters.selected_id || "",
-        departure_date_from: filters.departure_date_from || "",
-        departure_date_to: filters.departure_date_to || "",
-        arrival_date_from: filters.arrival_date_from || "",
-        arrival_date_to: filters.arrival_date_to || "",
+    const { data, setData, get, errors } = useForm({
+        id: filters.id ?? "",
+        origin: filters.origin ?? "",
+        destination: filters.destination ?? "",
+        selected_id: filters.selected_id ?? "",
+        departure_date_from: filters.departure_date_from ?? "",
+        departure_date_to: filters.departure_date_to ?? "",
+        arrival_date_from: filters.arrival_date_from ?? "",
+        arrival_date_to: filters.arrival_date_to ?? "",
     });
     const selectedOrder = orders.data.find(
         (o) => o.id === Number(filters.selected_id)
     );
 
     const handleSelectOrderAndGetAvailableTaxis = (order) => {
-        const filterParams = { ...useFormState.data, selected_id: order.id };
+        const filterParams = { ...data, selected_id: order.id };
         const transformedData = removeEmptyValues(filterParams);
         router.visit(route("travel-order.index"), {
             data: transformedData,
@@ -39,7 +41,7 @@ function Company({ auth, orders, taxis, filters }) {
     };
 
     const handleOnCloseAndClearSelectedId = () => {
-        const filterParams = { ...useFormState.data, selected_id: null };
+        const filterParams = { ...data, selected_id: null };
         const transformedData = removeEmptyValues(filterParams);
         router.visit(route("travel-order.index"), {
             data: transformedData,
@@ -52,7 +54,14 @@ function Company({ auth, orders, taxis, filters }) {
     return (
         <AuthenticatedLayout
             user={auth.user}
-            header={<TravelOrdersCompanyFilters useForm={useFormState} />}
+            header={
+                <TravelOrdersCompanyFilters
+                    data={data}
+                    setData={setData}
+                    get={get}
+                    errors={errors}
+                />
+            }
         >
             <Head title="Solicitudes de viajes" />
             <div className="py-10 pb-0">
