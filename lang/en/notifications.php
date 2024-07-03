@@ -31,7 +31,10 @@ return [
     'admin' => 'You have deleted the contact ":contact"'
   ],
 
+  'language-changed' => 'Language changed to :lang!',
+
   'profile-update' => 'Your profile has been updated successfully!',
+  
   'taxi-create' => 'The taxi of :driver, registration :registration, has been created successfully!',
   'taxi-update' => 'The taxi of :driver, registration :registration, has been updated successfully!',
   'taxi-delete' => 'The taxi of :driver, registration :registration, has been deleted successfully!',

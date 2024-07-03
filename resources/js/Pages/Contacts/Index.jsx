@@ -4,9 +4,12 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { objectToArray, removeEmptyValues } from "@/Utils/functions";
 import { Head, router, useForm } from "@moraki/inertia-react";
 import debounce from "just-debounce-it";
+import { useLaravelReactI18n } from "laravel-react-i18n";
 import { useCallback } from "react";
 
 function Index({ auth, contacts, filters }) {
+    const { t } = useLaravelReactI18n();
+
     const { data, setData } = useForm({
         department: filters.department || "",
     });
@@ -44,7 +47,7 @@ function Index({ auth, contacts, filters }) {
                 <div className="flex justify-between items-center text-gray-900 py-4">
                     <div className="flex justify-between w-full">
                         <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                            Mostrando taxis de tu departamento
+                            {t("pages.contacts.title")}
                         </h2>
                     </div>
                     <div className="flex justify-end w-full">
@@ -54,7 +57,7 @@ function Index({ auth, contacts, filters }) {
                             value={data.department}
                             onChange={handleChange}
                             autoFocus
-                            placeholder="Departamento..."
+                            placeholder={t("pages.contacts.department-placeholder")}
                         />
                     </div>
                 </div>
