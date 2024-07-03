@@ -13,6 +13,16 @@ return [
     |
     */
 
+  'client-favorite-company-create' => 'Has agregado a :company a tus favoritos!',
+  'client-favorite-company-delete' => 'Has eliminado a :company de tus favoritos!',
+  'client-favorite-company-already-exist' => ':company ya existe en tus favoritos!',
+  'client-favorite-company-doesnt-exist' => ':company no existe en tus favoritos!',
+
+  'user-login' => 'Bienvenido :user!',
+  'user-password-update' => 'Tu contraseña ha sido actualizada exitosamente!',
+
+  'profile-update' => 'Tu perfil ha sido actualizado exitosamente!',
+
   'travel-order-create' => 'Tu pedido de viaje ha sido creado exitosamente!',
 
   'travel-order-update' => [

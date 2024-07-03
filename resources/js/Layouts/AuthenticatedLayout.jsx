@@ -22,12 +22,12 @@ export default function Authenticated({ user, header, children }) {
 
     const { flash } = usePage().props;
     const flashToastMessage = {
-        content: flash.message || "",
-        type: flash.messageType || "default",
+        content: flash?.message || "",
+        type: flash?.messageType || "default",
     };
 
     return (
-        <div className="min-h-screen bg-gray-100">
+        <div className="relative min-h-screen bg-gray-100">
             <ToastMessage newMessage={flashToastMessage} />
 
             <nav className="bg-white border-b border-gray-100">
@@ -157,12 +157,14 @@ export default function Authenticated({ user, header, children }) {
                                         <Dropdown.Content>
                                             <Dropdown.Link
                                                 href={route("profile.edit")}
+                                                as="button"
                                             >
                                                 Perfil
                                             </Dropdown.Link>
                                             <Dropdown.Link
                                                 href={route("logout")}
                                                 method="post"
+                                                as="button"
                                             >
                                                 Cerrar Sesion
                                             </Dropdown.Link>
@@ -171,11 +173,13 @@ export default function Authenticated({ user, header, children }) {
                                         <Dropdown.Content>
                                             <Dropdown.Link
                                                 href={route("login")}
+                                                as="button"
                                             >
                                                 Entrar
                                             </Dropdown.Link>
                                             <Dropdown.Link
                                                 href={route("register")}
+                                                as="button"
                                             >
                                                 Registrarme
                                             </Dropdown.Link>
