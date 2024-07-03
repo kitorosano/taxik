@@ -1,22 +1,15 @@
-import { useForm } from "@moraki/inertia-react";
-
-function TaxisCompanyTableRow({ item, setEditingItem, setViewingPicture }) {
-    const { delete: destroy } = useForm(item);
-
+function TaxisCompanyTableRow({
+    item,
+    setEditingItem,
+    setViewingPicture,
+    setSelectedTaxi,
+}) {
     const isAvailable = item.is_available ? "Disponible" : "Ocupado";
 
     const statusColors = {
         Disponible: "bg-green-100 text-green-800",
         Ocupado: "bg-red-100 text-red-800",
     }[isAvailable];
-
-    const handleDeleteSubmit = (e) => {
-        e.preventDefault();
-
-        if (confirm("¿Estás seguro de eliminar este taxi?")) {
-            destroy(route("taxis.destroy", item.id));
-        }
-    };
 
     return (
         <tr key={item.id} className="bg-white border-b items-center">
@@ -54,11 +47,12 @@ function TaxisCompanyTableRow({ item, setEditingItem, setViewingPicture }) {
             </td>
 
             <td className="pr-4 py-2 text-center">
-                <form onSubmit={handleDeleteSubmit}>
-                    <button className="font-medium text-gray-600 hover:text-red-700">
-                        Eliminar
-                    </button>
-                </form>
+                <button
+                    className="font-medium text-gray-600 hover:text-red-700"
+                    onClick={() => setSelectedTaxi(item)}
+                >
+                    Eliminar
+                </button>
             </td>
         </tr>
     );

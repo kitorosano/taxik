@@ -16,8 +16,8 @@ return new class extends Migration
     Schema::create('travel_orders', function (Blueprint $table) {
       $table->id();
       $table->foreignIdFor(User::class, 'client_id')->constrained('users', 'id');
-      $table->foreignIdFor(User::class, 'company_id')->constrained('users', 'id');
-      $table->foreignIdFor(Taxi::class, 'assigned_taxi_id')->nullable()->constrained('taxis', 'id');
+      $table->foreignIdFor(User::class, 'company_id')->nullable()->constrained('users', 'id')->nullOnDelete();
+      $table->foreignIdFor(Taxi::class, 'assigned_taxi_id')->nullable()->constrained('taxis', 'id')->nullOnDelete();
       $table->string('origin');
       $table->string('destination');
       $table->dateTime('departure_date');

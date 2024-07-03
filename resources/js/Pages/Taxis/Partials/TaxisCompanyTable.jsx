@@ -9,7 +9,8 @@ function TaxisCompanyTable({
     columns,
     creatingItem,
     setCreatingItem,
-    setViewingPicture
+    setViewingPicture,
+    setSelectedTaxi,
 }) {
     const [editingItem, setEditingItem] = useState(null);
 
@@ -66,6 +67,7 @@ function TaxisCompanyTable({
                                 item={item}
                                 setEditingItem={setEditingItem}
                                 setViewingPicture={setViewingPicture}
+                                setSelectedTaxi={setSelectedTaxi}
                             />
                         )
                     )}

@@ -9,6 +9,7 @@ function ContactsAdminTable({
     companies,
     creatingItem,
     setCreatingItem,
+    setSelectedContact
 }) {
     const [editingItem, setEditingItem] = useState(null);
 
@@ -62,6 +63,7 @@ function ContactsAdminTable({
                                 key={item.id}
                                 item={item}
                                 setEditingItem={setEditingItem}
+                                setSelectedContact={setSelectedContact}
                             />
                         )
                     )}

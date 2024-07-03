@@ -7,6 +7,11 @@ function TravelOrdersClientTableRow({ item }) {
         Cancelado: "bg-red-100 text-red-800",
     }[item.status];
 
+    const companyName =
+        item.status > travelOrderStatusList[1] && !item?.company
+            ? "Información no disponible"
+            : item?.company;
+
     return (
         <tr className="bg-white border-b items-center">
             <td className="px-6 py-4">
@@ -17,7 +22,7 @@ function TravelOrdersClientTableRow({ item }) {
                 </span>
             </td>
 
-            <td className="px-1 py-4">{item.company}</td>
+            <td className="px-1 py-4">{companyName}</td>
 
             <td className="px-1 py-4">{item.origin}</td>
 

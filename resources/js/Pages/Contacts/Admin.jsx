@@ -1,6 +1,7 @@
+import ConfirmModal from "@/Components/ConfirmModal";
 import Pagination from "@/Components/Pagination";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head } from "@moraki/inertia-react";
+import { Head, router } from "@moraki/inertia-react";
 import { useState } from "react";
 import ContactsAdminFilters from "./Partials/ContactsAdminFilters";
 import ContactsAdminTable from "./Partials/ContactsAdminTable";
@@ -15,9 +16,17 @@ const columns = {
 
 function Admin({ auth, contacts, filters, companies }) {
     const [creatingItem, setCreatingItem] = useState(false);
+    const [selectedContactToDelete, setSelectedContactToDelete] =
+        useState(null);
 
     const handleCreate = () => {
         setCreatingItem((prev) => !prev);
+    };
+
+    const handleDelete = (contact) => {
+        router.delete(route("contacts.destroy", contact.id), {
+            onFinish: () => setSelectedContactToDelete(false),
+        });
     };
 
     return (
@@ -41,12 +50,23 @@ function Admin({ auth, contacts, filters, companies }) {
                             companies={companies.data}
                             creatingItem={creatingItem}
                             setCreatingItem={setCreatingItem}
+                            setSelectedContact={setSelectedContactToDelete}
                         />
                     </div>
 
                     <Pagination meta={contacts.meta} links={contacts.links} />
                 </div>
             </div>
+
+            <ConfirmModal
+                show={!!selectedContactToDelete}
+                onClose={() => setSelectedContactToDelete(false)}
+                title={"¿Estás seguro que deseas eliminar este contacto?"}
+                cancelText="No, Cancelar"
+                cancelOnClick={() => setSelectedContactToDelete(false)}
+                confirmText="Sí, Eliminar"
+                confirmOnClick={() => handleDelete(selectedContactToDelete)}
+            />
         </AuthenticatedLayout>
     );
 }
