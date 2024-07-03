@@ -8,7 +8,7 @@ const ToastMessage = ({ newMessage }) => {
     });
 
     useEffect(() => {
-        if (newMessage) {
+        if (newMessage.content) {
             setMessage(newMessage);
         }
     }, [newMessage.content]);
@@ -38,7 +38,14 @@ const ToastMessage = ({ newMessage }) => {
         }
     }, [message.content]);
 
-    return <ToastContainer stacked />;
+    return (
+        <ToastContainer
+            stacked
+            style={{
+                width: `${message.content.length * 10.5}px`,
+            }}
+        />
+    );
 };
 
 export default ToastMessage;
