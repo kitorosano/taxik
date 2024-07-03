@@ -7,7 +7,7 @@ import debounce from "just-debounce-it";
 import { useCallback, useState } from "react";
 
 function ContactsAdminFilters({ filters, columns, handleCreate }) {
-    const { data, setData } = useForm({
+    const { data, setData, errors } = useForm({
         name: filters.name || "",
         phone: filters.phone || "",
         address: filters.address || "",
@@ -53,6 +53,7 @@ function ContactsAdminFilters({ filters, columns, handleCreate }) {
             const transformedData = removeEmptyValues(realData);
             router.visit(route("contacts.index"), {
                 data: transformedData,
+                only: ['contacts'],
                 preserveState: true,
                 replace: true,
             });

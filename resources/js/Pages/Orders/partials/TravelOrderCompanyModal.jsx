@@ -51,7 +51,6 @@ function TravelOrderCompanyModal({ selectedOrder, onClose, taxis }) {
 
         patch(route("travel-order.update", selectedOrder.id), {
             preserveScroll: true,
-            only: ["orders"],
             onSuccess: () => {
                 setReassigningTaxi(false);
             },
@@ -73,7 +72,6 @@ function TravelOrderCompanyModal({ selectedOrder, onClose, taxis }) {
         if (confirm(`¿Estás seguro de deseas cancelar esta reserva?`)) {
             patch(route("travel-order.update", selectedOrder.id), {
                 preserveScroll: true,
-                only: ["orders"],
             });
         }
     };
