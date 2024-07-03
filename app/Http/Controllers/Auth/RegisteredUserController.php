@@ -45,8 +45,14 @@ class RegisteredUserController extends Controller
     Auth::login($user);
 
     if ($user->isCompany) {
-      return redirect(route('profile.edit', absolute: false));
+      return redirect(route('profile.edit', absolute: false))->with([
+        'message' => trans('notifications.user-login', ['user' => $user->name]),
+        'messageType' => 'info',
+      ]);
     }
-    return redirect(route('contacts.index', absolute: false));
+    return redirect(route('contacts.index', absolute: false))->with([
+      'message' => trans('notifications.user-login', ['user' => $user->name]),
+      'messageType' => 'info',
+    ]);
   }
 }

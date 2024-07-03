@@ -67,9 +67,12 @@ class TaxiController extends Controller
 
     $validated = $request->validated();
 
-    Taxi::create($validated);
+    $taxi = Taxi::create($validated);
 
-    return redirect()->route('taxis.index');
+    return redirect()->route('taxis.index')->with([
+      'message' => trans('notifications.taxi-create', ['driver' => $taxi->driver_name, 'registration' => $taxi->car_registration]),
+      'messageType' => 'success',
+    ]);
   }
 
   /**
@@ -99,7 +102,10 @@ class TaxiController extends Controller
 
     $taxi->update($validated);
 
-    return redirect()->route('taxis.index');
+    return redirect()->route('taxis.index')->with([
+      'message' => trans('notifications.taxi-update', ['driver' => $taxi->driver_name, 'registration' => $taxi->car_registration]),
+      'messageType' => 'success',
+    ]);
   }
 
   /**
@@ -111,6 +117,9 @@ class TaxiController extends Controller
 
     $taxi->delete();
 
-    return redirect()->route('taxis.index');
+    return redirect()->route('taxis.index')->with([
+      'message' => trans('notifications.taxi-delete', ['driver' => $taxi->driver_name, 'registration' => $taxi->car_registration]),
+      'messageType' => 'success',
+    ]);
   }
 }
