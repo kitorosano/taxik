@@ -5,9 +5,12 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ClientFavoriteCompanyController;
+use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\SetLocaleController;
 use App\Http\Controllers\TaxiController;
 use App\Http\Controllers\TravelOrderController;
+use App\Http\Middleware\SetLocaleMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -25,13 +28,15 @@ Route::get('/', function () {
   }
 });
 
+Route::get('/setlang', [LanguageController::class, 'changeLanguage'])->name('setlang');
+
 Route::middleware('auth')->group(function () {
   Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
   Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
   Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/contacts', [ContactController::class, 'index'])->name('contacts.index');
+Route::get('/contacts', [ContactController::class, 'index'])->middleware('language')->name('contacts.index');
 Route::resource('contacts', ContactController::class)
   ->only(['store', 'update', 'destroy'])
   ->middleware(['auth', 'can:create,App\Models\Contact']);
