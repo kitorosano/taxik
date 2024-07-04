@@ -7,10 +7,7 @@ import { useForm } from "@moraki/inertia-react";
 import debounce from "just-debounce-it";
 import { useCallback } from "react";
 
-function CreateContactsAdminTableRow({
-    setCreatingItem,
-    companies = [],
-}) {
+function CreateContactsAdminTableRow({ setCreatingItem, companies = [] }) {
     const { data, setData, post, clearErrors, reset, errors } = useForm({
         name: "",
         phone: "",
@@ -42,7 +39,8 @@ function CreateContactsAdminTableRow({
             });
         }
 
-        post(route("contacts.store"), transformedData, {
+        post(route("contacts.store"), {
+            data: transformedData,
             onSuccess: () => handleCancel(),
             preserveScroll: true,
         });
