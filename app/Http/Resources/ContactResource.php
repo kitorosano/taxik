@@ -22,6 +22,7 @@ class ContactResource extends JsonResource
       'department' => $this->department,
       'companyName' => $this->companyName,
       'linked_company_id' => $this->linked_company_id,
+      'isValidated' => $this->is_validated,
     ];
   }
 }

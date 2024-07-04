@@ -5,15 +5,19 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ClientFavoriteCompanyController;
+use App\Http\Controllers\LanguageController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\SetLocaleController;
 use App\Http\Controllers\TaxiController;
 use App\Http\Controllers\TravelOrderController;
+use App\Http\Middleware\SetLocaleMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
   if (auth()->check()) {
-    return redirect()->route('dashboard');
+    return redirect()->route('contacts.index');
   } else {
     return Inertia::render('Welcome', [
       'canLogin' => Route::has('login'),
@@ -24,9 +28,7 @@ Route::get('/', function () {
   }
 });
 
-Route::get('/dashboard', function () {
-  return redirect()->route('contacts.index');
-})->name('dashboard');
+Route::get('/setlang', [LanguageController::class, 'changeLanguage'])->name('setlang');
 
 Route::middleware('auth')->group(function () {
   Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -34,7 +36,12 @@ Route::middleware('auth')->group(function () {
   Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/contacts', [ContactController::class, 'index'])->name('contacts.index');
+Route::get('/contacts', [ContactController::class, 'index'])
+  ->middleware('language')
+  ->name('contacts.index');
+Route::get('/contacts/validate/{id}', [ContactController::class, 'validate'])
+  ->middleware(['auth', 'can:create,App\Models\Contact'])
+  ->name('contacts.validate');
 Route::resource('contacts', ContactController::class)
   ->only(['store', 'update', 'destroy'])
   ->middleware(['auth', 'can:create,App\Models\Contact']);
@@ -56,10 +63,13 @@ Route::resource('favorite-companies', ClientFavoriteCompanyController::class)
 
 Route::resource('travel-order', TravelOrderController::class)
   ->only(['index', 'store', 'show', 'edit', 'update', 'destroy'])
-  ->middleware(['auth']);
+  ->middleware(['auth', 'can:viewAny,App\Models\TravelOrder']);
 
 Route::resource('taxis', TaxiController::class)
   ->only(['index', 'store', 'update', 'destroy'])
   ->middleware(['auth', 'can:viewAny,App\Models\Taxi']);
+
+Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+Route::post('/notifications/watch', [NotificationController::class, 'update'])->name('notifications.watch');
 
 require __DIR__ . '/auth.php';

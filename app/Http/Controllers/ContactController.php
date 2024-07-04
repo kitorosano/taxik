@@ -11,7 +11,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -31,7 +30,8 @@ class ContactController extends Controller
     $department = $request->query('department', '');
     $companyName = $request->query('companyName', '');
 
-    $contacts = Contact::query()
+    $validatedContacts = Contact::query()
+      ->where('is_validated', '=', 1)
       ->when($name, function ($query, $name) {
         return $query->where('name', 'like', "%$name%");
       })
@@ -52,27 +52,52 @@ class ContactController extends Controller
       ->paginate($PAGINATION_COUNT)
       ->withQueryString();
 
-    $companies = User::query()->where('type', '=', 2)->get();
-
-
-    if (Auth::check() && Auth::user()->isAdmin) {
-      return Inertia::render('Contacts/Admin', [
-        'contacts' => ContactResource::collection($contacts),
+    if (!Auth::check() || !Auth::user()->isAdmin) {
+      return Inertia::render('Contacts/Index', [
+        'contacts' =>  ContactResource::collection($validatedContacts),
         'filters' => [
-          'name' => $name,
-          'phone' => $phone,
-          'address' => $address,
           'department' => $department,
-          'companyName' => $companyName,
         ],
-        'companies' => CompaniesResource::collection($companies),
       ]);
     }
 
-    return Inertia::render('Contacts/Index', [
-      'contacts' =>  ContactResource::collection($contacts),
+    $companies = User::query()
+      ->where('type', '=', 2)
+      ->whereDoesntHave('contact')
+      ->get();
+
+    $notValidatedContacts = Contact::query()
+      ->where('is_validated', '=', 0)
+      ->when($name, function ($query, $name) {
+        return $query->where('name', 'like', "%$name%");
+      })
+      ->when($phone, function ($query, $phone) {
+        return $query->where('phone', 'like', "%$phone%");
+      })
+      ->when($address, function ($query, $address) {
+        return $query->where('address', 'like', "%$address%");
+      })
+      ->when($department, function ($query, $department) {
+        return $query->where('department', 'like', "%$department%");
+      })
+      ->when($companyName, function ($query, $companyName) {
+        return $query->whereHas('linkedCompany', function ($query) use ($companyName) {
+          return $query->where('name', 'like', "%$companyName%");
+        });
+      })
+      ->paginate($PAGINATION_COUNT)
+      ->withQueryString();
+
+    return Inertia::render('Contacts/Admin', [
+      'validatedContacts' => ContactResource::collection($validatedContacts),
+      'notValidatedContacts' => ContactResource::collection($notValidatedContacts),
+      'companies' => CompaniesResource::collection($companies),
       'filters' => [
+        'name' => $name,
+        'phone' => $phone,
+        'address' => $address,
         'department' => $department,
+        'companyName' => $companyName,
       ],
     ]);
   }
@@ -95,12 +120,36 @@ class ContactController extends Controller
 
     $validated = $request->validated();
 
-    Contact::create($validated);
+    $contact = Contact::create($validated);
 
     if ($request->user()->isCompany) {
-      return redirect(route('profile.edit'));
+      return redirect(route('profile.edit'))->with([
+        'message' => trans('notifications.contact-create.company'),
+        'messageType' => 'success',
+      ]);
     }
-    return redirect(route('contacts.index'));
+    return redirect(route('contacts.index'))->with([
+      'message' => trans('notifications.contact-create.admin', ['contact' => $contact->name]),
+      'messageType' => 'success',
+    ]);
+  }
+
+  /**
+   * Validate the specified resource in storage.
+   */
+  public function validate(Request $request): RedirectResponse
+  {
+    // validate admin
+    Gate::authorize('create', Contact::class);
+
+    $contact = Contact::find($request->id);
+
+    $contact->update(['is_validated' => 1]);
+
+    return redirect(route('contacts.index'))->with([
+      'message' => trans('notifications.contact-validate', ['contact' => $contact->name]),
+      'messageType' => 'success',
+    ]);
   }
 
   /**
@@ -131,9 +180,15 @@ class ContactController extends Controller
     $contact->update($validated);
 
     if ($request->user()->isCompany) {
-      return redirect(route('profile.edit'));
+      return redirect(route('profile.edit'))->with([
+        'message' => trans('notifications.contact-update.company'),
+        'messageType' => 'success',
+      ]);
     }
-    return redirect(route('contacts.index'));
+    return redirect(route('contacts.index'))->with([
+      'message' => trans('notifications.contact-update.admin', ['contact' => $contact->name]),
+      'messageType' => 'success',
+    ]);
   }
 
   /**
@@ -143,8 +198,18 @@ class ContactController extends Controller
   {
     Gate::authorize('delete', $contact);
 
+    if ($contact->linkedCompany()->exists()) {
+      return redirect(route('contacts.index'))->with([
+        'message' => trans('notifications.contact-delete-error', ['company' => $contact->companyName]),
+        'messageType' => 'error',
+      ]);
+    }
+
     $contact->delete();
 
-    return redirect(route('contacts.index'));
+    return redirect(route('contacts.index'))->with([
+      'message' => trans('notifications.contact-delete', ['contact' => $contact->name]),
+      'messageType' => 'success',
+    ]);
   }
 }

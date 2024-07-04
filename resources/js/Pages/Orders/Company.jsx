@@ -1,7 +1,7 @@
 import Pagination from "@/Components/Pagination";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head } from "@moraki/inertia-react";
-import { useEffect, useState } from "react";
+import { removeEmptyValues } from "@/Utils/functions";
+import { Head, router, useForm } from "@moraki/inertia-react";
 import TravelOrderCompanyModal from "./Partials/TravelOrderCompanyModal";
 import TravelOrdersCompanyFilters from "./Partials/TravelOrdersCompanyFilters";
 import TravelOrdersCompanyTable from "./Partials/TravelOrdersCompanyTable";
@@ -15,21 +15,53 @@ const columns = {
 };
 
 function Company({ auth, orders, taxis, filters }) {
-    const [selectedOrder, setSelectedOrder] = useState(null);
+    const { data, setData, get, errors } = useForm({
+        id: filters.id ?? "",
+        origin: filters.origin ?? "",
+        destination: filters.destination ?? "",
+        selected_id: filters.selected_id ?? "",
+        departure_date_from: filters.departure_date_from ?? "",
+        departure_date_to: filters.departure_date_to ?? "",
+        arrival_date_from: filters.arrival_date_from ?? "",
+        arrival_date_to: filters.arrival_date_to ?? "",
+    });
+    const selectedOrder = orders.data.find(
+        (o) => o.id === Number(filters.selected_id)
+    );
 
-    useEffect(() => {
-        if (selectedOrder) {
-            const updatedSelectedOrder = orders.data.find(
-                (o) => o.id === selectedOrder.id
-            );
-            setSelectedOrder(updatedSelectedOrder);
-        }
-    }, [orders]);
+    const handleSelectOrderAndGetAvailableTaxis = (order) => {
+        const filterParams = { ...data, selected_id: order.id };
+        const transformedData = removeEmptyValues(filterParams);
+        router.visit(route("travel-order.index"), {
+            data: transformedData,
+            preserveScroll: true,
+            preserveState: true,
+            replace: true,
+        });
+    };
+
+    const handleOnCloseAndClearSelectedId = () => {
+        const filterParams = { ...data, selected_id: null };
+        const transformedData = removeEmptyValues(filterParams);
+        router.visit(route("travel-order.index"), {
+            data: transformedData,
+            preserveScroll: true,
+            preserveState: true,
+            replace: true,
+        });
+    };
 
     return (
         <AuthenticatedLayout
             user={auth.user}
-            header={<TravelOrdersCompanyFilters filters={filters} />}
+            header={
+                <TravelOrdersCompanyFilters
+                    data={data}
+                    setData={setData}
+                    get={get}
+                    errors={errors}
+                />
+            }
         >
             <Head title="Solicitudes de viajes" />
             <div className="py-10 pb-0">
@@ -38,7 +70,9 @@ function Company({ auth, orders, taxis, filters }) {
                         <TravelOrdersCompanyTable
                             items={orders.data}
                             columns={columns}
-                            setSelectedOrder={setSelectedOrder}
+                            setSelectedOrder={
+                                handleSelectOrderAndGetAvailableTaxis
+                            }
                         />
                     </div>
 
@@ -48,7 +82,7 @@ function Company({ auth, orders, taxis, filters }) {
 
             <TravelOrderCompanyModal
                 selectedOrder={selectedOrder}
-                onClose={() => setSelectedOrder(null)}
+                onClose={handleOnCloseAndClearSelectedId}
                 taxis={taxis}
             />
         </AuthenticatedLayout>

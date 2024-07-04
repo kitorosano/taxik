@@ -1,7 +1,7 @@
 function TravelOrdersCompanyTaxisTableRow({ item, setSelectedItem }) {
     const isAvailable = item.is_available ? "Disponible" : "Ocupado";
 
-    const isAvailableColors = {
+    const statusColors = {
         Disponible: "bg-green-100 text-green-800",
         Ocupado: "bg-red-100 text-red-800",
     }[isAvailable];
@@ -28,7 +28,7 @@ function TravelOrdersCompanyTaxisTableRow({ item, setSelectedItem }) {
 
             <td className="px-2 py-4">
                 <span
-                    className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${isAvailableColors}`}
+                    className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusColors}`}
                 >
                     {isAvailable}
                 </span>

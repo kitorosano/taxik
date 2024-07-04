@@ -12,14 +12,17 @@ export default function VerifyEmail({ status }) {
     };
 
     return (
-        <GuestLayout>
+        <GuestLayout title="Verificar Correo">
             <Head title="Verificacion de correo" />
 
-            <div className="mb-4 text-sm text-gray-600">
+            <div className="mb-4 text-sm text-gray-600 w-full">
                 Gracias por registrarte! Antes de comenzar, ¿podrías verificar
                 tu dirección de correo electrónico haciendo clic en el enlace
-                que acabamos de enviarte por correo electrónico? Si no recibiste
-                el correo electrónico, con gusto te enviaremos otro.
+                que acabamos de enviarte por correo electrónico?
+            </div>
+            <div className="mb-4 text-sm text-gray-600 w-full">
+                Si no recibiste el correo electrónico, con gusto te enviaremos
+                otro.
             </div>
 
             {status === "verification-link-sent" && (

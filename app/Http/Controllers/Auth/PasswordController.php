@@ -18,12 +18,16 @@ class PasswordController extends Controller
         $validated = $request->validate([
             'current_password' => ['required', 'current_password'],
             'password' => ['required', Password::defaults(), 'confirmed'],
+            'password_confirmation' => 'required',
         ]);
 
         $request->user()->update([
             'password' => Hash::make($validated['password']),
         ]);
 
-        return back();
+        return back()->with([
+          'message' => trans('notifications.user-password-update'),
+          'messageType' => 'success',
+        ]);
     }
 }

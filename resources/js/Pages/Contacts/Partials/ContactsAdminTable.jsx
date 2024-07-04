@@ -9,6 +9,7 @@ function ContactsAdminTable({
     companies,
     creatingItem,
     setCreatingItem,
+    setSelectedContact,
 }) {
     const [editingItem, setEditingItem] = useState(null);
 
@@ -39,6 +40,9 @@ function ContactsAdminTable({
                         ))}
                         <th scope="col" className="px-1 py-3"></th>
                         <th scope="col" className="px-1 py-3"></th>
+                        {(!creatingItem && !editingItem) && (
+                            <th scope="col" className="px-1 py-3"></th>
+                        )}
                     </tr>
                 </thead>
                 <tbody>
@@ -46,6 +50,7 @@ function ContactsAdminTable({
                         <CreateContactsAdminTableRow
                             columns={columns}
                             setCreatingItem={setCreatingItem}
+                            companies={companies}
                         />
                     )}
                     {items.map((item) =>
@@ -61,6 +66,7 @@ function ContactsAdminTable({
                                 key={item.id}
                                 item={item}
                                 setEditingItem={setEditingItem}
+                                setSelectedContact={setSelectedContact}
                             />
                         )
                     )}

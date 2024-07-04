@@ -31,31 +31,31 @@ class TravelOrder extends Model
   ];
 
   public static $STATUS_CODES = [
-    'Pendiente' => 0,
-    'Aprobado' => 1,
-    'Rechazado' => 2,
-    'Completado' => 3,
-    'Cancelado' => 4,
+    'pending' => 0,
+    'approved' => 1,
+    'on-trip' => 2,
+    'completed' => 3,
+    'canceled' => 4,
   ];
 
   public static $STATUS_STRINGS = [
-    0 => 'Pendiente',
-    1 => 'Aprobado',
-    2 => 'Rechazado',
-    3 => 'Completado',
-    4 => 'Cancelado',
+    0 => 'pending',
+    1 => 'approved',
+    2 => 'on-trip',
+    3 => 'completed',
+    4 => 'canceled',
   ];
 
   public static $PAYMENT_METHOD_CODES = [
-    'Efectivo' => 0,
-    'Tarjeta' => 1,
-    'Mercado Pago' => 2,
+    'cash' => 0,
+    'card' => 1,
+    'mercadopago' => 2,
   ];
 
   public static $PAYMENT_METHOD_STRINGS = [
-    0 => 'Efectivo',
-    1 => 'Tarjeta',
-    2 => 'Mercado Pago',
+    0 => 'cash',
+    1 => 'card',
+    2 => 'mercadopago',
   ];
 
   protected function casts(): array
@@ -93,11 +93,11 @@ class TravelOrder extends Model
 
   protected function getStatusStringAttribute(): string
   {
-    return self::$STATUS_STRINGS[$this->status];
+    return trans('enums.travel-order.status.' . self::$STATUS_STRINGS[$this->status]);
   }
 
   protected function getPaymentMethodStringAttribute(): string
   {
-    return self::$PAYMENT_METHOD_STRINGS[$this->payment_method];
+    return trans('enums.travel-order.payment-method.' . self::$PAYMENT_METHOD_STRINGS[$this->payment_method]);
   }
 }

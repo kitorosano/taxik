@@ -1,7 +1,8 @@
+import ConfirmModal from "@/Components/ConfirmModal";
 import Modal from "@/Components/Modal";
 import Pagination from "@/Components/Pagination";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head } from "@moraki/inertia-react";
+import { Head, router } from "@moraki/inertia-react";
 import { useState } from "react";
 import TaxisCompanyFilters from "./Partials/TaxisCompanyFilters";
 import TaxisCompanyTable from "./Partials/TaxisCompanyTable";
@@ -11,14 +12,22 @@ const columns = {
     driver_name: "Nombre Chofer",
     car_model: "Modelo Coche",
     car_registration: "Matricula Coche",
+    is_available: "Estado",
 };
 
 function Company({ auth, taxis, filters }) {
     const [creatingItem, setCreatingItem] = useState(false);
     const [viewingPicture, setViewingPicture] = useState(null);
+    const [selectedTaxiToDelete, setSelectedTaxiToDelete] = useState(null);
 
     const handleCreate = () => {
         setCreatingItem((prev) => !prev);
+    };
+
+    const handleDelete = (taxi) => {
+        router.delete(route("taxis.destroy", taxi.id), {
+            onFinish: () => setSelectedTaxiToDelete(false),
+        });
     };
 
     return (
@@ -43,6 +52,7 @@ function Company({ auth, taxis, filters }) {
                             creatingItem={creatingItem}
                             setCreatingItem={setCreatingItem}
                             setViewingPicture={setViewingPicture}
+                            setSelectedTaxi={setSelectedTaxiToDelete}
                         />
                     </div>
 
@@ -63,6 +73,16 @@ function Company({ auth, taxis, filters }) {
                     />
                 </div>
             </Modal>
+
+            <ConfirmModal
+                show={!!selectedTaxiToDelete}
+                onClose={() => setSelectedTaxiToDelete(false)}
+                title={"¿Estás seguro que deseas eliminar este taxi?"}
+                cancelText="No, Cancelar"
+                cancelOnClick={() => setSelectedTaxiToDelete(false)}
+                confirmText="Sí, Eliminar"
+                confirmOnClick={() => handleDelete(selectedTaxiToDelete)}
+            />
         </AuthenticatedLayout>
     );
 }

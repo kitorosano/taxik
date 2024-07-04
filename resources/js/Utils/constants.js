@@ -23,7 +23,7 @@ export const departmentList = [
 export const travelOrderStatusList = [
     "Pendiente",
     "Aprobado",
-    "Rechazado",
+    "En Viaje",
     "Completado",
     "Cancelado",
 ];
@@ -31,9 +31,9 @@ export const travelOrderStatusList = [
 export const travelOrderStatusCode = {
     Pendiente: 0,
     Aprobado: 1,
-    Rechazado: 2,
+    "En Viaje": 2,
     Completado: 3,
     Cancelado: 4,
 };
 
-export const tzUruguay = 'America/Montevideo'
+export const tzUruguay = "America/Montevideo";

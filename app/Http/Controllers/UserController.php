@@ -26,6 +26,7 @@ class UserController extends Controller
     $type = $request->query('type', '');
 
     $users = User::query()
+      ->where('type', '!=', 0)
       ->when($name, function ($query, $name) {
         return $query->where('name', 'like', "%$name%");
       })
@@ -91,7 +92,10 @@ class UserController extends Controller
 
     $user->update($validated);
 
-    return redirect(route('users.index'));
+    return redirect(route('users.index'))->with([
+      'message' => trans('notifications.user-update', ['user' => $user->name]),
+      'messageType' => 'success'
+    ]);
   }
 
   /**
@@ -103,6 +107,9 @@ class UserController extends Controller
 
     $user->delete();
 
-    return redirect(route('users.index'));
+    return redirect(route('users.index'))->with([
+      'message' => trans('notifications.user-delete', ['user' => $user->name]),
+      'messageType' => 'success'
+    ]);
   }
 }

@@ -77,10 +77,12 @@ export default function UpdateContactInformationForm({ contact }) {
                         <TextInput
                             form="contact_form"
                             id="name"
-                            className="mt-1 block w-full"
+                            className={
+                                "mt-1 block w-full " +
+                                (errors.name && "border-red-500")
+                            }
                             value={data.name}
                             onChange={(e) => setData("name", e.target.value)}
-                            required
                             autoComplete="name"
                         />
 
@@ -93,10 +95,12 @@ export default function UpdateContactInformationForm({ contact }) {
                         <TextInput
                             form="contact_form"
                             id="phone"
-                            className="mt-1 block w-full"
+                            className={
+                                "mt-1 block w-full " +
+                                (errors.phone && "border-red-500")
+                            }
                             value={data.phone}
                             onChange={(e) => setData("phone", e.target.value)}
-                            required
                             autoComplete="phone"
                         />
 
@@ -109,10 +113,12 @@ export default function UpdateContactInformationForm({ contact }) {
                         <TextInput
                             form="contact_form"
                             id="address"
-                            className="mt-1 block w-full"
+                            className={
+                                "mt-1 block w-full " +
+                                (errors.address && "border-red-500")
+                            }
                             value={data.address}
                             onChange={(e) => setData("address", e.target.value)}
-                            required
                             autoComplete="address"
                         />
 
@@ -128,9 +134,11 @@ export default function UpdateContactInformationForm({ contact }) {
 
                             <TextInput
                                 id="department"
-                                className="mt-1 block w-full bg-gray-100 cursor-default text-gray-500"
+                                className={
+                                    "mt-1 block w-full bg-gray-100 cursor-default text-gray-500 " +
+                                    (errors.department && "border-red-500")
+                                }
                                 value={data.department}
-                                required
                                 autoComplete="department"
                                 readOnly
                             />

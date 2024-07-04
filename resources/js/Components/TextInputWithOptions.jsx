@@ -78,6 +78,12 @@ function TextInputWithOptions(
                         optionsWrapperClassName
                     }
                 >
+                    {optionList.length === 0 && (
+                        <div className="relative cursor-pointer px-2 py-1">
+                            No hay resultados
+                        </div>
+                    )}
+
                     {optionList.map(({ key, value }) => (
                         <div
                             key={key}

@@ -6,6 +6,7 @@ import InputLabel from "@/Components/InputLabel";
 import Modal from "@/Components/Modal";
 import PrimaryButton from "@/Components/PrimaryButton";
 import SecondaryButton from "@/Components/SecondaryButton";
+import SelectInput from "@/Components/SelectInput";
 import TextInput from "@/Components/TextInput";
 import {
     calculateTaxiFee,
@@ -123,19 +124,14 @@ function BookTravelModal({ selectedCompany, handleFavorite, onClose }) {
             preserveState: true,
             onSuccess: () => {
                 handleOnClose();
-                alert("Viaje reservado correctamente");
-            },
-            onError: (errors) => {
-                console.log(errors);
-                alert("Ocurrió un error al reservar el viaje");
             },
         });
     };
 
     const handleOnClose = () => {
+        onClose();
         reset();
         clearErrors();
-        onClose();
     };
 
     return (
@@ -148,7 +144,7 @@ function BookTravelModal({ selectedCompany, handleFavorite, onClose }) {
         >
             <div className="p-6">
                 <header className="flex justify-end">
-                    <CloseButton onClick={onClose} />
+                    <CloseButton onClick={handleOnClose} />
                 </header>
 
                 <div className="flex justify-between">
@@ -205,7 +201,6 @@ function BookTravelModal({ selectedCompany, handleFavorite, onClose }) {
                                 onChange={(e) =>
                                     setData("origin", e.target.value)
                                 }
-                                required
                             />
 
                             <InputError
@@ -225,13 +220,42 @@ function BookTravelModal({ selectedCompany, handleFavorite, onClose }) {
                                 onChange={(e) =>
                                     setData("destination", e.target.value)
                                 }
-                                required
                             />
 
                             <InputError
                                 message={errors.destination}
                                 className="mt-2"
                             />
+                        </div>
+
+                        <div className="flex justify-center gap-4">
+                            <div className="mt-4 w-full">
+                                <InputLabel
+                                    htmlFor="payment_method"
+                                    value="Metodo de Pago"
+                                />
+
+                                <SelectInput
+                                    id="payment_method"
+                                    options={[
+                                        { key: 0, value: "Efectivo" },
+                                        { key: 1, value: "Tarjeta" },
+                                        { key: 2, value: "Mercado Pago" },
+                                    ]}
+                                    name="payment_method"
+                                    value={"Efectivo"}
+                                    className="mt-1 block w-full"
+                                    autoComplete="payment_method"
+                                    inputClassName="w-full text-black"
+                                    optionsWrapperClassName="w-full"
+                                    optionClassName="w-full px-2 py-2 text-gray-900 text-sm hover:bg-indigo-100"
+                                />
+
+                                <InputError
+                                    message={errors.payment_method}
+                                    className="mt-2"
+                                />
+                            </div>
                         </div>
 
                         <div className="flex justify-center gap-4">
@@ -256,7 +280,6 @@ function BookTravelModal({ selectedCompany, handleFavorite, onClose }) {
                                             e.target.value
                                         )
                                     }
-                                    required
                                 />
 
                                 <InputError
@@ -311,7 +334,7 @@ function BookTravelModal({ selectedCompany, handleFavorite, onClose }) {
                         </SecondaryButton>
 
                         <div className="flex justify-end items-center gap-2 ">
-                            <DangerButton type="button" onClick={onClose}>
+                            <DangerButton type="button" onClick={handleOnClose}>
                                 Cancelar
                             </DangerButton>
                             <PrimaryButton disabled={processing}>

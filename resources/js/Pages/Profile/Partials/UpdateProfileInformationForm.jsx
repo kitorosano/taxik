@@ -80,10 +80,9 @@ export default function UpdateProfileInformationForm({
 
                         <TextInput
                             id="username"
-                            className="mt-1 block w-full"
+                            className={"mt-1 block w-full " + (errors.name && "border-red-500")}
                             value={data.name}
                             onChange={(e) => setData("name", e.target.value)}
-                            required
                             autoComplete="name"
                         />
 
@@ -96,10 +95,9 @@ export default function UpdateProfileInformationForm({
                         <TextInput
                             id="useremail"
                             type="email"
-                            className="mt-1 block w-full"
+                            className={"mt-1 block w-full " + (errors.email && "border-red-500")}
                             value={data.email}
                             onChange={(e) => setData("email", e.target.value)}
-                            required
                             autoComplete="username"
                         />
 

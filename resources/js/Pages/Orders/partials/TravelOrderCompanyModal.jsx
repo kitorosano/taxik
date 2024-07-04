@@ -1,4 +1,5 @@
 import CloseButton from "@/Components/CloseButton";
+import ConfirmModal from "@/Components/ConfirmModal";
 import DangerButton from "@/Components/DangerButton";
 import Modal from "@/Components/Modal";
 import SecondaryButton from "@/Components/SecondaryButton";
@@ -25,16 +26,7 @@ const selectTaxiColumns = {
 };
 
 function TravelOrderCompanyModal({ selectedOrder, onClose, taxis }) {
-    const {
-        data,
-        setData,
-        patch,
-        transform,
-        processing,
-        clearErrors,
-        errors,
-        reset,
-    } = useForm({
+    const { data, setData, patch, transform, clearErrors, reset } = useForm({
         assigned_taxi_id: selectedOrder?.taxi?.id,
         status: selectedOrder?.status,
         reason: "",
@@ -43,14 +35,14 @@ function TravelOrderCompanyModal({ selectedOrder, onClose, taxis }) {
     const [reassigningTaxi, setReassigningTaxi] = useState(
         !selectedOrder?.taxi?.id
     );
+    const [openConfirmDeny, setOpenConfirmDeny] = useState(false);
 
     useEffect(() => {
         if (selectedOrder) {
             setData("assigned_taxi_id", selectedOrder.taxi?.id);
+            setReassigningTaxi(!selectedOrder.taxi?.id);
         }
     }, [selectedOrder]);
-
-    const [isDenying, setIsDenying] = useState(false);
 
     const handleSelectTaxi = (taxi) => {
         transform((data) => ({
@@ -61,7 +53,6 @@ function TravelOrderCompanyModal({ selectedOrder, onClose, taxis }) {
 
         patch(route("travel-order.update", selectedOrder.id), {
             preserveScroll: true,
-            only: ["orders"],
             onSuccess: () => {
                 setReassigningTaxi(false);
             },
@@ -75,46 +66,17 @@ function TravelOrderCompanyModal({ selectedOrder, onClose, taxis }) {
     };
 
     const handleDeny = () => {
-        if (isDenying) {
-            const statusIsPending =
-                selectedOrder?.status === travelOrderStatusList[0];
-
-            if (statusIsPending) {
-                declineOrder();
-            } else {
-                cancelOrder();
-            }
-        } else {
-            setIsDenying(true);
-        }
-    };
-
-    const declineOrder = () => {
-        transform((data) => ({
-            ...data,
-            status: travelOrderStatusCode.Rechazado,
-        }));
-
-        if (confirm("¿Estás seguro de deseas rechazar esta reserva?")) {
-            patch(route("travel-order.update", selectedOrder.id), {
-                preserveScroll: true,
-                only: ["selectedOrder"],
-            });
-        }
-    };
-
-    const cancelOrder = () => {
         transform((data) => ({
             ...data,
             status: travelOrderStatusCode.Cancelado,
         }));
 
-        if (confirm("¿Estás seguro de deseas cancelar esta reserva?")) {
-            patch(route("travel-order.update", selectedOrder.id), {
-                preserveScroll: true,
-                only: ["selectedOrder"],
-            });
-        }
+        patch(route("travel-order.update", selectedOrder.id), {
+            preserveScroll: true,
+            onFinish: () => {
+                setOpenConfirmDeny(false);
+            },
+        });
     };
 
     const parsedDepartureDate = dayjs(selectedOrder?.departureDate)
@@ -124,101 +86,109 @@ function TravelOrderCompanyModal({ selectedOrder, onClose, taxis }) {
     const statusColors = {
         Pendiente: "bg-orange-100 text-orange-800",
         Aprobado: "bg-blue-100 text-blue-800",
-        Rechazado: "bg-red-100 text-red-800",
+        "En Viaje": "bg-cyan-100 text-cyan-800",
         Completado: "bg-green-100 text-green-800",
         Cancelado: "bg-red-100 text-red-800",
     }[selectedOrder?.status];
 
+    const driverName =
+        selectedOrder?.status > travelOrderStatusList[1] &&
+        !selectedOrder?.taxi?.driver_name
+            ? "Información no disponible"
+            : selectedOrder?.taxi?.driver_name;
+
     return (
-        <Modal
-            show={!!selectedOrder}
-            onClose={handleOnClose}
-            closeable={false}
-            maxWidth="3xl"
-            background="bg-gray-300/75"
-        >
-            <div className="p-6">
-                <header className="flex justify-end">
-                    <CloseButton onClick={handleOnClose} />
-                </header>
+        <>
+            <Modal
+                show={!!selectedOrder}
+                onClose={handleOnClose}
+                closeable={false}
+                maxWidth="3xl"
+                background="bg-gray-300/75"
+            >
+                <div className="p-6">
+                    <header className="flex justify-end">
+                        <CloseButton onClick={handleOnClose} />
+                    </header>
 
-                <main className="flex flex-col gap-2">
-                    <div className="flex items-center  mb-4 gap-4">
-                        <h2 className="text-2xl font-black text-gray-900">
-                            Orden #{selectedOrder?.id}{" "}
-                        </h2>
-                        <span
-                            className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusColors}`}
-                        >
-                            {selectedOrder?.status}
-                        </span>
-                    </div>
-
-                    <div className="grid grid-cols-3 gap-4">
-                        <div>
-                            <h2 className="text-lg font-semibold text-gray-900 mb-2">
-                                Lugar de origen
+                    <main className="flex flex-col gap-2">
+                        <div className="flex items-center  mb-4 gap-4">
+                            <h2 className="text-2xl font-black text-gray-900">
+                                Orden #{selectedOrder?.id}{" "}
                             </h2>
-
-                            <p className="text-md text-gray-600">
-                                {selectedOrder?.origin}
-                            </p>
+                            <span
+                                className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusColors}`}
+                            >
+                                {selectedOrder?.status}
+                            </span>
                         </div>
 
-                        <div>
-                            <h2 className="text-lg font-semibold text-gray-900 mb-2">
-                                Lugar de destino
-                            </h2>
+                        <div className="grid grid-cols-3 gap-4">
+                            <div>
+                                <h2 className="text-lg font-semibold text-gray-900 mb-2">
+                                    Lugar de origen
+                                </h2>
 
-                            <p className="text-md text-gray-600">
-                                {selectedOrder?.destination}
-                            </p>
+                                <p className="text-md text-gray-600">
+                                    {selectedOrder?.origin}
+                                </p>
+                            </div>
+
+                            <div>
+                                <h2 className="text-lg font-semibold text-gray-900 mb-2">
+                                    Lugar de destino
+                                </h2>
+
+                                <p className="text-md text-gray-600">
+                                    {selectedOrder?.destination}
+                                </p>
+                            </div>
+
+                            <div>
+                                <h2 className="text-lg font-semibold text-gray-900 mb-2">
+                                    Fecha y hora de salida
+                                </h2>
+
+                                <p className="text-md text-gray-600">
+                                    {parsedDepartureDate}
+                                </p>
+                            </div>
+
+                            <div>
+                                <h2 className="text-lg font-semibold text-gray-900 mb-2">
+                                    Precio
+                                </h2>
+
+                                <p className="text-md text-gray-600">
+                                    UYU ${selectedOrder?.price}
+                                </p>
+                            </div>
+
+                            <div>
+                                <h2 className="text-lg font-semibold text-gray-900 mb-2">
+                                    Cliente
+                                </h2>
+
+                                <p className="text-md text-gray-600">
+                                    {selectedOrder?.client}
+                                </p>
+                            </div>
+
+                            <div>
+                                <h2 className="text-lg font-semibold text-gray-900 mb-2">
+                                    Taxi
+                                </h2>
+
+                                <p className="text-md text-gray-600">
+                                    {driverName}
+                                </p>
+                            </div>
                         </div>
 
-                        <div>
-                            <h2 className="text-lg font-semibold text-gray-900 mb-2">
-                                Fecha y hora de salida
-                            </h2>
-
-                            <p className="text-md text-gray-600">
-                                {parsedDepartureDate}
-                            </p>
-                        </div>
-
-                        <div>
-                            <h2 className="text-lg font-semibold text-gray-900 mb-2">
-                                Precio
-                            </h2>
-
-                            <p className="text-md text-gray-600">
-                                UYU ${selectedOrder?.price}
-                            </p>
-                        </div>
-
-                        <div>
-                            <h2 className="text-lg font-semibold text-gray-900 mb-2">
-                                Cliente
-                            </h2>
-
-                            <p className="text-md text-gray-600">
-                                {selectedOrder?.client}
-                            </p>
-                        </div>
-
-                        <div>
-                            <h2 className="text-lg font-semibold text-gray-900 mb-2">
-                                Taxi
-                            </h2>
-
-                            <p className="text-md text-gray-600">
-                                {selectedOrder?.taxi?.driver_name}
-                            </p>
-                        </div>
-                    </div>
-
-                    <hr className="my-3" />
-                    {selectedOrder?.status !== travelOrderStatusList[2] &&
-                        selectedOrder?.status !== travelOrderStatusList[4] && (
+                        <hr className="my-3" />
+                        {(selectedOrder?.status === travelOrderStatusList[0] ||
+                            selectedOrder?.status ===
+                                travelOrderStatusList[1]) && (
                             <>
                                 <footer className="flex justify-between items-center">
                                     <SecondaryButton
@@ -235,7 +205,9 @@ function TravelOrderCompanyModal({ selectedOrder, onClose, taxis }) {
                                     <div className="flex justify-end items-center gap-2 ">
                                         <DangerButton
                                             type="button"
-                                            onClick={handleDeny}
+                                            onClick={() =>
+                                                setOpenConfirmDeny(true)
+                                            }
                                         >
                                             {selectedOrder?.status ===
                                             travelOrderStatusList[0]
@@ -258,9 +230,28 @@ function TravelOrderCompanyModal({ selectedOrder, onClose, taxis }) {
                                 )}
                             </>
                         )}
-                </main>
-            </div>
-        </Modal>
+                    </main>
+                </div>
+            </Modal>
+
+            <ConfirmModal
+                show={openConfirmDeny}
+                onClose={() => setOpenConfirmDeny(false)}
+                title={`¿Estás seguro de ${
+                    selectedOrder?.status === travelOrderStatusList[0]
+                        ? "rechazar"
+                        : "cancelar"
+                } esta reserva?`}
+                cancelText="No, Cancelar"
+                cancelOnClick={() => setOpenConfirmDeny(false)}
+                confirmText={`Sí, ${
+                    selectedOrder?.status === travelOrderStatusList[0]
+                        ? "Rechazar"
+                        : "Cancelar"
+                }`}
+                confirmOnClick={handleDeny}
+            />
+        </>
     );
 }
 
