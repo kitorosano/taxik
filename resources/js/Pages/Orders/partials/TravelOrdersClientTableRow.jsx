@@ -1,3 +1,5 @@
+import { travelOrderStatusList } from "@/Utils/constants";
+
 function TravelOrdersClientTableRow({ item }) {
     const statusColors = {
         Pendiente: "bg-orange-100 text-orange-800",
