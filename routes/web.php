@@ -36,7 +36,12 @@ Route::middleware('auth')->group(function () {
   Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/contacts', [ContactController::class, 'index'])->middleware('language')->name('contacts.index');
+Route::get('/contacts', [ContactController::class, 'index'])
+  ->middleware('language')
+  ->name('contacts.index');
+Route::get('/contacts/validate/{id}', [ContactController::class, 'validate'])
+  ->middleware(['auth', 'can:create,App\Models\Contact'])
+  ->name('contacts.validate');
 Route::resource('contacts', ContactController::class)
   ->only(['store', 'update', 'destroy'])
   ->middleware(['auth', 'can:create,App\Models\Contact']);

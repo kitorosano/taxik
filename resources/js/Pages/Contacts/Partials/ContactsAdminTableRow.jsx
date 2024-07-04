@@ -1,4 +1,10 @@
+import { router } from "@moraki/inertia-react";
+
 function ContactsAdminTableRow({ item, setEditingItem, setSelectedContact }) {
+    const handleValidate = (contact) => {
+        router.visit(route("contacts.validate", { id: contact.id }));
+    };
+
     return (
         <tr className="bg-white border-b items-center">
             <th
@@ -17,6 +23,17 @@ function ContactsAdminTableRow({ item, setEditingItem, setSelectedContact }) {
             <td className="px-1 py-4">{item.department}</td>
 
             <td className="px-1 py-4">{item.companyName}</td>
+
+            {!item.isValidated && (
+                <td className="py-2 text-center">
+                    <button
+                        className="font-medium text-gray-600 hover:text-blue-700"
+                        onClick={() => handleValidate(item)}
+                    >
+                        Validar
+                    </button>
+                </td>
+            )}
 
             <td className="py-2 text-center">
                 <button

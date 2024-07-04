@@ -9,7 +9,7 @@ function ContactsAdminTable({
     companies,
     creatingItem,
     setCreatingItem,
-    setSelectedContact
+    setSelectedContact,
 }) {
     const [editingItem, setEditingItem] = useState(null);
 
@@ -40,6 +40,9 @@ function ContactsAdminTable({
                         ))}
                         <th scope="col" className="px-1 py-3"></th>
                         <th scope="col" className="px-1 py-3"></th>
+                        {(!creatingItem && !editingItem) && (
+                            <th scope="col" className="px-1 py-3"></th>
+                        )}
                     </tr>
                 </thead>
                 <tbody>

@@ -22,6 +22,7 @@ return [
     'company' => 'Tu contacto ha sido creado exitosamente!',
     'admin' => 'Has creado el contacto ":contact"'
   ],
+  'contact-validate' => 'Has validado el contacto ":contact"! Ahora está disponible para los clientes',
   'contact-update' => [
     'company' => 'Has actualizado tu contacto!',
     'admin' => 'Has actualizado el contacto ":contact"'
