@@ -136,6 +136,27 @@ php artisan reverb:start
 php artisan queue:listen
 ```
 
+## Acceso a la aplicación con datos de prueba
+
+Al ejecutar los seeders, se crean los siguientes usuarios de prueba:
+
+#### Cliente
+
+-   **Usuario**: `client@example.com`
+-   **Contraseña**: `12345678`
+
+#### Empresa
+
+-   **Usuario**: `company1@example.com`
+-   **Contraseña**: `12345678`
+
+#### Administrador
+
+-   **Usuario**: `admin@example.com`
+-   **Contraseña**: `12345678`
+
+Se pueden utilizar estos usuarios para acceder a la aplicación y probar las funcionalidades. También se pueden registrar nuevos usuarios.
+
 ## Tecnologías y dependencias utilizadas
 
 -   [Laravel](https://laravel.com)
