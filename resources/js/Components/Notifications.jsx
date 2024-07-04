@@ -33,8 +33,10 @@ const Notifications = ({ user }) => {
 
     const handleNotificationClick = async () => {
         try {
-            const response = await axios.post(route("notifications.watch"));
-            setNotifications(response.data);
+            await axios.post(route("notifications.watch"));
+            setNotifications((prev) =>
+                prev.map((n) => ({ ...n, watched: true }))
+            );
         } catch (error) {
             console.error(error);
         }
@@ -43,7 +45,7 @@ const Notifications = ({ user }) => {
     const fetchNotifications = async () => {
         try {
             const response = await axios.get(route("notifications.index"));
-            setNotifications(response.data);
+            setNotifications((prev) => response.data.concat(prev).slice(0, 5));
         } catch (error) {
             console.error(error);
         }
@@ -69,7 +71,10 @@ const Notifications = ({ user }) => {
                         )}
                     </div>
                 </Dropdown.Trigger>
-                <Dropdown.Content width="96" contentClasses="py-1 bg-white overflow-y-auto h-80">
+                <Dropdown.Content
+                    width="96"
+                    contentClasses="py-1 bg-white overflow-y-auto max-h-80"
+                >
                     <p className="px-4 py-1 text-sm font-bold">
                         Notificaciones
                     </p>
@@ -77,7 +82,7 @@ const Notifications = ({ user }) => {
                     {notifications.length === 0 && (
                         <>
                             <Dropdown.Divider />
-                            <p className="text-gray-500">
+                            <p className="text-gray-500 px-4 py-2 text-center">
                                 No hay notificaciones
                             </p>
                         </>
