@@ -43,7 +43,7 @@ function SelectInput(
     };
 
     return (
-        <div className={"w-full " + wrapperClassName}>
+        <div className={"relative w-full " + wrapperClassName}>
             <TextInput
                 ref={selectRef}
                 readOnly
@@ -63,14 +63,14 @@ function SelectInput(
             {isListVisible && (
                 <div
                     className={
-                        "absolute flex flex-col bg-white shadow-md rounded-lg mt-1 z-10 " +
+                        "absolute flex flex-col bg-white shadow-md rounded-lg mt-1 z-50 " +
                         optionsWrapperClassName
                     }
                 >
                     {options.map(({ key, value }) => (
                         <div
                             key={key}
-                            className={"cursor-pointer " + optionClassName}
+                            className={"relative cursor-pointer " + optionClassName}
                             onClick={() => handleOptionClick({ key, value })}
                         >
                             {value}

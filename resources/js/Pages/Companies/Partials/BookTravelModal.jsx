@@ -6,6 +6,7 @@ import InputLabel from "@/Components/InputLabel";
 import Modal from "@/Components/Modal";
 import PrimaryButton from "@/Components/PrimaryButton";
 import SecondaryButton from "@/Components/SecondaryButton";
+import SelectInput from "@/Components/SelectInput";
 import TextInput from "@/Components/TextInput";
 import {
     calculateTaxiFee,
@@ -225,6 +226,36 @@ function BookTravelModal({ selectedCompany, handleFavorite, onClose }) {
                                 message={errors.destination}
                                 className="mt-2"
                             />
+                        </div>
+
+                        <div className="flex justify-center gap-4">
+                            <div className="mt-4 w-full">
+                                <InputLabel
+                                    htmlFor="payment_method"
+                                    value="Metodo de Pago"
+                                />
+
+                                <SelectInput
+                                    id="payment_method"
+                                    options={[
+                                        { key: 0, value: "Efectivo" },
+                                        { key: 1, value: "Tarjeta" },
+                                        { key: 2, value: "Mercado Pago" },
+                                    ]}
+                                    name="payment_method"
+                                    value={"Efectivo"}
+                                    className="mt-1 block w-full"
+                                    autoComplete="payment_method"
+                                    inputClassName="w-full text-black"
+                                    optionsWrapperClassName="w-full"
+                                    optionClassName="w-full px-2 py-2 text-gray-900 text-sm hover:bg-indigo-100"
+                                />
+
+                                <InputError
+                                    message={errors.payment_method}
+                                    className="mt-2"
+                                />
+                            </div>
                         </div>
 
                         <div className="flex justify-center gap-4">
