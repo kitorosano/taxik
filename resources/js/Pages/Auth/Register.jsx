@@ -110,6 +110,7 @@ export default function Register() {
                     <TextInput
                         id="password"
                         name="password"
+                        type={showPassword ? "text" : "password"}
                         value={data.password}
                         className={
                             "mt-1 block w-full " +
