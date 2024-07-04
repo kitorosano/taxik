@@ -7,20 +7,25 @@ use Illuminate\Http\Request;
 
 class NotificationController extends Controller
 {
+  private $CLIENT_LIMIT = 5;
+  private $COMPANY_LIMIT = 8;
+  private  $ADMIN_LIMIT = 8;
+
+  private function getLimit($type)
+  {
+    return match ($type) {
+      0 => $this->ADMIN_LIMIT,
+      1 => $this->CLIENT_LIMIT,
+      2 => $this->COMPANY_LIMIT,
+    };
+  }
+
   /**
    * Display a listing of the resource.
    */
   public function index(Request $request)
   {
-    $CLIENT_LIMIT = 5;
-    $COMPANY_LIMIT = 8;
-    $ADMIN_LIMIT = 8;
-
-    $limit = match ($request->user()->type) {
-      0 => $ADMIN_LIMIT,
-      1 => $CLIENT_LIMIT,
-      2 => $COMPANY_LIMIT,
-    };
+    $limit = $this->getLimit($request->user()->type);
 
     return $request->user()->notifications()->take($limit)->get();
   }
@@ -66,7 +71,8 @@ class NotificationController extends Controller
       $notification->markAsRead();
     }
 
-    return $this->index($request);
+    $limit = $this->getLimit($request->user()->type);
+    return $request->user()->notifications()->take($limit)->get();
   }
 
   /**

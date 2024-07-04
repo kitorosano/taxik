@@ -26,8 +26,8 @@ const LanguageSwitcher = ({ initialLocale }) => {
                         className="opacity-75 hover:opacity-50 hover:cursor-pointer"
                     />
                 </Dropdown.Trigger>
-                <Dropdown.Content width="32">
-                    <p className="px-4 py-1 text-sm font-bold">Lenguaje</p>
+                <Dropdown.Content >
+                    <p className="px-4 py-1 text-sm font-bold">Cambiar Lenguaje</p>
                     {getLocales().map((locale) => (
                         <div key={locale}>
                             <Dropdown.Divider />

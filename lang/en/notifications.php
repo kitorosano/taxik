@@ -26,6 +26,7 @@ return [
     'company' => 'You have updated your contact!',
     'admin' => 'You have updated the contact ":contact"'
   ],
+  'contact-validate' => 'You have validated the contact ":contact"! Now it is available for clients',
   'contact-delete' => 'You have deleted the contact ":contact"',
   'contact-delete-error' => 'You cannot delete this contact because it is linked to the company ":company"',
 
